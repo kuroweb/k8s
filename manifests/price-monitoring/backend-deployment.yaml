@@ -2,6 +2,7 @@ apiVersion: v1
 kind: Deployment
 metadata:
   name: backend-deployment
+  namespace: price-monitoring
   labels:
     app: backend
 spec:
