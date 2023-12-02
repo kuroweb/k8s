@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+  labels:
+    app: backend
+spec:
+  # 展開するレプリカ数
+  replicas: 1
+  # Label がこれらにマッチした Pod をこの ReplicaSet の配下に置く
+  selector:
+    matchLabels:
+      app: backend
+      server: backend
+
+  # 展開する Pod の定義
+  template:
+    metadata:
+      # この Pod につける Label
+      labels:
+        app: backend
+        server: backend
+
+    spec:
+      # Container の定義
+      containers:
+        - name: backend
+          # イメージの指定
+          image: price-monitoring-backend:latest
+          imagePullPolicy: Never
+          ports:
+            - name: http
+              containerPort: 3000
+          env:
+            - name: DB_HOST_NAME
+              # Service にはドメインが割り振られる
+              value: backend-db-service.default.svc.cluster.local
+            - name: DB_DATABASE_NAME
+              value: rails
+            - name: DB_USER_NAME
+              value: root
+            - name: DB_PASSWORD
+              value: ""
