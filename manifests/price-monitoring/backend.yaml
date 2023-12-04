@@ -1,17 +1,47 @@
+#
+# Service
+#
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+
+spec:
+  # ingress 経由なのでクラスタ内に閉じておく
+  type: ClusterIP
+  selector:
+    # これにマッチした pod に流す
+    app: price-monitoring
+    server: backend
+  ports:
+    - name: http
+      protocol: TCP
+      # 受信するポート
+      port: 3000
+      # 送信するポート
+      targetPort: http
+
+---
+
+#
+# Deployment
+#
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: backend-deployment
   namespace: price-monitoring
   labels:
-    app: backend
+    app: price-monitoring
 spec:
   # 展開するレプリカ数
   replicas: 1
   # Label がこれらにマッチした Pod をこの ReplicaSet の配下に置く
   selector:
     matchLabels:
-      app: backend
+      app: price-monitoring
       server: backend
 
   # 展開する Pod の定義
@@ -19,7 +49,7 @@ spec:
     metadata:
       # この Pod につける Label
       labels:
-        app: backend
+        app: price-monitoring
         server: backend
 
     spec:
@@ -27,7 +57,7 @@ spec:
       containers:
         - name: backend
           # イメージの指定
-          image: price-monitoring-backend:latest
+          image: localhost:5000/price-monitoring-backend:latest
           imagePullPolicy: Never
           ports:
             - name: http
