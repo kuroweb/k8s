@@ -16,7 +16,7 @@ spec:
     spec:
       hostNetwork: true
       tolerations:
-        - key: node-role.kubernetes.io/master
+        - key: node-role.kubernetes.io/control-plane
           effect: NoSchedule
       nodeSelector:
         kubernetes.io/hostname: k8s-master.example.com
