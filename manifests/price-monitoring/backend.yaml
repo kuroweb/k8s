@@ -58,7 +58,6 @@ spec:
         - name: backend
           # イメージの指定
           image: localhost:5000/price-monitoring-backend:latest
-          imagePullPolicy: Never
           ports:
             - name: http
               containerPort: 3000
