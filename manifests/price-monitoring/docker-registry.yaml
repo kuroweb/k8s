@@ -31,15 +31,14 @@ spec:
             - name: registry-tls
               mountPath: /certs
               readOnly: true
-        volumes:
-          - name: registry-storage
-            emptyDir: {}
-          - name: registry-tls
-            secret:
-              secretName: registry-tls-secret
+      volumes:
+        - name: registry-storage
+          emptyDir: {}
+        - name: registry-tls
+          secret:
+            secretName: registry-tls-secret
 
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
@@ -48,7 +47,7 @@ spec:
   selector:
     app: docker-registry
   ports:
-  - protocol: TCP
-    port: 443
-    targetPort: 5000
+    - protocol: TCP
+      port: 443
+      targetPort: 5000
   type: LoadBalancer
