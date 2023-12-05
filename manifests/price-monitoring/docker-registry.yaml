@@ -28,8 +28,28 @@ spec:
           volumeMounts:
             - name: registry
               mountPath: /var/lib/registry
+          env:
+            - name: REGISTRY_HTTP_TLS_CERTIFICATE
+              value: /certs/registry.crt
+            - name: REGISTRY_HTTP_TLS_KEY
+              value: /certs/registry.key
       volumes:
         - name: registry
           hostPath:
             type: Directory
             path: /var/local/registry
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: docker-registry
+spec:
+  selector:
+    app: docker-registry
+  ports:
+  - protocol: TCP
+    port: 443
+    targetPort: 5000
+  type: LoadBalancer
