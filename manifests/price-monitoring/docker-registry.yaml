@@ -16,10 +16,10 @@ spec:
     spec:
       hostNetwork: true
       tolerations:
-        - key: node-role.kubernetes.io/control-plane
+        - key: node-role.kubernetes.io/master
           effect: NoSchedule
       nodeSelector:
-        kubernetes.io/hostname: k8s-master.example.com
+        kubernetes.io/hostname: k60h
       containers:
         - name: docker-registry
           image: registry:2
@@ -28,26 +28,6 @@ spec:
           volumeMounts:
             - name: registry-storage
               mountPath: /var/lib/registry
-            - name: registry-tls
-              mountPath: /certs
-              readOnly: true
       volumes:
         - name: registry-storage
           emptyDir: {}
-        - name: registry-tls
-          secret:
-            secretName: registry-tls-secret
-
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: docker-registry
-spec:
-  selector:
-    app: docker-registry
-  ports:
-    - protocol: TCP
-      port: 443
-      targetPort: 5000
-  type: LoadBalancer
