@@ -19,7 +19,7 @@ spec:
         - key: node-role.kubernetes.io/control-plane
           effect: NoSchedule
       nodeSelector:
-        kubernetes.io/hostname: k8s-master
+        kubernetes.io/hostname: k8s-master.example.com
       containers:
         - name: docker-registry
           image: registry:2
