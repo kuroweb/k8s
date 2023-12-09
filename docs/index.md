@@ -39,6 +39,7 @@
 ### クラスタ構築
 
 ```bash
+# Masterノードで実行
 # userで実行する (rootユーザーで実行すると、毎回rootユーザー以外は毎回sudoつけないと動かない)
 sudo kubeadm init --control-plane-endpoint=master-1
 mkdir -p $HOME/.kube
@@ -64,6 +65,19 @@ kubectl get node
 ```bash
 # calicoを導入する
 kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.0/manifests/calico.yaml
+```
+
+## Helm
+
+### Install
+
+```bash
+# Masterノードで実行
+curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg > /dev/null
+sudo apt-get install apt-transport-https --yes
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
+sudo apt-get update
+sudo apt-get install helm
 ```
 
 ## Server
