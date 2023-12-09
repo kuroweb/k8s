@@ -13,6 +13,8 @@
 	- [サーバにssh鍵を登録する](#サーバにssh鍵を登録する)
 - [Ansible](#ansible)
 	- [簡単な疎通確認コマンド](#簡単な疎通確認コマンド)
+	- [各サーバにパッケージをインストールする](#各サーバにパッケージをインストールする)
+	- [各サーバを再起動する](#各サーバを再起動する)
 
 ## Kubernetes
 
@@ -77,7 +79,7 @@ ssh-copy-id username@hostname
 ### 簡単な疎通確認コマンド
 
 ```bash
-ansible -i hosts worker -m ping
+ansible worker -m ping
 
 #=>
 # master-1 | SUCCESS => {
@@ -92,4 +94,17 @@ ansible -i hosts worker -m ping
 #     "changed": false,
 #     "ping": "pong"
 # }
+```
+
+### 各サーバにパッケージをインストールする
+
+```bash
+# iptablesをインストールする場合
+ansible worker -m apt -b --ask-become-pass -a "name=iptables state=present"
+```
+
+### 各サーバを再起動する
+
+```bash
+ansible worker -b --ask-become-pass -m shell -a "reboot"
 ```
