@@ -1,0 +1,10 @@
+[master]
+master-1  ansible_connection=local
+
+[workers]
+worker-1  ansible_connection=ssh
+worker-2  ansible_connection=ssh
+
+[worker:children]
+master
+workers
