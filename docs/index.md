@@ -40,7 +40,7 @@
 
 ```bash
 # userで実行する (rootユーザーで実行すると、毎回rootユーザー以外は毎回sudoつけないと動かない)
-sudo kubeadm init --control-plane-endpoint=k8s-master
+sudo kubeadm init --control-plane-endpoint=master-1
 mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
@@ -53,7 +53,7 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 kubeadm token create --print-join-command
 
 # 上記コマンドをWorkerノードで実行
-sudo kubeadm join k8s-master:6443 --token hogehoge --discovery-token-ca-cert-hash sha256:fugafuga
+sudo kubeadm join master-1:6443 --token hogehoge --discovery-token-ca-cert-hash sha256:fugafuga
 
 # Masterノードでノード一覧を確認
 kubectl get node
