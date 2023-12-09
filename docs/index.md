@@ -9,6 +9,8 @@
 	- [クラスタ構築](#クラスタ構築)
 	- [Workerノードを追加](#workerノードを追加)
 	- [クラスタ構築後に各ノードをとりあえずReadyにしたい](#クラスタ構築後に各ノードをとりあえずreadyにしたい)
+- [Helm](#helm)
+	- [Install](#install)
 - [Server](#server)
 	- [サーバにssh鍵を登録する](#サーバにssh鍵を登録する)
 - [Ansible](#ansible)
