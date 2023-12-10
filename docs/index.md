@@ -11,6 +11,9 @@
 	- [クラスタ構築後に各ノードをとりあえずReadyにしたい](#クラスタ構築後に各ノードをとりあえずreadyにしたい)
 - [Helm](#helm)
 	- [Install](#install)
+- [MetalLB](#metallb)
+	- [Install](#install-1)
+	- [Configuration](#configuration)
 - [Server](#server)
 	- [サーバにssh鍵を登録する](#サーバにssh鍵を登録する)
 - [Ansible](#ansible)
@@ -80,6 +83,26 @@ sudo apt-get install apt-transport-https --yes
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
 sudo apt-get update
 sudo apt-get install helm
+```
+
+## MetalLB
+
+### Install
+
+```bash
+# First add metallb repository to your helm
+helm repo add metallb https://metallb.github.io/metallb
+# Check if it was found
+helm search repo metallb
+# Install metallb
+helm upgrade --install metallb metallb/metallb --create-namespace \
+--namespace metallb-system --wait
+```
+
+### Configuration
+
+```bash
+kubectl apply -f metallb/ip-address-pool.yaml
 ```
 
 ## Server
