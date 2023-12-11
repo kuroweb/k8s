@@ -21,21 +21,11 @@ spec:
           image: registry:2
           ports:
             - containerPort: 5000
-          env:
-            - name: REGISTRY_HTTP_TLS_CERTIFICATE
-              value: "/certs/tls.crt"
-            - name: REGISTRY_HTTP_TLS_KEY
-              value: "/certs/tls.key"
           volumeMounts:
-            - name: lv-storage
+            - name: volv
               mountPath: /var/lib/registry
               subPath: registry
-            - name: certs
-              mountPath: /certs
       volumes:
-        - name: lv-storage
+        - name: volv
           persistentVolumeClaim:
             claimName: longhorn-docker-registry-pvc
-        - name: certs
-          secret:
-            secretName: docker-registry-tls-cert
