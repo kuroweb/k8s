@@ -9,6 +9,7 @@
 	- [クラスタ構築](#クラスタ構築)
 	- [Workerノードを追加](#workerノードを追加)
 	- [クラスタ構築後に各ノードをとりあえずReadyにしたい](#クラスタ構築後に各ノードをとりあえずreadyにしたい)
+	- [各ノードにラベルを設定](#各ノードにラベルを設定)
 - [Helm](#helm)
 	- [Install](#install)
 - [MetalLB](#metallb)
@@ -70,6 +71,12 @@ kubectl get node
 ```bash
 # calicoを導入する
 kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.0/manifests/calico.yaml
+```
+
+### 各ノードにラベルを設定
+
+```bash
+kubectl label nodes <worker-node-name> node-type=worker
 ```
 
 ## Helm
@@ -147,3 +154,5 @@ ansible worker -m apt -b --ask-become-pass -a "name=iptables state=present"
 ```bash
 ansible worker -b --ask-become-pass -m shell -a "reboot"
 ```
+
+<!-- TODO: longhornのstorageClassのreplicasの数が3なのでhealthyにならない問題に対応中 -->
