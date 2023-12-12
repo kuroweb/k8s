@@ -12,8 +12,10 @@
 	- [各ノードにラベルを設定](#各ノードにラベルを設定)
 - [Helm](#helm)
 	- [Install](#install)
-- [MetalLB](#metallb)
+- [Arkade](#arkade)
 	- [Install](#install-1)
+- [MetalLB](#metallb)
+	- [Install](#install-2)
 	- [Configuration](#configuration)
 - [Server](#server)
 	- [サーバにssh鍵を登録する](#サーバにssh鍵を登録する)
@@ -90,6 +92,14 @@ sudo apt-get install apt-transport-https --yes
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
 sudo apt-get update
 sudo apt-get install helm
+```
+
+## Arkade
+
+### Install
+
+```bash
+curl -sLS https://get.arkade.dev | sudo sh
 ```
 
 ## MetalLB
