@@ -57,7 +57,7 @@ spec:
       containers:
         - name: backend
           # イメージの指定
-          image: k8s-master.example.com:5000/price-monitoring-backend:latest
+          image: registry.local:5000/price-monitoring-backend:latest
           ports:
             - name: http
               containerPort: 3000
