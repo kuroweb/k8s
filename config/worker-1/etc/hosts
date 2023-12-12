@@ -10,6 +10,9 @@
 # docker registry
 192.168.0.202 registry registry.local
 
+# openfaas
+192.168.0.203 openfaas openfaas.local
+
 #
 # Defaults
 #
