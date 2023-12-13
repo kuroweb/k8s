@@ -50,8 +50,6 @@ graph LR
   Macbook
 
   subgraph k8s["kubernetes Node"]
-    direction LR
-
     master-1
     worker-1
     worker-2
