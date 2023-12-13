@@ -24,7 +24,8 @@
   - [9. Arkade](#9-arkade)
   - [10. MetalLB](#10-metallb)
   - [11. Longhorn](#11-longhorn)
-  - [12. OpenFaaS](#12-openfaas)
+  - [12. Docker Registry (TLS)](#12-docker-registry-tls)
+  - [13. OpenFaaS](#13-openfaas)
 - [Command](#command)
   - [Kubernetes](#kubernetes)
   - [Ansible](#ansible)
@@ -115,18 +116,7 @@ graph LR
     sudo su
     vim /etc/netplan/01-network-manager-all.yaml
 
-    # 以下の内容で更新する
-    network:
-      version: 2
-      ethernets:
-        enp1s0f0:
-          addresses: [192.168.0.10/24]
-          nameservers:
-            addresses: [192.168.0.1]
-          routes:
-            - to: default
-              via: 192.168.0.1
-      renderer: NetworkManager
+    #=> config/master-1/etc/netplan/01-network-manager-all.yamlの内容で修正
     ```
 
   - worker-1
@@ -135,18 +125,7 @@ graph LR
     sudo su
     vim /etc/netplan/01-network-manager-all.yaml
 
-    # 以下の内容で更新する
-    network:
-      version: 2
-      ethernets:
-        enp1s0f0:
-          addresses: [192.168.0.11/24]
-          nameservers:
-            addresses: [192.168.0.1]
-          routes:
-            - to: default
-              via: 192.168.0.1
-      renderer: NetworkManager
+    #=> config/worker-1/etc/netplan/01-network-manager-all.yamlの内容で修正
     ```
 
   - worker-2
@@ -155,18 +134,7 @@ graph LR
     sudo su
     vim /etc/netplan/01-network-manager-all.yaml
 
-    # 以下の内容で更新する
-    network:
-      version: 2
-      ethernets:
-        enp1s0f0:
-          addresses: [192.168.0.12/24]
-          nameservers:
-            addresses: [192.168.0.1]
-          routes:
-            - to: default
-              via: 192.168.0.1
-      renderer: NetworkManager
+    #=> config/worker-2/etc/netplan/01-network-manager-all.yamlの内容で修正
     ```
 
 ### 3. Macbookのhostsを修正
@@ -248,7 +216,16 @@ graph LR
       sudo vi /etc/fstab
       ```
 
-  7. クラスタ構築
+  7. 各サーバのhostsを修正
+
+      ```bash
+      # 以下を追加する
+      192.168.0.10 master-1 master-1.local
+      192.168.0.11 worker-1 worker-1.local
+      192.168.0.12 worker-2 worker-2.local
+      ```
+
+  8. クラスタ構築
 
       ```bash
       # master-1で実行
@@ -259,7 +236,7 @@ graph LR
       sudo chown $(id -u):$(id -g) $HOME/.kube/config
       ```
 
-  8. クラスタにworkerノードを追加
+  9.  クラスタにworkerノードを追加
 
       ```bash
       # Workerノードで実行するべきコマンドを表示
@@ -272,14 +249,14 @@ graph LR
       kubectl get node
       ```
 
-  9. クラスタ構築後に各ノードをとりあえずReadyにしたい
+  10. クラスタ構築後に各ノードをとりあえずReadyにしたい
 
       ```bash
       # calicoを導入する
       kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.0/manifests/calico.yaml
       ```
 
-  10. workerノードにラベルを設定
+  11. workerノードにラベルを設定
 
       ```bash
       kubectl label nodes <worker-node-name> node-type=worker
@@ -409,7 +386,85 @@ graph LR
 
       - 初期だと`3`なので`2`に変更したい
 
-### 12. OpenFaaS
+### 12. Docker Registry (TLS)
+
+- Install
+  1. Namespace作成
+
+      ```bash
+      kubectl apply -f manifests/docker-registry/namespace.yaml
+      ```
+
+  2. pvc作成
+
+      ```bash
+      kubectl apply -f manifests/docker-registry/pvc.yaml
+      ```
+
+  3. 証明書を作成
+
+      ```bash
+      # Macbookで実行
+      cd ansible
+      openssl req -x509 -newkey rsa:4096 -sha256 -days 3650 -nodes -keyout registry.key -out registry.crt -subj "/CN=registry.local" -addext "subjectAltName=DNS:registry.local,DNS:*.cube.local,IP:192.168.0.202"
+      ```
+
+  4. 各サーバに証明書を追加
+
+      ```bash
+      ansible cube -b --ask-become-pass -m copy -a "src=registry.crt dest=/usr/local/share/ca-certificates/registry.crt"
+      ansible cube -b --ask-become-pass -m copy -a "src=registry.key dest=/usr/local/share/ca-certificates/registry.key"
+      ansible all -b --ask-become-pass -m shell -a "update-ca-certificates"
+      ```
+
+  5. Secret作成
+
+      ```bash
+      # master-1で実行
+      sudo su
+
+      # manifests/docker-registry/secret.yamlの tls.crt を/usr/local/share/ca-certificates/registry.crtの値で更新
+      vim manifests/docker-registry/secret.yaml
+      # manifests/docker-registry/secret.yamlの tls.key を/usr/local/share/ca-certificates/registry.keyの値で更新
+      vim manifests/docker-registry/secret.yaml
+
+      kubectl apply -f manifests/docker-registry/secret.yaml
+      ```
+
+  6. Deployment作成
+
+      ```bash
+      kubectl apply -f manifests/docker-registry/deployment.yaml
+      ```
+
+  7. 各サーバのhostsを修正
+
+      ```bash
+      # 以下を追加する
+      192.168.0.202 registry registry.local
+      ```
+
+  8. dockerの設定を修正
+
+      ```bash
+      # master-1で実行
+      sudo su
+      vim /etc/docker/daemon.json
+
+      #=> config/master-1/etc/docker/daemon.jsonの内容で修正
+      ```
+
+  9. containerdの設定を修正
+
+      ```bash
+      # master-1, worker-1, worker-2で実行
+      sudo su
+      vim /etc/containerd/config.toml
+
+      #=> config/{master-1,worker-1,worker-2}/etc/containerd/config.tomlの内容で修正
+      ```
+
+### 13. OpenFaaS
 
 - TODO
 
