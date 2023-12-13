@@ -328,7 +328,86 @@ graph LR
 
 ### 11. Longhorn
 
-- TODO
+- Install
+  1. Workerノードにカレント以外のディスクを用意
+
+  2. 関連パッケージをインストール
+
+      ```bash
+      ansible cube -b --ask-become-pass -m apt -a "name=nfs-common state=present"
+      ansible cube -b --ask-become-pass -m apt -a "name=open-iscsi state=present"
+      ansible cube -b --ask-become-pass -m apt -a "name=util-linux state=present"
+      ```
+
+  3. ディスク状態をチェック
+
+      ```bash
+      ansible cube -b --ask-become-pass -m shell -a "lsblk -f"
+      ```
+
+  4. `3`で確認したディスク名とUUIDをansibleのconfigに記述
+
+      ```bash
+      [master]
+      master-1  ansible_connection=ssh
+
+      [workers]
+      # var_disk, var_uuidに記述
+      worker-1  ansible_connection=ssh var_hostname=worker-1 var_disk=sdb var_uuid=b40c4e64-372c-4f4b-a402-280ccb1ac5da
+      # var_disk, var_uuidに記述
+      worker-2  ansible_connection=ssh var_hostname=worker-2 var_disk=sdb var_uuid=90981682-7bc1-477c-888f-ce073ed3f160
+
+      [worker:children]
+      master
+      workers
+      ```
+
+  5. ansibleで指定したディスクをワイプ(初期化)
+
+      ```bash
+      #wipe
+      ansible workers -b --ask-become-pass -m shell -a "wipefs -a /dev/{{ var_disk }}"
+      #format to ext4
+      ansible workers -b --ask-become-pass -m filesystem -a "fstype=ext4 dev=/dev/{{ var_disk }}"
+      ```
+
+  6. ディスクをマウント
+
+      ```bash
+      ansible workers -b --ask-become-pass -m ansible.posix.mount -a "path=/storage-1 src=UUID={{ var_uuid }} fstype=ext4 state=mounted"
+      ```
+
+  7. Longhornをインストール
+
+      ```bash
+      # Masterノードで実行
+      helm repo add longhorn https://charts.longhorn.io
+      helm repo update
+      helm install longhorn longhorn/longhorn --namespace longhorn-system --create-namespace --set defaultSettings.defaultDataPath="/storage-1"
+      # if you do not want to create separate service file for UI access as I did leter on with `service.yaml` you can use it like this:
+      helm install longhorn longhorn/longhorn --namespace longhorn-system --create-namespace --set defaultSettings.defaultDataPath="/storage-1" --set service.ui.loadBalancerIP="192.168.0.201" --set service.ui.type="LoadBalancer"
+      ```
+
+  8. Serviceを追加
+
+      ```bash
+      kubectl apply -f manifests/longhorn/service.yaml
+      ```
+
+  9. Longhornの管理画面にアクセス
+
+     - http://192.168.0.201/
+
+  10. Nodeを更新
+
+      ![](/docs/images/readme_1.png)
+      ![](/docs/images/readme_2.png)
+      ![](/docs/images/readme_3.png)
+      ![](/docs/images/readme_4.png)
+
+  11. 🤔TODO: NodeのrepliasをWorkerノードの数と揃える
+
+      - 初期だと`3`なので`2`に変更したい
 
 ### 12. OpenFaaS
 
