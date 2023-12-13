@@ -50,12 +50,14 @@ graph LR
   Macbook
 
   subgraph k8s["kubernetes Node"]
+    direction LR
+
     master-1
     worker-1
     worker-2
   end
 
-  Macbook--ansible (ssh)-->k8s
+  Macbook--"ansible (ssh)"-->k8s
 ```
 
 ## Setup
