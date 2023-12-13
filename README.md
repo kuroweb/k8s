@@ -15,6 +15,7 @@
   - [Management](#management)
 - [Setup](#setup)
   - [1. SSH](#1-ssh)
+    - [hostname](#hostname)
   - [2. DNS](#2-dns)
   - [3. Ansible](#3-ansible)
   - [5. Kubernetes](#5-kubernetes)
@@ -65,6 +66,45 @@ graph LR
 ### 1. SSH
 
 - TODO
+
+#### hostname
+
+- 各サーバのホスト名を変更する
+- master-1
+
+  ```bash
+  sudo su
+  hostnamectl set-hostname master-1
+  reboot
+  #=> reboot...
+
+  hostname
+  #=> master-1
+  ```
+
+- worker-1
+
+  ```bash
+  sudo su
+  hostnamectl set-hostname worker-1
+  reboot
+  #=> reboot...
+
+  hostname
+  #=> worker-1
+  ```
+
+- worker-2
+
+  ```bash
+  sudo su
+  hostnamectl set-hostname worker-2
+  reboot
+  #=> reboot...
+
+  hostname
+  #=> worker-2
+  ```
 
 ### 2. DNS
 
