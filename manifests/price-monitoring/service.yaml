@@ -9,7 +9,7 @@ spec:
     server: backend
   type: LoadBalancer
   ports:
-    - name: http
+    - name: backend-port
       protocol: TCP
       port: 3000
       targetPort: 3000
