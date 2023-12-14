@@ -13,6 +13,7 @@
 - [Infra](#infra)
   - [Structure](#structure)
   - [Management](#management)
+  - [loadBalancerIP](#loadbalancerip)
 - [Setup](#setup)
   - [1. hostname](#1-hostname)
   - [2. IP固定](#2-ip固定)
@@ -65,6 +66,17 @@ graph LR
 
   Macbook--"ansible (ssh)"-->k8s
 ```
+
+### loadBalancerIP
+
+| port | application |
+| -- | -- |
+| 192.168.0.201 | Longhorn |
+| 192.168.0.202 | docker-registry |
+| 192.168.0.203 | OpenFaaS |
+| 192.168.0.204 | redis-server |
+| 192.168.0.207 | Portainer |
+| 192.168.0.210 | price-monitoring |
 
 ## Setup
 
