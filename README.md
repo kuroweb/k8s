@@ -237,7 +237,7 @@ graph LR
       sudo chown $(id -u):$(id -g) $HOME/.kube/config
       ```
 
-  9.  クラスタにworkerノードを追加
+  9. クラスタにworkerノードを追加
 
       ```bash
       # Workerノードで実行するべきコマンドを表示
@@ -374,14 +374,14 @@ graph LR
 
   9. Longhornの管理画面にアクセス
 
-     - http://192.168.0.201/
+     - <http://192.168.0.201>
 
   10. Nodeを更新
 
-      ![](/docs/images/readme_1.png)
-      ![](/docs/images/readme_2.png)
-      ![](/docs/images/readme_3.png)
-      ![](/docs/images/readme_4.png)
+      ![image](/docs/images/readme_1.png)
+      ![image](/docs/images/readme_2.png)
+      ![image](/docs/images/readme_3.png)
+      ![image](/docs/images/readme_4.png)
 
   11. 🤔TODO: NodeのrepliasをWorkerノードの数と揃える
 
@@ -473,11 +473,29 @@ graph LR
 
 - Install
 
-    ```bash
-    helm repo add portainer https://portainer.github.io/k8s/
-    helm repo update
-    helm install --create-namespace -n portainer portainer portainer/portainer
-    ```
+  1. helmでインストール
+
+      ```bash
+      helm repo add portainer https://portainer.github.io/k8s/
+      helm repo update
+      helm install --create-namespace -n portainer portainer portainer/portainer
+      ```
+
+  2. portainerを再起動
+
+      ```bash
+      kubectl scale --replicas=0 deployment portainer -n portainer
+      kubectl scale --replicas=1 deployment portainer -n portainer
+      ```
+
+  3. portainerにアクセス
+
+      <http://192.168.0.207:9000>
+
+  4. 管理ユーザーを作成
+
+     - Username: admin
+     - Password: admin1234567
 
 ## Command
 
