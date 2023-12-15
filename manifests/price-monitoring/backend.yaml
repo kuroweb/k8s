@@ -51,7 +51,7 @@ spec:
               containerPort: 3000
           env:
             - name: DB_HOST_NAME
-              value: backend-db-service.default.svc.cluster.local
+              value: 192.168.0.211
             - name: DB_DATABASE_NAME
               value: rails
             - name: DB_USER_NAME
