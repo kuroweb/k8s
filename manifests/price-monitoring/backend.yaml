@@ -43,7 +43,6 @@ spec:
         app: price-monitoring
         server: backend
     spec:
-      # Container の定義
       containers:
         - name: backend
           image: registry.local:5000/price-monitoring-backend:latest
