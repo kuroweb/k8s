@@ -1,29 +1,3 @@
-#
-# Service
-#
-
-apiVersion: v1
-kind: Service
-metadata:
-  name: backend-service
-  namespace: price-monitoring
-spec:
-  selector:
-    app: price-monitoring
-    server: backend
-  type: LoadBalancer
-  ports:
-    - name: backend-port
-      protocol: TCP
-      port: 3000
-      targetPort: 3000
-  loadBalancerIP: 192.168.0.210
-
----
-#
-# Deployment
-#
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -63,17 +37,3 @@ spec:
                 secretKeyRef:
                   name: rails-master-key
                   key: RAILS_MASTER_KEY
-
----
-#
-# Secret
-#
-
-apiVersion: v1
-kind: Secret
-metadata:
-  name: rails-master-key
-  namespace: price-monitoring
-type: Opaque
-data:
-  RAILS_MASTER_KEY: '' # 適切なキーを入力してapplyすること
