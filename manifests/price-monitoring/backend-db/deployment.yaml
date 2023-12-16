@@ -1,29 +1,3 @@
-#
-# Service
-#
-
-apiVersion: v1
-kind: Service
-metadata:
-  name: backend-db-service
-  namespace: price-monitoring
-spec:
-  selector:
-    app: price-monitoring
-    server: backend-db
-  type: LoadBalancer
-  ports:
-    - name: backend-db-port
-      protocol: TCP
-      port: 3306
-      targetPort: 3306
-  loadBalancerIP: 192.168.0.211
-
----
-#
-# Deployment
-#
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
