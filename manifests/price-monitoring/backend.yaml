@@ -58,3 +58,22 @@ spec:
               value: root
             - name: DB_PASSWORD
               value: ""
+            - name: RAILS_MASTER_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: rails-master-key
+                  key: RAILS_MASTER_KEY
+
+---
+#
+# Secret
+#
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: rails-master-key
+  namespace: price-monitoring
+type: Opaque
+data:
+  RAILS_MASTER_KEY: '' # 適切なキーを入力してapplyすること
