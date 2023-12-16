@@ -23,8 +23,15 @@ spec:
           ports:
             - name: backend-db-port
               containerPort: 3306
+          volumeMounts:
+            - name: backend-db-storage
+              mountPath: /var/lib/mysql
           env:
             - name: MYSQL_ROOT_HOST
               value: "%"
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: "yes"
+      volumes:
+        - name: backend-db-storage
+          persistentVolumeClaim:
+            claimName: backend-db-pvc
