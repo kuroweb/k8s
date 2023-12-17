@@ -27,7 +27,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: backend-deployment
+  name: backend-db-deployment
   namespace: price-monitoring
   labels:
     app: price-monitoring
@@ -36,44 +36,31 @@ spec:
   selector:
     matchLabels:
       app: price-monitoring
-      server: backend
+      server: backend-db
   template:
     metadata:
       labels:
         app: price-monitoring
-        server: backend
+        server: backend-db
     spec:
       containers:
-        - name: backend
-          image: registry.local:5000/price-monitoring-backend:latest
-          command:
-            [
-              "./bin/rails",
-              "server",
-              "-b",
-              "0.0.0.0",
-              "-p",
-              "3000",
-              "-e",
-              "production",
-            ]
+        - name: backend-db
+          image: mysql/mysql-server:8.0
           ports:
-            - name: backend-port
-              containerPort: 3000
+            - name: backend-db-port
+              containerPort: 3306
+          volumeMounts:
+            - name: backend-db-storage
+              mountPath: /var/lib/mysql
           env:
-            - name: DB_HOST_NAME
-              value: 192.168.0.212
-            - name: DB_DATABASE_NAME
-              value: rails
-            - name: DB_USER_NAME
-              value: root
-            - name: DB_PASSWORD
-              value: ""
-            - name: RAILS_MASTER_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: rails-master-key
-                  key: RAILS_MASTER_KEY
+            - name: MYSQL_ROOT_HOST
+              value: "%"
+            - name: MYSQL_ALLOW_EMPTY_PASSWORD
+              value: "yes"
+      volumes:
+        - name: backend-db-storage
+          persistentVolumeClaim:
+            claimName: backend-db-pvc
 
 ---
 #
