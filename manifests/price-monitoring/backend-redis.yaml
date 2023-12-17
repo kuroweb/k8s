@@ -28,6 +28,8 @@ kind: Deployment
 metadata:
   name: backend-redis-deployment
   namespace: price-monitoring
+  labels:
+    app: price-monitoring
 spec:
   replicas: 1
   selector:
