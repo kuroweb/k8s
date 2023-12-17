@@ -1,3 +1,29 @@
+#
+# Service
+#
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+  namespace: price-monitoring
+spec:
+  selector:
+    app: price-monitoring
+    server: backend
+  type: LoadBalancer
+  ports:
+    - name: backend-port
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
+  loadBalancerIP: 192.168.0.210
+
+---
+#
+# Deployment
+#
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -20,6 +46,7 @@ spec:
       containers:
         - name: backend
           image: registry.local:5000/price-monitoring-backend:latest
+          command: ["./bin/rails", "server", "-b", "0.0.0.0", "-p", "3000", "-e", "production"]
           ports:
             - name: backend-port
               containerPort: 3000
