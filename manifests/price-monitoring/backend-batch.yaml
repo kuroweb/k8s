@@ -62,7 +62,7 @@ spec:
             - name: REDIS_URL
               value: "redis://192.168.0.213:6379"
             - name: TOR_URL
-              value: "192.168.0.214:9050"
+              value: "socks5://192.168.0.214:9050"
             - name: RAILS_MASTER_KEY
               valueFrom:
                 secretKeyRef:
