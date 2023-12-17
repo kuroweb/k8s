@@ -13,7 +13,7 @@ spec:
     server: backend-db
   type: LoadBalancer
   ports:
-    - name: backend-db-port
+    - name: http
       protocol: TCP
       port: 3306
       targetPort: 3306
@@ -47,7 +47,7 @@ spec:
         - name: backend-db
           image: mysql/mysql-server:8.0
           ports:
-            - name: backend-db-port
+            - name: http
               containerPort: 3306
           volumeMounts:
             - name: backend-db-storage

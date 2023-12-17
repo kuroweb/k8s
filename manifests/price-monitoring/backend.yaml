@@ -13,7 +13,7 @@ spec:
     server: backend
   type: LoadBalancer
   ports:
-    - name: backend-port
+    - name: http
       protocol: TCP
       port: 3000
       targetPort: 3000
@@ -48,7 +48,7 @@ spec:
           image: registry.local:5000/price-monitoring-backend:latest
           command: ["./bin/rails", "server", "-b", "0.0.0.0", "-p", "3000", "-e", "production"]
           ports:
-            - name: backend-port
+            - name: http
               containerPort: 3000
           env:
             - name: DB_HOST_NAME

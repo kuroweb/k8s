@@ -12,7 +12,7 @@ spec:
     app: price-monitoring
   type: LoadBalancer
   ports:
-    - name: backend-redis-port
+    - name: http
       protocol: TCP
       port: 6379
       targetPort: 6379
@@ -45,7 +45,7 @@ spec:
           image: redis
           args: ["--appendonly", "yes"]
           ports:
-            - name: backend-redis-port
+            - name: http
               containerPort: 6379
           volumeMounts:
             - name: backend-redis-storage

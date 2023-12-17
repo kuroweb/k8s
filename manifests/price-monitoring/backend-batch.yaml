@@ -13,7 +13,7 @@ spec:
     server: backend-batch
   type: LoadBalancer
   ports:
-    - name: backend-db-port
+    - name: http
       protocol: TCP
       port: 3000
       targetPort: 3000
@@ -48,7 +48,7 @@ spec:
           image: registry.local:5000/price-monitoring-backend:latest
           command: ["sidekiq", "-C", "config/sidekiq.yml", "-e", "production"]
           ports:
-            - name: backend-db-port
+            - name: http
               containerPort: 3000
           env:
             - name: DB_HOST_NAME
