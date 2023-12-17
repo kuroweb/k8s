@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: backend-deployment
+  name: backend-batch-deployment
   namespace: price-monitoring
   labels:
     app: price-monitoring
@@ -10,22 +10,22 @@ spec:
   selector:
     matchLabels:
       app: price-monitoring
-      server: backend
+      server: backend-batch
   template:
     metadata:
       labels:
         app: price-monitoring
-        server: backend
+        server: backend-batch
     spec:
       containers:
-        - name: backend
+        - name: backend-batch
           image: registry.local:5000/price-monitoring-backend:latest
           ports:
-            - name: backend-port
+            - name: backend-db-port
               containerPort: 3000
           env:
             - name: DB_HOST_NAME
-              value: 192.168.0.212
+              value: 192.168.0.211
             - name: DB_DATABASE_NAME
               value: rails
             - name: DB_USER_NAME
