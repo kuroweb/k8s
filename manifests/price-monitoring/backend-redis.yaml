@@ -1,0 +1,77 @@
+#
+# Service
+#
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-redis-service
+  namespace: price-monitoring
+spec:
+  selector:
+    app: price-monitoring
+  type: LoadBalancer
+  ports:
+    - name: backend-redis-port
+      protocol: TCP
+      port: 6379
+      targetPort: 6379
+  loadBalancerIP: 192.168.0.213
+
+---
+#
+# Deployment
+#
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-redis-deployment
+  namespace: price-monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: price-monitoring
+      server: backend-redis
+  template:
+    metadata:
+      labels:
+        app: price-monitoring
+        name: backend-redis
+    spec:
+      containers:
+        - name: backend-redis
+          image: redis
+          args: ["--appendonly", "yes"]
+          ports:
+            - name: backend-redis-port
+              containerPort: 6379
+          volumeMounts:
+            - name: backend-redis-storage
+              mountPath: /data
+          env:
+            - name: ALLOW_EMPTY_PASSWORD
+              value: "yes"
+      volumes:
+        - name: backend-redis-storage
+          persistentVolumeClaim:
+            claimName: backend-redis-pvc
+
+---
+#
+# pvc
+#
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: backend-redis-pvc
+  namespace: price-monitoring
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: longhorn
+  resources:
+    requests:
+      storage: 10Gi
