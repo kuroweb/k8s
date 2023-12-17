@@ -59,6 +59,8 @@ spec:
               value: root
             - name: DB_PASSWORD
               value: ""
+            - name: REDIS_URL
+              value: "redis://192.168.0.213:6379"
             - name: RAILS_MASTER_KEY
               valueFrom:
                 secretKeyRef:
