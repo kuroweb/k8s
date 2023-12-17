@@ -10,6 +10,7 @@ metadata:
 spec:
   selector:
     app: price-monitoring
+    server: backend-redis
   type: LoadBalancer
   ports:
     - name: http
