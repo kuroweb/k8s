@@ -41,7 +41,7 @@ spec:
     metadata:
       labels:
         app: price-monitoring
-        name: backend-redis
+        server: backend-redis
     spec:
       containers:
         - name: backend-redis
