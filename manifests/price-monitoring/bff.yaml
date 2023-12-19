@@ -51,8 +51,8 @@ spec:
               containerPort: 3000
           env:
             - name: PORT
-              value: 3000
+              value: "3000"
             - name: ALLOWED_ORIGIN
-              value: bff
+              value: "bff"
             - name: BACKEND_URL
-              value: http://192.168.0.210:3000
+              value: "http://192.168.0.210:3000"
