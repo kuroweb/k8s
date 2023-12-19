@@ -2,12 +2,6 @@
 
 - ローカルサーバのk8sのセットアップや試行錯誤用リポジトリ
 
-## TODO<!-- omit in toc -->
-
-- 🏃Dockerコンテナ化したアプリケーションをデプロイできるようにする
-- ArgoCDでGitOps化
-- 外部アクセスできるようにする
-
 ## Categories<!-- omit in toc -->
 
 - [Infra](#infra)
