@@ -53,6 +53,6 @@ spec:
             - name: PORT
               value: "3000"
             - name: ALLOWED_ORIGIN
-              value: "bff"
+              value: "192.168.0.216"
             - name: BACKEND_URL
               value: "http://192.168.0.210:3000"
