@@ -501,8 +501,8 @@ graph LR
 
   4. 管理ユーザーを作成
 
-     - Username: admin
-     - Password: admin1234567
+     - Username: 任意のユーザー名
+     - Password: 任意のパスワード
 
 ### 15. Argo CD
 
