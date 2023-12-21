@@ -7,7 +7,7 @@
 - [Infra](#infra)
   - [Structure](#structure)
   - [Management](#management)
-  - [loadBalancerIP](#loadbalancerip)
+  - [IP](#ip)
 - [Setup](#setup)
   - [1. hostname](#1-hostname)
   - [2. IP固定](#2-ip固定)
@@ -22,6 +22,7 @@
   - [12. Docker Registry (TLS)](#12-docker-registry-tls)
   - [13. OpenFaaS](#13-openfaas)
   - [14. Portainer](#14-portainer)
+  - [15. Argo CD](#15-argo-cd)
 - [Command](#command)
   - [Kubernetes](#kubernetes)
   - [Ansible](#ansible)
@@ -502,6 +503,40 @@ graph LR
 
      - Username: admin
      - Password: admin1234567
+
+### 15. Argo CD
+
+- Install
+
+  1. namespace作成
+
+      ```bash
+      kubectl apply -f manifests/argocd/namespace.yaml
+      ```
+
+  2. クラスタに追加
+
+      ```bash
+      kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+      ```
+
+  3. MetalLBを利用する
+
+      ```bash
+      kubectl patch service argocd-server -n argocd --patch '{ "spec": { "type": "LoadBalancer", "loadBalancerIP": "192.168.0.208" } }'
+      ```
+
+  4. 確認
+
+      ```bash
+      kubectl get pods  -n argocd
+      kubectl get svc -n argocd
+      ```
+
+- Argo CD CLI
+  - TODO
+- Argo CDにアプリを追加する
+  - TODO
 
 ## Command
 
