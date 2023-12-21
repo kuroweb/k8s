@@ -61,16 +61,16 @@ graph LR
   Macbook--"ansible (ssh)"-->k8s
 ```
 
-### loadBalancerIP
+### IP
 
 | port | application |
 | -- | -- |
 | 192.168.0.201 | Longhorn |
 | 192.168.0.202 | docker-registry |
 | 192.168.0.203 | OpenFaaS |
-| 192.168.0.204 | redis-server |
 | 192.168.0.207 | Portainer |
-| 192.168.0.210 | price-monitoring |
+| 192.168.0.208 | Argo CD |
+| 192.168.0.210 ... 217 | price-monitoring |
 
 ## Setup
 
