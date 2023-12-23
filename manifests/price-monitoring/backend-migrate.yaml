@@ -26,13 +26,8 @@ spec:
           image: registry.local:5000/price-monitoring-backend:latest
           command:
             [
-              "RAILS_ENV=production",
-              "./bin/rails",
-              "db:create",
-              "&&",
-              "RAILS_ENV=production",
-              "./bin/rails",
-              "db:migrate",
+              "/bin/sh", "-c",
+              "RAILS_ENV=production rails db:create && RAILS_ENV=production rails db:migrate"
             ]
           env:
             - name: DB_HOST_NAME
@@ -49,6 +44,8 @@ spec:
               value: "socks5://192.168.0.214:9050"
             - name: PLAYWRIGHT_URL
               value: "ws://192.168.0.215:8888/ws"
+            - name: ALLOWED_ORIGIN
+              value: ""
             - name: RAILS_MASTER_KEY
               valueFrom:
                 secretKeyRef:
