@@ -1,0 +1,56 @@
+#
+# Deployment
+#
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-migrate-deployment
+  namespace: price-monitoring
+  labels:
+    app: price-monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: price-monitoring
+      server: backend-migrate
+  template:
+    metadata:
+      labels:
+        app: price-monitoring
+        server: backend-migrate
+    spec:
+      containers:
+        - name: backend-migrate
+          image: registry.local:5000/price-monitoring-backend:latest
+          command:
+            [
+              "RAILS_ENV=production",
+              "./bin/rails",
+              "db:create",
+              "&&",
+              "RAILS_ENV=production",
+              "./bin/rails",
+              "db:migrate",
+            ]
+          env:
+            - name: DB_HOST_NAME
+              value: 192.168.0.212
+            - name: DB_DATABASE_NAME
+              value: rails
+            - name: DB_USER_NAME
+              value: root
+            - name: DB_PASSWORD
+              value: ""
+            - name: REDIS_URL
+              value: "redis://192.168.0.213:6379"
+            - name: TOR_URL
+              value: "socks5://192.168.0.214:9050"
+            - name: PLAYWRIGHT_URL
+              value: "ws://192.168.0.215:8888/ws"
+            - name: RAILS_MASTER_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: rails-master-key
+                  key: RAILS_MASTER_KEY
