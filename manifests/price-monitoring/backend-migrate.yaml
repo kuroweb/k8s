@@ -31,7 +31,7 @@ spec:
             ]
           env:
             - name: DB_HOST_NAME
-              value: 192.168.0.212
+              value: 192.168.2.212
             - name: DB_DATABASE_NAME
               value: rails
             - name: DB_USER_NAME
@@ -39,11 +39,11 @@ spec:
             - name: DB_PASSWORD
               value: ""
             - name: REDIS_URL
-              value: "redis://192.168.0.213:6379"
+              value: "redis://192.168.2.213:6379"
             - name: TOR_URL
-              value: "socks5://192.168.0.214:9050"
+              value: "socks5://192.168.2.214:9050"
             - name: PLAYWRIGHT_URL
-              value: "ws://192.168.0.215:8888/ws"
+              value: "ws://192.168.2.215:8888/ws"
             - name: ALLOWED_ORIGIN
               value: ""
             - name: RAILS_MASTER_KEY

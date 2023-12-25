@@ -66,12 +66,12 @@ graph LR
 
 | port | application |
 | -- | -- |
-| 192.168.0.201 | Longhorn |
-| 192.168.0.202 | docker-registry |
-| 192.168.0.203 | OpenFaaS |
-| 192.168.0.207 | Portainer |
-| 192.168.0.208 | Argo CD |
-| 192.168.0.210 ... 217 | price-monitoring |
+| 192.168.2.201 | Longhorn |
+| 192.168.2.202 | docker-registry |
+| 192.168.2.203 | OpenFaaS |
+| 192.168.2.207 | Portainer |
+| 192.168.2.208 | Argo CD |
+| 192.168.2.210 ... 217 | price-monitoring |
 
 ## Setup
 
@@ -153,9 +153,9 @@ graph LR
   sudo vim /etc/hosts
 
   # 以下を追記する
-  192.168.0.10 master-1 master-1.local
-  192.168.0.11 worker-1 worker-1.local
-  192.168.0.12 worker-2 worker-2.local
+  192.168.2.10 master-1 master-1.local
+  192.168.2.11 worker-1 worker-1.local
+  192.168.2.12 worker-2 worker-2.local
   ```
 
 ### 4. 公開鍵を登録
@@ -228,9 +228,9 @@ graph LR
 
       ```bash
       # 以下を追加する
-      192.168.0.10 master-1 master-1.local
-      192.168.0.11 worker-1 worker-1.local
-      192.168.0.12 worker-2 worker-2.local
+      192.168.2.10 master-1 master-1.local
+      192.168.2.11 worker-1 worker-1.local
+      192.168.2.12 worker-2 worker-2.local
       ```
 
   8. クラスタ構築
@@ -380,7 +380,7 @@ graph LR
       helm repo update
       helm install longhorn longhorn/longhorn --namespace longhorn-system --create-namespace --set defaultSettings.defaultDataPath="/storage-1"
       # if you do not want to create separate service file for UI access as I did leter on with `service.yaml` you can use it like this:
-      helm install longhorn longhorn/longhorn --namespace longhorn-system --create-namespace --set defaultSettings.defaultDataPath="/storage-1" --set service.ui.loadBalancerIP="192.168.0.201" --set service.ui.type="LoadBalancer"
+      helm install longhorn longhorn/longhorn --namespace longhorn-system --create-namespace --set defaultSettings.defaultDataPath="/storage-1" --set service.ui.loadBalancerIP="192.168.2.201" --set service.ui.type="LoadBalancer"
       ```
 
   8. Serviceを追加
@@ -391,7 +391,7 @@ graph LR
 
   9. Longhornの管理画面にアクセス
 
-     - <http://192.168.0.201>
+     - <http://192.168.2.201>
 
   10. Nodeを更新
 
@@ -424,7 +424,7 @@ graph LR
       ```bash
       # Macbookで実行
       cd ansible
-      openssl req -x509 -newkey rsa:4096 -sha256 -days 3650 -nodes -keyout registry.key -out registry.crt -subj "/CN=registry.local" -addext "subjectAltName=DNS:registry.local,DNS:*.cube.local,IP:192.168.0.202"
+      openssl req -x509 -newkey rsa:4096 -sha256 -days 3650 -nodes -keyout registry.key -out registry.crt -subj "/CN=registry.local" -addext "subjectAltName=DNS:registry.local,DNS:*.cube.local,IP:192.168.2.202"
       ```
 
   4. 各サーバに証明書を追加
@@ -459,7 +459,7 @@ graph LR
 
       ```bash
       # 以下を追加する
-      192.168.0.202 registry registry.local
+      192.168.2.202 registry registry.local
       ```
 
   8. dockerの設定を修正
@@ -507,7 +507,7 @@ graph LR
 
   3. portainerにアクセス
 
-      <http://192.168.0.207:9000>
+      <http://192.168.2.207:9000>
 
   4. 管理ユーザーを作成
 
@@ -533,7 +533,7 @@ graph LR
   3. MetalLBを利用する
 
       ```bash
-      kubectl patch service argocd-server -n argocd --patch '{ "spec": { "type": "LoadBalancer", "loadBalancerIP": "192.168.0.208" } }'
+      kubectl patch service argocd-server -n argocd --patch '{ "spec": { "type": "LoadBalancer", "loadBalancerIP": "192.168.2.208" } }'
       ```
 
   4. 確認

@@ -17,7 +17,7 @@ spec:
       protocol: TCP
       port: 80
       targetPort: 3000
-  loadBalancerIP: 192.168.0.217
+  loadBalancerIP: 192.168.2.217
 
 ---
 #
@@ -51,6 +51,6 @@ spec:
               containerPort: 3000
           env:
             - name: NEXT_PRIVATE_BFF_URL
-              value: "http://192.168.0.216:3000/query"
+              value: "http://192.168.2.216:3000/query"
             - name: NEXT_PUBLIC_BFF_URL
-              value: "http://192.168.0.216:3000/query"
+              value: "http://192.168.2.216:3000/query"
