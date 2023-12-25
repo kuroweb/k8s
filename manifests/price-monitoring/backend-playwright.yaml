@@ -17,7 +17,7 @@ spec:
       protocol: TCP
       port: 8888
       targetPort: 8888
-  loadBalancerIP: 192.168.2.215
+  loadBalancerIP: 192.168.0.215
 
 ---
 #

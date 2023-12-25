@@ -17,7 +17,7 @@ spec:
       protocol: TCP
       port: 3000
       targetPort: 3000
-  loadBalancerIP: 192.168.2.216
+  loadBalancerIP: 192.168.0.216
 
 ---
 #
@@ -53,6 +53,6 @@ spec:
             - name: PORT
               value: "3000"
             - name: ALLOWED_ORIGIN
-              value: "192.168.2.216"
+              value: "192.168.0.216"
             - name: BACKEND_URL
-              value: "http://192.168.2.210:3000"
+              value: "http://192.168.0.210:3000"
