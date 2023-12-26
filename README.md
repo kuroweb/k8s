@@ -11,7 +11,7 @@
 - [Setup](#setup)
   - [1. hostname](#1-hostname)
   - [2. IP固定](#2-ip固定)
-  - [3. Macbookのhostsを修正](#3-macbookのhostsを修正)
+  - [3. SSHポート変更](#3-sshポート変更)
   - [4. 公開鍵を登録](#4-公開鍵を登録)
   - [6. Ansible](#6-ansible)
   - [7. Kubernetes](#7-kubernetes)
@@ -145,17 +145,14 @@ graph LR
     #=> config/worker-2/etc/netplan/01-network-manager-all.yamlの内容で修正
     ```
 
-### 3. Macbookのhostsを修正
+### 3. SSHポート変更
 
-- サーバのホスト名でsshできるようにする
+- セキュリティ対策としてSSHポートを変更する
 
   ```bash
-  sudo vim /etc/hosts
+  sudo vi /etc/ssh/sshd_config
 
-  # 以下を追記する
-  192.168.0.10 master-1 master-1.local
-  192.168.0.11 worker-1 worker-1.local
-  192.168.0.12 worker-2 worker-2.local
+  #=> Port を任意の値で変更する
   ```
 
 ### 4. 公開鍵を登録
