@@ -295,19 +295,16 @@ graph LR
   1. Traefikをインストール
 
       ```bash
-      helm repo add metallb https://metallb.github.io/metallb
-      helm install metallb metallb/metallb --create-namespace \
+      helm repo add traefik https://traefik.github.io/charts
+      helm install traefik traefik/traefik --create-namespace \
       --namespace traefik --wait
       ```
 
   2. MetalLBをインストール
 
       ```bash
-      # First add metallb repository to your helm
       helm repo add metallb https://metallb.github.io/metallb
-      # Check if it was found
       helm search repo metallb
-      # Install metallb
       helm upgrade --install metallb metallb/metallb --create-namespace \
       --namespace metallb-system --wait
       ```
