@@ -7,8 +7,3 @@
 127.0.0.1	localhost
 255.255.255.255	broadcasthost
 ::1             localhost
-
-# servers
-192.168.2.10 master-1 master-1.local
-192.168.2.11 worker-1 worker-1.local
-192.168.2.12 worker-2 worker-2.local
