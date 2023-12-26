@@ -296,7 +296,7 @@ graph LR
 
       ```bash
       helm repo add traefik https://traefik.github.io/charts
-      helm install traefik traefik/traefik --create-namespace \
+      helm upgrade --install traefik traefik/traefik --create-namespace \
       --namespace traefik --wait
       ```
 
