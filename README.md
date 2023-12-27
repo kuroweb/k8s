@@ -296,8 +296,7 @@ graph LR
 
       ```bash
       helm repo add traefik https://traefik.github.io/charts
-      helm upgrade --install traefik traefik/traefik --create-namespace \
-      --namespace traefik --wait
+      helm upgrade --install traefik traefik/traefik --namespace kube-system
       ```
 
   2. MetalLBをインストール
