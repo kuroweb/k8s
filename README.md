@@ -23,6 +23,7 @@
   - [13. OpenFaaS](#13-openfaas)
   - [14. Portainer](#14-portainer)
   - [15. Argo CD](#15-argo-cd)
+  - [16. firewall](#16-firewall)
 - [Command](#command)
   - [Kubernetes](#kubernetes)
   - [Ansible](#ansible)
@@ -540,6 +541,35 @@ graph LR
   - TODO
 - Argo CDにアプリを追加する
   - TODO
+
+### 16. firewall
+
+- ufwを有効化
+
+  ```bash
+  sudo ufw default deny
+  sudo ufw allow <ssh port>/tcp
+  sudo ufw enable
+  ```
+
+- kubernetes用のポートを開放する
+
+  ```bash
+  sudo ufw allow 6443/tcp
+  sudo ufw allow 10250/tcp
+  sudo ufw allow 10251/tcp
+  sudo ufw allow 10252/tcp
+  sudo ufw reload
+  ```
+
+  | ポート番号 | 使用目的 | 使用者 | 備考 |
+  | -- | -- | -- | -- |
+  | 6443 | Kubernetes API server | すべて | ポート番号は任意に書き換え可能 |
+  | 2379-2380 | etcd server client API | kube-apiserver、etcd |   |
+  | 10250 | Kubelet API | 自身、コントロールプレーン |   |
+  | 10251 | kube-scheduler | 自身 |   |
+  | 10252 | kube-controller-manager | 自身 |   |
+  | 30000-32767 | NodePort Service | すべて | NodePort Serviceのデフォルトのポートの範囲 |
 
 ## Command
 
