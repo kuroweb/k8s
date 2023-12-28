@@ -27,6 +27,7 @@
 - [Command](#command)
   - [Kubernetes](#kubernetes)
   - [Ansible](#ansible)
+  - [ufw](#ufw)
 
 ## Infra
 
@@ -624,3 +625,36 @@ graph LR
     ```bash
     ansible worker -b --ask-become-pass -m shell -a "reboot"
     ```
+
+### ufw
+
+- 有効化
+
+  ```bash
+  sudo ufw enable
+  ```
+
+- 無効化
+
+  ```bash
+  sudo ufw disable
+  ```
+
+- 無効化 & 初期化
+
+  ```bash
+  sudo ufw reset
+  ```
+
+- ポートを追加
+
+  ```bash
+  sudo ufw allow <port>
+  ```
+
+- ポートを削除
+
+  ```bash
+  sudo ufw status numbered
+  sudo ufw delete <number>
+  ```
