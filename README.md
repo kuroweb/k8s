@@ -256,14 +256,7 @@ graph LR
       kubectl get node
       ```
 
-  10. クラスタ構築後に各ノードをとりあえずReadyにしたい
-
-      ```bash
-      # calicoを導入する
-      kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.0/manifests/calico.yaml
-      ```
-
-  11. workerノードにラベルを設定
+  10. workerノードにラベルを設定
 
       ```bash
       kubectl label nodes <worker-node-name> node-type=worker
@@ -294,11 +287,12 @@ graph LR
 
 - Install
 
-  1. Traefikをインストール
+  1. Ciliumをインストール
 
       ```bash
-      helm repo add traefik https://traefik.github.io/charts
-      helm upgrade --install traefik traefik/traefik --namespace kube-system
+      helm repo add cilium https://helm.cilium.io/
+      helm install cilium cilium/cilium --version 1.14.5 \
+        --namespace kube-system
       ```
 
   2. MetalLBをインストール
