@@ -13,6 +13,7 @@
   - [2. IP固定](#2-ip固定)
   - [3. SSHポート変更](#3-sshポート変更)
   - [4. 公開鍵を登録](#4-公開鍵を登録)
+  - [5. firewall](#5-firewall)
   - [6. Ansible](#6-ansible)
   - [7. Kubernetes](#7-kubernetes)
   - [8. Helm](#8-helm)
@@ -23,7 +24,6 @@
   - [13. OpenFaaS](#13-openfaas)
   - [14. Portainer](#14-portainer)
   - [15. Argo CD](#15-argo-cd)
-  - [16. firewall](#16-firewall)
 - [Command](#command)
   - [Kubernetes](#kubernetes)
   - [Ansible](#ansible)
@@ -164,6 +164,77 @@ graph LR
   ```bash
   ssh-copy-id <username>@<hostname>
   ```
+
+### 5. firewall
+
+- ufwを有効化
+
+  ```bash
+  sudo ufw default deny
+  sudo ufw allow <ssh port>/tcp
+  sudo ufw enable
+  ```
+
+- master-1
+
+  ```bash
+  <sshポート番号>/tcp          ALLOW       Anywhere
+  6443/tcp                   ALLOW       Anywhere
+  10250/tcp                  ALLOW       Anywhere
+  10251/tcp                  ALLOW       Anywhere
+  10252/tcp                  ALLOW       Anywhere
+  1194/udp                   ALLOW       Anywhere
+  443/tcp                    ALLOW       Anywhere
+  2379/tcp                   ALLOW       Anywhere
+  2380/tcp                   ALLOW       Anywhere
+  30000:32767/tcp            ALLOW       Anywhere
+  8472/udp                   ALLOW       Anywhere
+  7946/tcp                   ALLOW       Anywhere
+  4240/tcp                   ALLOW       Anywhere
+  7946/udp                   ALLOW       Anywhere
+  <sshポート番号>/tcp (v6)     ALLOW       Anywhere (v6)
+  6443/tcp (v6)              ALLOW       Anywhere (v6)
+  10250/tcp (v6)             ALLOW       Anywhere (v6)
+  10251/tcp (v6)             ALLOW       Anywhere (v6)
+  10252/tcp (v6)             ALLOW       Anywhere (v6)
+  1194/udp (v6)              ALLOW       Anywhere (v6)
+  443/tcp (v6)               ALLOW       Anywhere (v6)
+  2379/tcp (v6)              ALLOW       Anywhere (v6)
+  2380/tcp (v6)              ALLOW       Anywhere (v6)
+  30000:32767/tcp (v6)       ALLOW       Anywhere (v6)
+  8472/udp (v6)              ALLOW       Anywhere (v6)
+  7946/tcp (v6)              ALLOW       Anywhere (v6)
+  4240/tcp (v6)              ALLOW       Anywhere (v6)
+  7946/udp (v6)              ALLOW       Anywhere (v6)
+  ```
+
+- worker-1, worker-2
+
+  ```bash
+  10250/tcp                  ALLOW       Anywhere
+  30000:32767/tcp            ALLOW       Anywhere
+  <sshポート番号>/tcp          ALLOW       Anywhere
+  7946/tcp                   ALLOW       Anywhere
+  4240/tcp                   ALLOW       Anywhere
+  8472/udp                   ALLOW       Anywhere
+  10250/tcp (v6)             ALLOW       Anywhere (v6)
+  30000:32767/tcp (v6)       ALLOW       Anywhere (v6)
+  <sshポート番号>/tcp (v6)     ALLOW       Anywhere (v6)
+  7946/tcp (v6)              ALLOW       Anywhere (v6)
+  4240/tcp (v6)              ALLOW       Anywhere (v6)
+  8472/udp (v6)              ALLOW       Anywhere (v6)
+  ```
+
+- kubernetes用の基本的なポート
+
+  | ポート番号 | 使用目的 | 使用者 | 備考 |
+  | -- | -- | -- | -- |
+  | 6443 | Kubernetes API server | すべて | ポート番号は任意に書き換え可能 |
+  | 2379-2380 | etcd server client API | kube-apiserver、etcd |   |
+  | 10250 | Kubelet API | 自身、コントロールプレーン |   |
+  | 10251 | kube-scheduler | 自身 |   |
+  | 10252 | kube-controller-manager | 自身 |   |
+  | 30000-32767 | NodePort Service | すべて | NodePort Serviceのデフォルトのポートの範囲 |
 
 ### 6. Ansible
 
@@ -536,35 +607,6 @@ graph LR
   - TODO
 - Argo CDにアプリを追加する
   - TODO
-
-### 16. firewall
-
-- ufwを有効化
-
-  ```bash
-  sudo ufw default deny
-  sudo ufw allow <ssh port>/tcp
-  sudo ufw enable
-  ```
-
-- kubernetes用のポートを開放する
-
-  ```bash
-  sudo ufw allow 6443/tcp
-  sudo ufw allow 10250/tcp
-  sudo ufw allow 10251/tcp
-  sudo ufw allow 10252/tcp
-  sudo ufw reload
-  ```
-
-  | ポート番号 | 使用目的 | 使用者 | 備考 |
-  | -- | -- | -- | -- |
-  | 6443 | Kubernetes API server | すべて | ポート番号は任意に書き換え可能 |
-  | 2379-2380 | etcd server client API | kube-apiserver、etcd |   |
-  | 10250 | Kubelet API | 自身、コントロールプレーン |   |
-  | 10251 | kube-scheduler | 自身 |   |
-  | 10252 | kube-controller-manager | 自身 |   |
-  | 30000-32767 | NodePort Service | すべて | NodePort Serviceのデフォルトのポートの範囲 |
 
 ## Command
 
