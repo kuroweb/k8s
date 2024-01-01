@@ -7,6 +7,7 @@
 - [Infra](#infra)
   - [Structure](#structure)
   - [Management](#management)
+  - [Network](#network)
   - [IP](#ip)
 - [Setup](#setup)
   - [1. hostname](#1-hostname)
@@ -52,7 +53,7 @@ graph LR
 
 ```mermaid
 graph LR
-  Macbook
+  client
 
   subgraph k8s["kubernetes Node"]
     direction LR
@@ -62,7 +63,34 @@ graph LR
     worker-2
   end
 
-  Macbook--"ansible (ssh)"-->k8s
+  client--"ansible (ssh)"-->k8s
+```
+
+### Network
+
+```mermaid
+graph LR
+  client-public["client-public (xx.xx.xx)"]
+
+  subgraph local-network
+    subgraph dmz["router-1 - DMZ (192.168.0.1)"]
+      direction LR
+
+      master-1["master-1 (192.168.0.xx)"]
+      worker-1["worker-1 (192.168.0.xx)"]
+      worker-2["worker-2 (192.168.0.xx)"]
+    end
+
+    subgraph priv["router-2 - private-network (192.168.1.1)"]
+      direction LR
+
+      client-private["client-private (192.168.1.xx)"]
+    end
+  end
+
+  client-public--"SSH (with VPN)"-->dmz
+  dmz--"二重ルータ"-->priv
+  client-private--"SSH"-->dmz
 ```
 
 ### IP
