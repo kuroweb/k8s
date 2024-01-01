@@ -740,3 +740,17 @@ graph LR
   kubectl rollout restart deploy longhorn-driver-deployer -n longhorn-system
   kubectl rollout restart deploy longhorn-ui -n longhorn-system
   ```
+
+- rphaned podエラーの対処
+  - Workerノードを再起動したときに以下のログが表示され続ける問題
+
+    ```log
+    1月 01 22:05:44 worker-2 kubelet[990]: E0101 22:05:44.486149     990 kubelet_volumes.go:261] "There were many similar errors. Turn up verbosity to see them." err="orphaned pod \"684d52e7-c6b5-4584-b3bb-681afaf390d4\" found, but error occurred when trying to remove the volumes dir: not a directory" numErrs=3
+    ```
+
+  - 対処方法 (暫定)
+
+    ```bash
+    # 発生しているWorkerノードのkubeletを再起動
+    sudo systemctl restart kubelet
+    ```
