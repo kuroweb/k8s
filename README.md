@@ -4,11 +4,8 @@
 
 ## Categories<!-- omit in toc -->
 
-- [Infra](#infra)
-  - [Structure](#structure)
-  - [Management](#management)
-  - [Network](#network)
-  - [IP](#ip)
+- [Nodes](#nodes)
+- [Applications](#applications)
 - [Setup](#setup)
   - [1. hostname](#1-hostname)
   - [2. IP固定](#2-ip固定)
@@ -31,78 +28,39 @@
   - [ufw](#ufw)
   - [Longhorn](#longhorn)
 
-## Infra
-
-### Structure
+## Nodes
 
 ```mermaid
-graph LR
-  subgraph k8s["kubernetes Node"]
-    subgraph Control Node
+graph
+  direction LR
+
+  subgraph k8s[" "]
+    subgraph control["Control Node"]
       master-1
     end
 
-    subgraph Worker Node
+    subgraph worker["Worker Node"]
       worker-1
       worker-2
     end
   end
+
+  control-->worker
 ```
 
-### Management
+## Applications
 
-```mermaid
-graph LR
-  client
-
-  subgraph k8s["kubernetes Node"]
-    direction LR
-
-    master-1
-    worker-1
-    worker-2
-  end
-
-  client--"ansible (ssh)"-->k8s
-```
-
-### Network
-
-```mermaid
-graph LR
-  client-public["client-public (xx.xx.xx)"]
-
-  subgraph local-network
-    subgraph dmz["router-1 - DMZ (192.168.0.1)"]
-      direction LR
-
-      master-1["master-1 (192.168.0.xx)"]
-      worker-1["worker-1 (192.168.0.xx)"]
-      worker-2["worker-2 (192.168.0.xx)"]
-    end
-
-    subgraph priv["router-2 - private-network (192.168.1.1)"]
-      direction LR
-
-      client-private["client-private (192.168.1.xx)"]
-    end
-  end
-
-  client-public--"SSH (with VPN)"-->dmz
-  dmz--"二重ルータ"-->priv
-  client-private--"SSH"-->dmz
-```
-
-### IP
-
-| port | application |
+| Application | LoadbalancerIP |
 | -- | -- |
-| 192.168.0.201 | Longhorn |
-| 192.168.0.202 | docker-registry |
-| 192.168.0.203 | OpenFaaS |
-| 192.168.0.207 | Portainer |
-| 192.168.0.208 | Argo CD |
-| 192.168.0.210 ... 217 | price-monitoring |
+| Longhorn | http://192.168.0.201 |
+| docker-registry | https://192.168.0.202:5000 |
+| OpenFaaS | http://192.168.0.203:8080 |
+| Portainer | http://192.168.0.207:9000 |
+| Argo CD | https://192.168.0.208 |
+| price-monitoring - Frontend | http://192.168.0.217 |
+| price-monitoring - Backend | http://192.168.0.210:3000 |
+| price-monitoring - Backend - Sidekiq管理画面 | http://192.168.0.210:3000/sidekiq |
+| price-monitoring - BFF | http://192.168.0.216:3000 |
 
 ## Setup
 
@@ -207,7 +165,7 @@ graph LR
 - master-1
 
   ```bash
-  <sshポート番号>/tcp          ALLOW       Anywhere
+  <ssh port>/tcp             ALLOW       Anywhere
   6443/tcp                   ALLOW       Anywhere
   10250/tcp                  ALLOW       Anywhere
   10251/tcp                  ALLOW       Anywhere
@@ -218,10 +176,11 @@ graph LR
   2380/tcp                   ALLOW       Anywhere
   30000:32767/tcp            ALLOW       Anywhere
   8472/udp                   ALLOW       Anywhere
-  7946/tcp                   ALLOW       Anywhere
   4240/tcp                   ALLOW       Anywhere
   7946/udp                   ALLOW       Anywhere
-  <sshポート番号>/tcp (v6)     ALLOW       Anywhere (v6)
+  7946/tcp                   ALLOW       Anywhere
+  4244/tcp                   ALLOW       Anywhere
+  <ssh port>/tcp (v6)        ALLOW       Anywhere (v6)
   6443/tcp (v6)              ALLOW       Anywhere (v6)
   10250/tcp (v6)             ALLOW       Anywhere (v6)
   10251/tcp (v6)             ALLOW       Anywhere (v6)
@@ -232,9 +191,10 @@ graph LR
   2380/tcp (v6)              ALLOW       Anywhere (v6)
   30000:32767/tcp (v6)       ALLOW       Anywhere (v6)
   8472/udp (v6)              ALLOW       Anywhere (v6)
-  7946/tcp (v6)              ALLOW       Anywhere (v6)
   4240/tcp (v6)              ALLOW       Anywhere (v6)
   7946/udp (v6)              ALLOW       Anywhere (v6)
+  7946/tcp (v6)              ALLOW       Anywhere (v6)
+  4244/tcp (v6)              ALLOW       Anywhere (v6)
   ```
 
 - worker-1, worker-2
@@ -242,16 +202,22 @@ graph LR
   ```bash
   10250/tcp                  ALLOW       Anywhere
   30000:32767/tcp            ALLOW       Anywhere
-  <sshポート番号>/tcp          ALLOW       Anywhere
+  <ssh port>/tcp             ALLOW       Anywhere
   7946/tcp                   ALLOW       Anywhere
   4240/tcp                   ALLOW       Anywhere
   8472/udp                   ALLOW       Anywhere
+  7946/udp                   ALLOW       Anywhere
+  4244/tcp                   ALLOW       Anywhere
+  3702/tcp                   ALLOW       Anywhere
   10250/tcp (v6)             ALLOW       Anywhere (v6)
   30000:32767/tcp (v6)       ALLOW       Anywhere (v6)
-  <sshポート番号>/tcp (v6)     ALLOW       Anywhere (v6)
+  <ssh port>/tcp (v6)        ALLOW       Anywhere (v6)
   7946/tcp (v6)              ALLOW       Anywhere (v6)
   4240/tcp (v6)              ALLOW       Anywhere (v6)
   8472/udp (v6)              ALLOW       Anywhere (v6)
+  7946/udp (v6)              ALLOW       Anywhere (v6)
+  4244/tcp (v6)              ALLOW       Anywhere (v6)
+  3702/tcp (v6)              ALLOW       Anywhere (v6)
   ```
 
 - kubernetes用の基本的なポート
