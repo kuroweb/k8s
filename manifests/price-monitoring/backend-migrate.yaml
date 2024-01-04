@@ -28,7 +28,9 @@ spec:
             [
               "/bin/sh", "-c",
               # TODO: CrashLoopBackOffの暫定対応としてRailsサーバを起動する
-              "RAILS_ENV=production rails db:create && RAILS_ENV=production rails db:migrate && RAILS_ENV=production rails s"
+              "RAILS_ENV=production rails db:create && \
+               RAILS_ENV=production rails db:migrate && \
+               ./bin/rails server -b 0.0.0.0 -p 3000 -e production"
             ]
           env:
             - name: DB_HOST_NAME
