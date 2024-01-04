@@ -6,6 +6,7 @@
 
 - [Nodes](#nodes)
 - [Applications](#applications)
+- [Secrets](#secrets)
 
 ## Nodes
 
@@ -40,3 +41,7 @@ graph
 | price-monitoring - Backend | http://192.168.0.210:3000 |
 | price-monitoring - Backend - Sidekiq管理画面 | http://192.168.0.210:3000/sidekiq |
 | price-monitoring - BFF | http://192.168.0.216:3000 |
+
+## Secrets
+
+- プライベートリポジトリで管理する方針のため、本リポジトリには追加しないこと
