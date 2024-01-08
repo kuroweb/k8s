@@ -47,6 +47,9 @@ spec:
         - name: repair-redis
           image: redis
           command: ['sh', '-c', "redis-check-aof --fix  /data/appendonly.aof"]
+          volumeMounts:
+            - name: backend-redis-storage
+              mountPath: /data
       containers:
         - name: backend-redis
           image: redis
