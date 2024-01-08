@@ -43,6 +43,11 @@ spec:
         app: price-monitoring
         server: backend-redis
     spec:
+      initContainers:
+        - name: repair-redis
+          image: redis
+          command: ["sleep", "infinity"]
+          # command: ['sh', '-c', "redis-check-aof --fix /data/appendonly.aof"]
       containers:
         - name: backend-redis
           image: redis
