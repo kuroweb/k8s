@@ -46,6 +46,7 @@ spec:
       containers:
         - name: backend-redis
           image: redis
+          command: ['sh', '-c', "redis-check-aof --fix /data/appendonly.aof"]
           args: ["--appendonly", "yes"]
           ports:
             - name: http
