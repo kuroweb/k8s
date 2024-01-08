@@ -47,7 +47,7 @@ spec:
         - name: backend-redis
           image: redis
           command: ["sleep", "infinity"]
-          args: ["--appendonly", "yes"]
+          # args: ["--appendonly", "yes"]
           ports:
             - name: http
               containerPort: 6379
