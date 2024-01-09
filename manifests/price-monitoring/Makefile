@@ -12,7 +12,7 @@ tag_suffix := $(shell git rev-parse --short HEAD)
 # util
 #
 
-all: apply-backend apply-backend-batch apply-backend-migrate apply-backend-playwright apply-backend-tor apply-all commit push
+all: apply-backend apply-backend-batch apply-backend-migrate apply-backend-playwright apply-backend-tor commit push
 
 commit:
 	git add .
