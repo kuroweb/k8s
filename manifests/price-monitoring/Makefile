@@ -12,7 +12,9 @@ tag_suffix := $(shell git rev-parse --short HEAD)
 # util
 #
 
-all: apply-backend apply-backend-batch apply-backend-migrate apply-backend-playwright apply-backend-tor commit push
+all: apply-all commit push
+
+apply-all: apply-backend apply-backend-batch apply-backend-migrate apply-backend-playwright apply-backend-tor apply-bff apply-frontend
 
 commit:
 	git add .
@@ -72,17 +74,21 @@ apply-backend-tor:
 	backend-tor.yaml > tmpfile && mv tmpfile backend-tor.yaml
 
 #
-# tor
-#
-
-#
-# playwright
-#
-
-#
 # bff
 #
+
+bff_tag := $(registry)/$(project)-bff
+
+apply-bff:
+	awk '{gsub("image: $(bff_tag):[^ ]*", "image: $(bff_tag):$(tag_suffix)")}1' \
+	bff.yaml > tmpfile && mv tmpfile bff.yaml
 
 #
 # frontend
 #
+
+frontend_tag := $(registry)/$(project)-frontend
+
+apply-frontend:
+	awk '{gsub("image: $(frontend_tag):[^ ]*", "image: $(frontend_tag):$(tag_suffix)")}1' \
+	frontend.yaml > tmpfile && mv tmpfile frontend.yaml
