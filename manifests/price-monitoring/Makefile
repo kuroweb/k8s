@@ -14,7 +14,7 @@ tag_suffix := $(shell git rev-parse --short HEAD)
 
 all: apply-all commit push
 
-apply-all: apply-backend apply-backend-batch apply-backend-migrate apply-backend-playwright apply-backend-tor apply-bff apply-frontend
+apply-all: apply-backend apply-backend-playwright apply-backend-tor apply-bff apply-frontend
 
 commit:
 	git add .
@@ -24,33 +24,22 @@ push:
 	git push
 
 #
-# backend.yaml
+# backend
 #
 
 backend_tag := $(registry)/$(project)-backend
 
 apply-backend:
+	# backend.yaml
 	awk '{gsub("image: $(backend_tag):[^ ]*", "image: $(backend_tag):$(tag_suffix)")}1' \
 	backend.yaml > tmpfile && mv tmpfile backend.yaml
 
-#
-# backend-batch.yaml
-#
-
-backend_batch_tag := $(registry)/$(project)-backend
-
-apply-backend-batch:
-	awk '{gsub("image: $(backend_batch_tag):[^ ]*", "image: $(backend_batch_tag):$(tag_suffix)")}1' \
+	# backend-batch.yaml
+	awk '{gsub("image: $(backend_tag):[^ ]*", "image: $(backend_tag):$(tag_suffix)")}1' \
 	backend-batch.yaml > tmpfile && mv tmpfile backend-batch.yaml
 
-#
-# backend-migrate.yaml
-#
-
-backend_migrate_tag := $(registry)/$(project)-backend
-
-apply-backend-migrate:
-	awk '{gsub("image: $(backend_migrate_tag):[^ ]*", "image: $(backend_migrate_tag):$(tag_suffix)")}1' \
+	# backend-migrate.yaml
+	awk '{gsub("image: $(backend_tag):[^ ]*", "image: $(backend_tag):$(tag_suffix)")}1' \
 	backend-migrate.yaml > tmpfile && mv tmpfile backend-migrate.yaml
 
 #
