@@ -1,0 +1,53 @@
+#
+# Service
+#
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: registry-frontend-service
+  namespace: docker-registry
+spec:
+  selector:
+    app: registry-frontend
+  type: LoadBalancer
+  ports:
+    - name: docker-port
+      protocol: TCP
+      port: 80
+      targetPort: 8080
+  loadBalancerIP: 192.168.0.209
+
+---
+#
+# Deployment
+#
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: registry-frontend
+  namespace: docker-registry
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: registry-frontend
+  template:
+    metadata:
+      labels:
+        app: registry-frontend
+        name: registry-frontend
+    spec:
+      nodeSelector:
+        node-type: worker
+      containers:
+        - name: registry-frontend
+          image: konradkleine/docker-registry-frontend:v2
+          ports:
+            - containerPort: 8080
+          env:
+            - name: ENV_DOCKER_REGISTRY_HOST
+              value: 192.168.0.202
+            - name: ENV_DOCKER_REGISTRY_PORT
+              value: 5000
