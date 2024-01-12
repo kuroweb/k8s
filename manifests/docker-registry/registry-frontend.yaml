@@ -15,7 +15,7 @@ spec:
     - name: docker-port
       protocol: TCP
       port: 80
-      targetPort: 8888
+      targetPort: 80
   loadBalancerIP: 192.168.0.209
 
 ---
@@ -45,7 +45,7 @@ spec:
         - name: registry-frontend
           image: konradkleine/docker-registry-frontend:v2
           ports:
-            - containerPort: 8888
+            - containerPort: 80
           env:
             - name: ENV_DOCKER_REGISTRY_HOST
               value: "192.168.0.202"
