@@ -48,6 +48,6 @@ spec:
             - containerPort: 8080
           env:
             - name: ENV_DOCKER_REGISTRY_HOST
-              value: 192.168.0.202
+              value: "192.168.0.202"
             - name: ENV_DOCKER_REGISTRY_PORT
-              value: 5000
+              value: "5000"
