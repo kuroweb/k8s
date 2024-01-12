@@ -1,23 +1,48 @@
+#
+# Service
+#
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: registry-backend-service
+  namespace: docker-registry
+spec:
+  selector:
+    app: registry-backend
+  type: LoadBalancer
+  ports:
+    - name: docker-port
+      protocol: TCP
+      port: 5000
+      targetPort: 5000
+  loadBalancerIP: 192.168.0.202
+
+---
+#
+# Deployment
+#
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: registry
+  name: registry-backend
   namespace: docker-registry
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: registry
+      app: registry-backend
   template:
     metadata:
       labels:
-        app: registry
-        name: registry
+        app: registry-backend
+        name: registry-backend
     spec:
       nodeSelector:
         node-type: worker
       containers:
-        - name: registry
+        - name: registry-backend
           image: registry:2
           ports:
             - containerPort: 5000
@@ -39,3 +64,20 @@ spec:
         - name: certs
           secret:
             secretName: docker-registry-tls-cert
+---
+#
+# PVC
+#
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: longhorn-docker-registry-pvc
+  namespace: docker-registry
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: longhorn
+  resources:
+    requests:
+      storage: 30Gi
