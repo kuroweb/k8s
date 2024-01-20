@@ -44,13 +44,13 @@ spec:
         server: backend-redis
     spec:
       # NOTE: AOF fileに問題が生じてPodが起動しない場合に利用する
-      # initContainers:
-      #   - name: repair-redis
-      #     image: redis
-      #     command: ['sh', '-c', "redis-check-aof --fix /data/appendonlydir/appendonly.aof.manifest"]
-      #     volumeMounts:
-      #       - name: backend-redis-storage
-      #         mountPath: /data
+      initContainers:
+        - name: repair-redis
+          image: redis
+          command: ['sh', '-c', "redis-check-aof --fix /data/appendonlydir/appendonly.aof.manifest"]
+          volumeMounts:
+            - name: backend-redis-storage
+              mountPath: /data
       containers:
         - name: backend-redis
           image: redis
