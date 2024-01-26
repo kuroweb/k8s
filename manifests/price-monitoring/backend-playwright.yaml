@@ -45,7 +45,7 @@ spec:
     spec:
       containers:
         - name: backend-playwright
-          image: registry.local:5000/price-monitoring-backend-playwright:cfbf3c71410a014de7c3190ed588aa7dcdcb0bfd
+          image: registry.local:5000/price-monitoring-backend-playwright:877ce35db2504b1d1a0fc8d42b88d29b7fe076bc
           ports:
             - name: http
               containerPort: 8888
