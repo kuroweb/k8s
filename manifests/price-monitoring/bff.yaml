@@ -45,7 +45,7 @@ spec:
     spec:
       containers:
         - name: bff
-          image: registry.local:5000/price-monitoring-bff:08e205e1f68ee1d6803d069c5cc271f467a423a5
+          image: registry.local:5000/price-monitoring-bff:547ff8361a5f9ac5ebd6edd966f64912463d0427
           ports:
             - name: http
               containerPort: 3000
