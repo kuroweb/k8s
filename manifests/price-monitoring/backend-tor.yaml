@@ -45,7 +45,7 @@ spec:
     spec:
       containers:
         - name: backend-tor
-          image: registry.local:5000/price-monitoring-backend-tor:f580a57b8a28b1527c3ccc3f54b201b7c268afac
+          image: registry.local:5000/price-monitoring-backend-tor:58db07d0423c93fa01968c0e43dc51480030f9cf
           ports:
             - name: http
               containerPort: 9050
