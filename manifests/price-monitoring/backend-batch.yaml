@@ -61,8 +61,6 @@ spec:
               value: ""
             - name: REDIS_URL
               value: "redis://192.168.0.213:6379"
-            - name: TOR_URL
-              value: "socks5://192.168.0.214:9050"
             - name: PLAYWRIGHT_URL
               value: "ws://192.168.0.215:8888/ws"
             - name: ALLOWED_ORIGIN

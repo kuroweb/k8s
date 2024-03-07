@@ -14,7 +14,7 @@ tag_suffix := $(shell git rev-parse --short HEAD)
 
 all: apply-all commit push
 
-apply-all: apply-backend apply-backend-playwright apply-backend-tor apply-bff apply-frontend
+apply-all: apply-backend apply-backend-playwright apply-bff apply-frontend
 
 commit:
 	git add .
@@ -51,16 +51,6 @@ backend_playwright_tag := $(registry)/$(project)-backend-playwright
 apply-backend-playwright:
 	awk '{gsub("image: $(backend_playwright_tag):[^ ]*", "image: $(backend_playwright_tag):$(tag_suffix)")}1' \
 	backend-playwright.yaml > tmpfile && mv tmpfile backend-playwright.yaml
-
-#
-# backend-tor.yaml
-#
-
-backend_tor_tag := $(registry)/$(project)-backend-tor
-
-apply-backend-tor:
-	awk '{gsub("image: $(backend_tor_tag):[^ ]*", "image: $(backend_tor_tag):$(tag_suffix)")}1' \
-	backend-tor.yaml > tmpfile && mv tmpfile backend-tor.yaml
 
 #
 # bff
