@@ -52,7 +52,7 @@ spec:
               containerPort: 3000
           resources:
             limits:
-              cpu: "250m"
+              cpu: "500m"
           env:
             - name: DB_HOST_NAME
               value: 192.168.0.212
