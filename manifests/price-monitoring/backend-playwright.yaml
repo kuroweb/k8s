@@ -32,7 +32,7 @@ metadata:
   labels:
     app: price-monitoring
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: price-monitoring
@@ -52,3 +52,11 @@ spec:
           # resources:
           #   limits:
           #     cpu: "500m"
+      topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: kubernetes.io/hostname
+        whenUnsatisfiable: ScheduleAnyway
+        labelSelector:
+          matchLabels:
+            app: price-monitoring
+            server: backend-playwright
