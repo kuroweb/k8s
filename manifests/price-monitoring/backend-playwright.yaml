@@ -32,7 +32,7 @@ metadata:
   labels:
     app: price-monitoring
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: price-monitoring
@@ -49,9 +49,9 @@ spec:
           ports:
             - name: http
               containerPort: 8888
-          # resources:
-          #   limits:
-          #     cpu: "500m"
+          resources:
+            limits:
+              cpu: "1000m"
       topologySpreadConstraints:
       - maxSkew: 1
         topologyKey: kubernetes.io/hostname
