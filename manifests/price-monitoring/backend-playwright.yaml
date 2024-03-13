@@ -32,7 +32,7 @@ metadata:
   labels:
     app: price-monitoring
 spec:
-  replicas: 4
+  replicas: 1
   selector:
     matchLabels:
       app: price-monitoring
@@ -51,4 +51,4 @@ spec:
               containerPort: 8888
           resources:
             limits:
-              cpu: "500m"
+              cpu: "2000m"
