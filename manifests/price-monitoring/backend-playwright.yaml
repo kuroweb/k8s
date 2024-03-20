@@ -49,9 +49,9 @@ spec:
           ports:
             - name: http
               containerPort: 8888
-          resources:
-            limits:
-              cpu: "500m"
+          # resources:
+          #   limits:
+          #     cpu: "500m"
       # topologySpreadConstraints:
       # - maxSkew: 1
       #   topologyKey: kubernetes.io/hostname
