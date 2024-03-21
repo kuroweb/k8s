@@ -53,7 +53,7 @@ spec:
             limits:
               cpu: "1000m"
       topologySpreadConstraints:
-      - maxSkew: 1
+      - maxSkew: 2
         topologyKey: kubernetes.io/hostname
         whenUnsatisfiable: ScheduleAnyway
         labelSelector:
