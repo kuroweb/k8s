@@ -32,7 +32,7 @@ metadata:
   labels:
     app: price-monitoring
 spec:
-  replicas: 2
+  replicas: 3
   selector:
     matchLabels:
       app: price-monitoring
@@ -50,9 +50,9 @@ spec:
           ports:
             - name: http
               containerPort: 3000
-          # resources:
-          #   limits:
-          #     cpu: "500m"
+          resources:
+            limits:
+              cpu: "200m"
           env:
             - name: DB_HOST_NAME
               value: 192.168.0.212
