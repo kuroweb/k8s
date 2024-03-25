@@ -52,7 +52,9 @@ spec:
           resources:
             limits:
               cpu: "1000m"
-      nodeName: worker-3
+      nodeName:
+        - worker-1
+        - worker-3
       # topologySpreadConstraints:
       # - maxSkew: 1
       #   topologyKey: kubernetes.io/hostname
