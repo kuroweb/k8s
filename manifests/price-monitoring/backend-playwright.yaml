@@ -51,13 +51,12 @@ spec:
               containerPort: 8888
           resources:
             limits:
-              cpu: "750m"
-      nodeName: worker-3
-      # topologySpreadConstraints:
-      # - maxSkew: 1
-      #   topologyKey: kubernetes.io/hostname
-      #   whenUnsatisfiable: ScheduleAnyway
-      #   labelSelector:
-      #     matchLabels:
-      #       app: price-monitoring
-      #       server: backend-playwright
+              cpu: "1000m"
+      topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: kubernetes.io/hostname
+        whenUnsatisfiable: ScheduleAnyway
+        labelSelector:
+          matchLabels:
+            app: price-monitoring
+            server: backend-playwright
