@@ -51,7 +51,7 @@ spec:
               containerPort: 8888
           resources:
             limits:
-              cpu: "750m"
+              cpu: "500m"
       nodeName: worker-3
       # topologySpreadConstraints:
       # - maxSkew: 1
