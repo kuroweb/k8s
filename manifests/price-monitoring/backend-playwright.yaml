@@ -52,11 +52,12 @@ spec:
           resources:
             limits:
               cpu: "1000m"
-      topologySpreadConstraints:
-      - maxSkew: 1
-        topologyKey: kubernetes.io/hostname
-        whenUnsatisfiable: ScheduleAnyway
-        labelSelector:
-          matchLabels:
-            app: price-monitoring
-            server: backend-playwright
+      nodeName: worker-3
+      # topologySpreadConstraints:
+      # - maxSkew: 1
+      #   topologyKey: kubernetes.io/hostname
+      #   whenUnsatisfiable: ScheduleAnyway
+      #   labelSelector:
+      #     matchLabels:
+      #       app: price-monitoring
+      #       server: backend-playwright
