@@ -51,8 +51,9 @@ spec:
               containerPort: 8888
           resources:
             limits:
-              cpu: "500m"
-      nodeName: worker-3
+              cpu: "1000m"
+    nodeSelector:
+      node-tier: playwright
       # topologySpreadConstraints:
       # - maxSkew: 1
       #   topologyKey: kubernetes.io/hostname
