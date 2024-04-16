@@ -42,6 +42,10 @@ apply-backend:
 	awk '{gsub("image: $(backend_tag):[^ ]*", "image: $(backend_tag):$(tag_suffix)")}1' \
 	backend-batch-2.yaml > tmpfile && mv tmpfile backend-batch-2.yaml
 
+	# backend-batch-3.yaml
+	awk '{gsub("image: $(backend_tag):[^ ]*", "image: $(backend_tag):$(tag_suffix)")}1' \
+	backend-batch-3.yaml > tmpfile && mv tmpfile backend-batch-3.yaml
+
 	# backend-migrate.yaml
 	awk '{gsub("image: $(backend_tag):[^ ]*", "image: $(backend_tag):$(tag_suffix)")}1' \
 	backend-migrate.yaml > tmpfile && mv tmpfile backend-migrate.yaml
