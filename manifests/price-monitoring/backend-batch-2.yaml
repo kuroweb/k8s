@@ -88,3 +88,8 @@ spec:
                 secretKeyRef:
                   name: backend-secret
                   key: PROXY_PASSWORD
+            - name: PROXY_LIST
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secret
+                  key: PROXY_LIST
