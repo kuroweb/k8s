@@ -45,7 +45,7 @@ spec:
     spec:
       containers:
         - name: backend-batch-3
-          image: registry.local:5000/price-monitoring-backend:30dd283d2c1c50ecad0c25a3d3ea555aec8680ce
+          image: registry.local:5000/price-monitoring-backend:99edf2bc5925ff58e715edd37866dc05f7495ef8
           command: ["sidekiq", "-C", "config/sidekiq/crawl_process_2.yml", "-e", "production"]
           ports:
             - name: http
