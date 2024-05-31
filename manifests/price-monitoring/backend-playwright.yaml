@@ -32,7 +32,7 @@ metadata:
   labels:
     app: price-monitoring
 spec:
-  replicas: 9
+  replicas: 12
   selector:
     matchLabels:
       app: price-monitoring
