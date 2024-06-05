@@ -45,7 +45,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: registry.local:5000/price-monitoring-backend:9b33e00bfc7820c81d50ec5fdc255c538e4e1307
+          image: registry.local:5000/price-monitoring-backend:0084a748f6861213c43af96580a2454d2d55762a
           command: ["./bin/rails", "server", "-b", "0.0.0.0", "-p", "3000", "-e", "production"]
           ports:
             - name: http
