@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
         - name: backend-migrate
-          image: registry.local:5000/price-monitoring-backend:942a3617f5d6a641ecc4cd184aa1f74c3e27e508
+          image: registry.local:5000/price-monitoring-backend:b2401de882968708e7b12da3cc443dbdcd975afe
           command:
             [
               "/bin/sh", "-c",
