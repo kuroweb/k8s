@@ -74,3 +74,8 @@ spec:
                 secretKeyRef:
                   name: backend-secret
                   key: PROXY_LIST
+            - name: BUGSNAG_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secret
+                  key: BUGSNAG_API_KEY
