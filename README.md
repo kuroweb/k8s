@@ -22,6 +22,7 @@ graph
     subgraph worker["Worker Node"]
       worker-1
       worker-2
+      worker-3
     end
   end
 
