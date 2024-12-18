@@ -67,7 +67,7 @@ spec:
       volumes:
         - name: backend-redis-storage
           persistentVolumeClaim:
-            claimName: backend-redis-pvc-2
+            claimName: backend-redis-pvc
 
 ---
 #
@@ -77,7 +77,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: backend-redis-pvc-2
+  name: backend-redis-pvc
   namespace: price-monitoring
 spec:
   accessModes:
