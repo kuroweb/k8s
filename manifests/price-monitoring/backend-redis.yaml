@@ -67,7 +67,7 @@ spec:
       volumes:
         - name: backend-redis-storage
           persistentVolumeClaim:
-            claimName: backend-redis-pvc
+            claimName: backend-redis-pvc-2
 
 ---
 #
@@ -77,7 +77,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: backend-redis-pvc
+  name: backend-redis-pvc-2
   namespace: price-monitoring
 spec:
   accessModes:
@@ -85,4 +85,4 @@ spec:
   storageClassName: longhorn
   resources:
     requests:
-      storage: 10Gi
+      storage: 5Gi
