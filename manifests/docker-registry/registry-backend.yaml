@@ -60,7 +60,7 @@ spec:
       volumes:
         - name: lv-storage
           persistentVolumeClaim:
-            claimName: longhorn-docker-registry-pvc
+            claimName: longhorn-docker-registry-pvc-1
         - name: certs
           secret:
             secretName: docker-registry-tls-cert
@@ -72,7 +72,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: longhorn-docker-registry-pvc
+  name: longhorn-docker-registry-pvc-1
   namespace: docker-registry
 spec:
   accessModes:
