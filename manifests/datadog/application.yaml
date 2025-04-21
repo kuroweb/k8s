@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: datadog
+  namespace: argocd
+spec:
+  project: default
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: datadog
+  sources:
+    - repoURL: https://helm.datadoghq.com
+      chart: datadog-operator
+      targetRevision: 1.2.0 # 最新のバージョンを確認して調整
+      helm:
+        valueFiles:
+          - manifests/datadog/operator/helm-values.yaml
+    - repoURL: https://your-git-repo-url
+      path: manifests/datadog
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
