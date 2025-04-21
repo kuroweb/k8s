@@ -11,10 +11,7 @@ spec:
   sources:
     - repoURL: https://helm.datadoghq.com
       chart: datadog-operator
-      targetRevision: 1.2.0 # 最新のバージョンを確認して調整
-      helm:
-        valueFiles:
-          - manifests/datadog/operator/helm-values.yaml
+      targetRevision: 1.2.0
     - repoURL: https://your-git-repo-url
       path: manifests/datadog
   syncPolicy:
