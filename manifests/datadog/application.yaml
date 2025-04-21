@@ -12,7 +12,7 @@ spec:
     - repoURL: https://helm.datadoghq.com
       chart: datadog-operator
       targetRevision: 1.2.0
-    - repoURL: https://your-git-repo-url
+    - repoURL: https://github.com/kuroweb/k8s
       path: manifests/datadog
   syncPolicy:
     automated:
