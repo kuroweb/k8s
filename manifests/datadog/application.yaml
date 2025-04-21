@@ -14,7 +14,3 @@ spec:
       targetRevision: 1.2.0
     - repoURL: https://github.com/kuroweb/k8s
       path: manifests/datadog
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
