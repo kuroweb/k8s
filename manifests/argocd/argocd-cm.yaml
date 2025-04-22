@@ -7,6 +7,9 @@ metadata:
     app.kubernetes.io/name: argocd-cm
     app.kubernetes.io/part-of: argocd
 data:
+  # datadog-operatorでCiliumIdentityリソースでOutOfSyncが発生するので追加したもの
+  # - https://github.com/argoproj/argo-cd/discussions/6454#discussioncomment-864790
+  # - https://argo-cd.readthedocs.io/en/stable/operator-manual/declarative-setup/#resource-exclusioninclusion
   resource.exclusions: |
     - apiGroups:
         - cilium.io
