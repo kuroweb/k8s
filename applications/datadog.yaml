@@ -20,9 +20,6 @@ spec:
     automated:
       selfHeal: true
       prune: true
-  # OutOfSyncになるので除外
-  ignoreDifferences:
-    - kind: CiliumIdentity
 
 ---
 #
