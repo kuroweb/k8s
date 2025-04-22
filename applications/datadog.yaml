@@ -17,6 +17,9 @@ spec:
     server: https://kubernetes.default.svc
     namespace: datadog
   syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
   ignoreDifferences:
     - group: cilium.io
       kind: CiliumIdentity
