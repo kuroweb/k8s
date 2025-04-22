@@ -23,9 +23,6 @@ spec:
   ignoreDifferences:
     - group: cilium.io
       kind: CiliumIdentity
-      jsonPointers:
-        - /metadata/managedFields
-        - /security-labels
 
 ---
 #
