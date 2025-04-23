@@ -10,7 +10,7 @@ spec:
   tls:
     - hosts:
         - 192.168.0.220.nip.io
-      secretName: frontend-tls-secret
+      secretName: tls-secret
   rules:
     - host: 192.168.0.220.nip.io
       http:
