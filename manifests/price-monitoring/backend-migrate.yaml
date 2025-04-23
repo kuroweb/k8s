@@ -47,7 +47,7 @@ spec:
               value: "socks5://192.168.0.214:9050"
             - name: PLAYWRIGHT_URL
               value: "ws://192.168.0.215:8888/ws"
-            - name: ALLOWED_ORIGIN
+            - name: ALLOWED_ORIGINS
               value: ""
             - name: DD_AGENT_HOST
               value: "datadog-agent.datadog.svc.cluster.local"

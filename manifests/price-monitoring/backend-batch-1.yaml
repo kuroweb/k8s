@@ -66,7 +66,7 @@ spec:
               value: "redis://192.168.0.213:6379"
             - name: PLAYWRIGHT_URL
               value: "ws://192.168.0.215:8888/ws"
-            - name: ALLOWED_ORIGIN
+            - name: ALLOWED_ORIGINS
               value: "192.168.0.211"
             - name: DD_AGENT_HOST
               value: "datadog-agent.datadog.svc.cluster.local"
