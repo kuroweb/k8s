@@ -2,21 +2,23 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: frontend-ingress
+  namespace: price-monitoring
   annotations:
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
 spec:
+  ingressClassName: nginx
   tls:
-  - hosts:
-    - 192.168.0.217.nip.io
-    secretName: frontend-tls-secret
+    - hosts:
+        - 192.168.0.217.nip.io
+      secretName: frontend-tls-secret
   rules:
-  - host: 192.168.0.217.nip.io
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: frontend-service
-            port:
-              number: 3000
+    - host: 192.168.0.217.nip.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend-service
+                port:
+                  number: 3000
