@@ -9,10 +9,10 @@ spec:
   ingressClassName: nginx
   tls:
     - hosts:
-        - 192.168.0.217.nip.io
+        - 192.168.0.220.nip.io
       secretName: frontend-tls-secret
   rules:
-    - host: 192.168.0.217.nip.io
+    - host: 192.168.0.220.nip.io
       http:
         paths:
           - path: /
