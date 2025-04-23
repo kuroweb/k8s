@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: docker-registry
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/kuroweb/k8s.git
+    targetRevision: HEAD
+    path: manifests/docker-registry
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: docker-registry
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
