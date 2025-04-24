@@ -45,7 +45,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: registry.local:5000/price-monitoring-frontend:cc657c205f3170a03506a1403595eda70980ed50
+          image: registry.local:5000/price-monitoring-frontend:f184f466aaf9253250989b7cba253ccab0a814e8
           ports:
             - name: http
               containerPort: 3000
