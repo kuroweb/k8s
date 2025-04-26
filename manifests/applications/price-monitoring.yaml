@@ -10,6 +10,7 @@ spec:
     targetRevision: HEAD
     path: manifests/price-monitoring
     directory:
+      recurse: true
       exclude: namespace.yaml
   destination:
     server: https://kubernetes.default.svc
