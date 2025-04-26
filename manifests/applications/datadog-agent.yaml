@@ -15,13 +15,18 @@ spec:
           apiKeyExistingSecret: datadog-secret
           site: ap1.datadoghq.com
           tags:
-            - "env:integration"
-            - "service:your-service-name"
+            - "env:production"
+            - "service:price-monitoring"
             - "version:v1.0.0"
           apm:
             enabled: true
         agents:
           enabled: true
+          containerEnv:
+            - name: DD_HOSTNAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
         clusterAgent:
           enabled: true
   destination:
