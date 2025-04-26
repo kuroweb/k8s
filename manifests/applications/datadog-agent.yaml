@@ -20,8 +20,8 @@ spec:
             - "version:v1.0.0"
           apm:
             enabled: true
-          hostname: "price-monitoring-agent"
-          hostnameForceConfigAsCanonical: true
+          kubelet:
+            tlsVerify: false
         agents:
           enabled: true
         clusterAgent:
