@@ -20,15 +20,7 @@ spec:
             - "version:v1.0.0"
           apm:
             enabled: true
-        agents:
-          enabled: true
-          containerEnv:
-            - name: DD_HOSTNAME
-              valueFrom:
-                fieldRef:
-                  fieldPath: spec.nodeName
-        clusterAgent:
-          enabled: true
+          hostnameSource: kubernetes
   destination:
     server: https://kubernetes.default.svc
     namespace: datadog
