@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://helm.datadoghq.com
     chart: datadog
-    targetRevision: 3.51.0
+    targetRevision: 3.67.0
     helm:
       values: |
         datadog:
@@ -18,16 +18,19 @@ spec:
             - "env:production"
             - "service:price-monitoring"
             - "version:v1.0.0"
+          kubelet:
+            host:
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+            tlsVerify:  false
+          env:
+            - name: DD_HOSTNAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
           apm:
             enabled: true
-        hostname: "price-monitoring-agent"
-        agents:
-          enabled: true
-          config:
-            datadog.yaml: |
-              hostname_force_config_as_canonical: true
-                clusterAgent:
-                  enabled: true
   destination:
     server: https://kubernetes.default.svc
     namespace: datadog
