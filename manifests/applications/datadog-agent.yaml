@@ -22,6 +22,11 @@ spec:
             enabled: true
           kubelet:
             tlsVerify: false
+          env:
+            - name: DD_HOSTNAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
         agents:
           enabled: true
         clusterAgent:
