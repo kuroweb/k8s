@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://helm.datadoghq.com
     chart: datadog
-    targetRevision: 3.67.0
+    targetRevision: 3.59.0
     helm:
       values: |
         datadog:
@@ -20,18 +20,6 @@ spec:
             - "version:v1.0.0"
           apm:
             enabled: true
-          hostnameSource: kubernetes
-          kubeApiserver:
-            tlsVerify: false
-        agents:
-          enabled: true
-          containerEnv:
-            - name: DD_HOSTNAME
-              valueFrom:
-                fieldRef:
-                  fieldPath: spec.nodeName
-        clusterAgent:
-          enabled: true
   destination:
     server: https://kubernetes.default.svc
     namespace: datadog
