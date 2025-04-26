@@ -20,6 +20,7 @@ spec:
             - "version:v1.0.0"
           apm:
             enabled: true
+          hostname: "default"
           hostnameForceConfigAsCanonical: true
   destination:
     server: https://kubernetes.default.svc
