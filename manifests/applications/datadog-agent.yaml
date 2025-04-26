@@ -20,18 +20,14 @@ spec:
             - "version:v1.0.0"
           apm:
             enabled: true
+        hostname: "price-monitoring-agent"
         agents:
           enabled: true
           config:
-          kubelet:
-            tlsVerify: false
-          env:
-            - name: DD_HOSTNAME
-              valueFrom:
-                fieldRef:
-                  fieldPath: spec.nodeName
-        clusterAgent:
-          enabled: true
+            datadog.yaml: |
+              hostname_force_config_as_canonical: true
+                clusterAgent:
+                  enabled: true
   destination:
     server: https://kubernetes.default.svc
     namespace: datadog
