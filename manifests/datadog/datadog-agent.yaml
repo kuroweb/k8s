@@ -13,6 +13,6 @@ spec:
     kubelet:
       tlsVerify: false
     tags:
-      - "env:integration"
-      - "service:my-service"
+      - "env:production"
+      - "service:price-monitoring"
       - "version:v1.0.0"
