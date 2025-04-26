@@ -9,6 +9,8 @@ spec:
     repoURL: https://github.com/kuroweb/k8s.git
     targetRevision: HEAD
     path: manifests/price-monitoring
+    directory:
+      exclude: namespace.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: price-monitoring
