@@ -21,13 +21,10 @@ spec:
           apm:
             enabled: true
           hostnameSource: kubernetes
+          kubeApiserver:
+            tlsVerify: false  # ← ここ超重要！！
         agents:
           enabled: true
-          containerEnv:
-            - name: DD_HOSTNAME
-              valueFrom:
-                fieldRef:
-                  fieldPath: spec.nodeName
         clusterAgent:
           enabled: true
   destination:
