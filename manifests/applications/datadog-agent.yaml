@@ -20,6 +20,9 @@ spec:
             - "version:v1.0.0"
           apm:
             enabled: true
+        agents:
+          enabled: true
+          config:
           kubelet:
             tlsVerify: false
           env:
@@ -27,8 +30,6 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: spec.nodeName
-        agents:
-          enabled: true
         clusterAgent:
           enabled: true
   destination:
