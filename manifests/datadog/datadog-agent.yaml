@@ -13,4 +13,6 @@ spec:
     kubelet:
       tlsVerify: false
     tags:
-      - env: production
+      - env: 'production'
+      - service: 'price-monitoring'
+      - version: 'v1.0.0'
