@@ -6,9 +6,24 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/kuroweb/k8s.git
-    targetRevision: HEAD
-    path: manifests/datadog
+    repoURL: https://helm.datadoghq.com
+    chart: datadog
+    targetRevision: 3.67.0
+    helm:
+      values: |
+        datadog:
+          apiKeyExistingSecret: datadog-secret
+          site: ap1.datadoghq.com
+          tags:
+            - "env:integration"
+            - "service:your-service-name"
+            - "version:v1.0.0"
+          apm:
+            enabled: true
+        agents:
+          enabled: true
+        clusterAgent:
+          enabled: true
   destination:
     server: https://kubernetes.default.svc
     namespace: datadog
