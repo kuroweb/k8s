@@ -54,7 +54,7 @@ spec:
             - name: DD_TRACE_AGENT_PORT
               value: "8126"
             - name: DD_TRACE_SERVICE_MAPPING
-              value: "mysql:price-monitoring-mysql"
+              value: "mysq2:price-monitoring-mysql"
             - name: RAILS_MASTER_KEY
               valueFrom:
                 secretKeyRef:
