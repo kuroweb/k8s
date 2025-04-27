@@ -19,7 +19,7 @@ spec:
             - "service:price-monitoring"
             - "version:v1.0.0"
           kubelet:
-            tlsVerify:  false
+            tlsVerify: false
           env:
             - name: DD_HOSTNAME
               valueFrom:
@@ -27,6 +27,8 @@ spec:
                   fieldPath: spec.nodeName
           apm:
             enabled: true
+            serviceMappings:
+              mysql: price-monitoring-mysql
   destination:
     server: https://kubernetes.default.svc
     namespace: datadog
