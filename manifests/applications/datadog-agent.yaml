@@ -25,10 +25,10 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: spec.nodeName
+            - name: DD_TRACE_SERVICE_MAPPING
+              value: "mysql:price-monitoring-mysql"
           apm:
             enabled: true
-            serviceMappings:
-              mysql: price-monitoring-mysql
   destination:
     server: https://kubernetes.default.svc
     namespace: datadog
