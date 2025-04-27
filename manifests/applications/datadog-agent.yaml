@@ -26,7 +26,7 @@ spec:
                 fieldRef:
                   fieldPath: spec.nodeName
             - name: DD_TRACE_SERVICE_MAPPING
-              value: "mysql:price-monitoring-mysql"
+              value: "mysql2:price-monitoring-mysql"
           apm:
             enabled: true
   destination:
