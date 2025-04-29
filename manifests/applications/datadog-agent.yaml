@@ -29,6 +29,9 @@ spec:
               value: "false"
           apm:
             enabled: true
+            env:
+              - name: DD_APM_PEER_TAGS_AGGREGATION
+                value: "false"
   destination:
     server: https://kubernetes.default.svc
     namespace: datadog
