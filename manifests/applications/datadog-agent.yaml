@@ -25,6 +25,8 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: spec.nodeName
+            - name: DD_APM_PEER_TAGS_AGGREGATION
+              value: "false"
           apm:
             enabled: true
   destination:
