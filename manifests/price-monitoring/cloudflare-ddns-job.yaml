@@ -1,0 +1,26 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: cloudflare-ddns-job
+  namespace: price-monitoring
+spec:
+  schedule: "*/5 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: ddns
+              image: alpine:latest
+              command: ["/bin/sh", "/scripts/update.sh"]
+              envFrom:
+                - secretRef:
+                    name: cloudflare-ddns-secret
+              volumeMounts:
+                - name: script
+                  mountPath: /scripts
+          restartPolicy: OnFailure
+          volumes:
+            - name: script
+              configMap:
+                name: cloudflare-ddns-script
