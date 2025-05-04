@@ -1,26 +1,33 @@
-apiVersion: batch/v1
-kind: CronJob
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: cloudflare-ddns-job
+  name: cloudflare-ddns
   namespace: price-monitoring
 spec:
-  schedule: "*/5 * * * *"
-  jobTemplate:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cloudflare-ddns
+  template:
+    metadata:
+      labels:
+        app: cloudflare-ddns
     spec:
-      template:
-        spec:
-          containers:
-            - name: ddns
-              image: alpine:latest
-              command: ["/bin/sh", "/scripts/update.sh"]
-              envFrom:
-                - secretRef:
-                    name: cloudflare-ddns-secret
-              volumeMounts:
-                - name: script
-                  mountPath: /scripts
-          restartPolicy: OnFailure
-          volumes:
-            - name: script
-              configMap:
-                name: cloudflare-ddns-script
+      containers:
+        - name: ddns
+          image: favonia/cloudflare-ddns:latest
+          env:
+            - name: CLOUDFLARE_API_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: cloudflare-ddns-secret
+                  key: CF_API_TOKEN
+            - name: DOMAINS
+              value: kuroweb.net
+            - name: PROXIED
+              value: "false"
+            - name: UPDATE_ON_START
+              value: "true"
+            - name: IP6_PROVIDER
+              value: "none"
+      restartPolicy: Always
