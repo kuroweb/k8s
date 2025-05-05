@@ -1,12 +1,17 @@
 resources:
   - clusterissuer.yaml
 
-vars:
-  - name: ACME_EMAIL
-    objref:
+replacements:
+  - source:
       kind: Secret
       name: acme-email
-      namespace: cert-manager
-      apiVersion: v1
-    fieldref:
-      fieldpath: data.email
+      fieldPath: data.email
+    targets:
+      - select:
+          kind: ClusterIssuer
+          name: letsencrypt-dns
+        fieldPaths:
+          - spec.acme.email
+        options:
+          delimiter: ""
+          encoding: base64
