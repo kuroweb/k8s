@@ -1,0 +1,11 @@
+resources:
+  - clusterissuer.yaml
+
+vars:
+  - name: ACME_EMAIL
+    objref:
+      kind: Secret
+      name: acme-email
+      apiVersion: v1
+    fieldref:
+      fieldpath: data.email

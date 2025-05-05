@@ -1,0 +1,4 @@
+resources:
+  - ../../base
+# ↓ この行は **削除 or 含めない**
+# - secret-acme-email.yaml
