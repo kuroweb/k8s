@@ -6,6 +6,7 @@ vars:
     objref:
       kind: Secret
       name: acme-email
+      namespace: cert-manager
       apiVersion: v1
     fieldref:
       fieldpath: data.email
