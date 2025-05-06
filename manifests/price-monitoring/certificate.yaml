@@ -7,7 +7,7 @@ spec:
   secretName: kuroweb-net-tls
   issuerRef:
     name: letsencrypt-dns
-    kind: ClusterIssuer
+    kind: Issuer
   commonName: kuroweb.net
   dnsNames:
     - kuroweb.net
