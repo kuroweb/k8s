@@ -9,8 +9,9 @@ spec:
   ingressClassName: nginx
   tls:
     - hosts:
-        - 192.168.0.220.nip.io
-      secretName: tls-secret
+        - kuroweb.net
+        - www.kuroweb.net
+      secretName: kuroweb-net-tls
   rules:
     - host: 192.168.0.220.nip.io
       http:
