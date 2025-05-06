@@ -20,6 +20,7 @@ spec:
             default: true
           config:
             use-forwarded-headers: "false"
+            real_ip_header: "remote_addr"
   destination:
     server: https://kubernetes.default.svc
     namespace: ingress-nginx
