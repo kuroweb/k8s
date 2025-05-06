@@ -1,14 +1,14 @@
 apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
-  name: letsencrypt-dns
+  name: tls-issuer
   namespace: price-monitoring
 spec:
   acme:
     email: kuromitsu0104@gmail.com
     server: https://acme-v02.api.letsencrypt.org/directory
     privateKeySecretRef:
-      name: letsencrypt-dns-account-key
+      name: tls-issuer-account-key
     solvers:
       - dns01:
           cloudflare:

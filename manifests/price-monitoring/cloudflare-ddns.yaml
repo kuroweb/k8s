@@ -20,8 +20,8 @@ spec:
             - name: CLOUDFLARE_API_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: cloudflare-ddns-secret
-                  key: CF_API_TOKEN
+                  name: cloudflare-api-token
+                  key: api-token
             - name: DOMAINS
               value: kuroweb.net
             - name: PROXIED

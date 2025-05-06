@@ -12,7 +12,7 @@ spec:
     - hosts:
         - kuroweb.net
         - www.kuroweb.net
-      secretName: kuroweb-net-tls
+      secretName: tls-cert
   rules:
     - host: kuroweb.net
       http:
