@@ -13,7 +13,7 @@ spec:
         - www.kuroweb.net
       secretName: kuroweb-net-tls
   rules:
-    - host: 192.168.0.220.nip.io
+    - host: kuroweb.net
       http:
         paths:
           - path: /
