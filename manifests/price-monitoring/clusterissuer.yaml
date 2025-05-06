@@ -1,7 +1,8 @@
 apiVersion: cert-manager.io/v1
-kind: ClusterIssuer
+kind: Issuer
 metadata:
   name: letsencrypt-dns
+  namespace: price-monitoring
 spec:
   acme:
     email: kuromitsu0104@gmail.com
