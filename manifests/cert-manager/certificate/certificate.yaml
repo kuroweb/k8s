@@ -1,0 +1,16 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: kuroweb-net-cert
+  namespace: cert-manager
+spec:
+  secretName: kuroweb-net-tls
+  issuerRef:
+    name: letsencrypt-dns
+    kind: ClusterIssuer
+  commonName: kuroweb.net
+  dnsNames:
+    - kuroweb.net
+    - www.kuroweb.net
+  renewBefore: 720h
+  duration: 2160h
