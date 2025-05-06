@@ -5,6 +5,7 @@ metadata:
   namespace: price-monitoring
   annotations:
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    cert-manager.io/cluster-issuer: letsencrypt-dns
 spec:
   ingressClassName: nginx
   tls:
@@ -30,3 +31,13 @@ spec:
                 name: backend-service
                 port:
                   number: 3000
+    - host: www.kuroweb.net
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend-service
+                port:
+                  number: 80
