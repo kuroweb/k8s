@@ -51,11 +51,11 @@ spec:
               containerPort: 3000
           env:
             # Basic認証を導入するまで無効化
-            # - name: NEXT_PRIVATE_API_URL
-            #   value: "https://kuroweb.net"
-            # - name: NEXT_PUBLIC_API_URL
-            #   value: "https://kuroweb.net"
             - name: NEXT_PRIVATE_API_URL
-              value: "https://192.168.0.220.nip.io"
+              value: "https://kuroweb.net"
             - name: NEXT_PUBLIC_API_URL
-              value: "https://192.168.0.220.nip.io"
+              value: "https://kuroweb.net"
+            # - name: NEXT_PRIVATE_API_URL
+            #   value: "https://192.168.0.220.nip.io"
+            # - name: NEXT_PUBLIC_API_URL
+            #   value: "https://192.168.0.220.nip.io"

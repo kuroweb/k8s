@@ -5,53 +5,54 @@ metadata:
   namespace: price-monitoring
   annotations:
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    # nginx.ingress.kubernetes.io/whitelist-source-range: "192.168.0.0/16"
 spec:
   ingressClassName: nginx
   tls:
     # Basic認証を導入するまで無効化
-    # - hosts:
-    #     - kuroweb.net
-    #     - www.kuroweb.net
-    #   secretName: kuroweb-net-tls
+    - hosts:
+        - kuroweb.net
+        - www.kuroweb.net
+      secretName: kuroweb-net-tls
     - hosts:
         - 192.168.0.220.nip.io
       secretName: nip-tls-secret
   rules:
     # Basic認証を導入するまで無効化
-    # - host: kuroweb.net
-    #   http:
-    #     paths:
-    #       - path: /
-    #         pathType: Prefix
-    #         backend:
-    #           service:
-    #             name: frontend-service
-    #             port:
-    #               number: 80
-    #       - path: /api
-    #         pathType: Prefix
-    #         backend:
-    #           service:
-    #             name: backend-service
-    #             port:
-    #               number: 3000
-    # - host: www.kuroweb.net
-    #   http:
-    #     paths:
-    #       - path: /
-    #         pathType: Prefix
-    #         backend:
-    #           service:
-    #             name: frontend-service
-    #             port:
-    #               number: 80
-    #       - path: /api
-    #         pathType: Prefix
-    #         backend:
-    #           service:
-    #             name: backend-service
-    #             port:
-    #               number: 3000
+    - host: kuroweb.net
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend-service
+                port:
+                  number: 80
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: backend-service
+                port:
+                  number: 3000
+    - host: www.kuroweb.net
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend-service
+                port:
+                  number: 80
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: backend-service
+                port:
+                  number: 3000
     - host: 192.168.0.220.nip.io
       http:
         paths:
