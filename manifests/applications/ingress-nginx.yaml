@@ -18,6 +18,8 @@ spec:
             externalTrafficPolicy: Local
           ingressClassResource:
             default: true
+          config:
+            use-forwarded-headers: "false"
   destination:
     server: https://kubernetes.default.svc
     namespace: ingress-nginx
