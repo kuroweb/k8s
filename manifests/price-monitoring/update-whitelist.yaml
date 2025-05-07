@@ -5,8 +5,6 @@ metadata:
   namespace: price-monitoring
 spec:
   schedule: "*/5 * * * *"
-  successfulJobsHistoryLimit: 1
-  failedJobsHistoryLimit: 1
   jobTemplate:
     spec:
       ttlSecondsAfterFinished: 60
