@@ -1,0 +1,61 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: update-whitelist
+  namespace: price-monitoring
+spec:
+  schedule: "*/5 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: update-ip
+              image: alpine:3.19
+              env:
+                - name: GIT_USER
+                  value: kuroweb_bot
+                - name: GIT_EMAIL
+                  value: kuroweb_bot@users.noreply.github.com
+                - name: GIT_TOKEN
+                  valueFrom:
+                    secretKeyRef:
+                      name: github-token
+                      key: token
+              command: ["/bin/sh"]
+              args:
+                - -c
+                - |
+                  set -e
+
+                  apk add --no-cache git bash curl yq openssh
+
+                  REPO_URL=https://$GIT_TOKEN@github.com/kuroweb/k8s.git
+                  INGRESS_PATH="manifests/price-monitoring/ingress.yaml"
+                  WHITELIST_KEY="nginx.ingress.kubernetes.io/whitelist-source-range"
+                  DYNAMIC_KEY="price-monitoring/managed-dynamic-ip"
+
+                  git config --global user.name "$GIT_USER"
+                  git config --global user.email "$GIT_EMAIL"
+                  git clone "$REPO_URL" /repo
+                  cd /repo
+
+                  NEW_IP=$(curl -s https://api.ipify.org)/32
+                  OLD_IP=$(yq e ".metadata.annotations.\"$DYNAMIC_KEY\"" "$INGRESS_PATH")
+
+                  echo "NEW_IP = $NEW_IP"
+                  echo "OLD_IP = $OLD_IP"
+
+                  if [ "$NEW_IP" = "$OLD_IP" ]; then
+                    echo "No IP change detected. Skipping update."
+                    exit 0
+                  fi
+
+                  echo "Updating IP in whitelist-source-range..."
+                  yq e ".metadata.annotations.\"$WHITELIST_KEY\" |= sub(\"$OLD_IP\", \"$NEW_IP\")" -i "$INGRESS_PATH"
+                  yq e ".metadata.annotations.\"$DYNAMIC_KEY\" = \"$NEW_IP\"" -i "$INGRESS_PATH"
+
+                  git add "$INGRESS_PATH"
+                  git commit -m "auto: update dynamic IP to $NEW_IP"
+                  git push origin master
+          restartPolicy: OnFailure

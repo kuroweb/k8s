@@ -6,6 +6,7 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
     nginx.ingress.kubernetes.io/whitelist-source-range: "125.193.159.120/32,192.168.0.0/16"
+    price-monitoring/managed-dynamic-ip: "125.193.159.120/32"
 spec:
   ingressClassName: nginx
   tls:
