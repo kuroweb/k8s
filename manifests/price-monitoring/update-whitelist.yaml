@@ -9,9 +9,9 @@ spec:
   failedJobsHistoryLimit: 1
   jobTemplate:
     spec:
+      ttlSecondsAfterFinished: 60
       template:
         spec:
-          ttlSecondsAfterFinished: 60
           containers:
             - name: update-ip
               image: alpine:3.19
