@@ -11,6 +11,7 @@ spec:
     spec:
       template:
         spec:
+          ttlSecondsAfterFinished: 60
           containers:
             - name: update-ip
               image: alpine:3.19
