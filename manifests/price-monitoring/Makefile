@@ -14,7 +14,7 @@ tag_suffix := $(shell git rev-parse --short HEAD)
 
 all: apply-all commit push
 
-apply-all: apply-backend apply-backend-playwright apply-frontend
+apply-all: apply-backend apply-backend-playwright apply-frontend apply-auth-provider
 
 commit:
 	git add .
