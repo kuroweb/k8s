@@ -1,0 +1,68 @@
+#
+# Deployment
+#
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-provider-migrate-deployment
+  namespace: price-monitoring
+  labels:
+    app: price-monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: price-monitoring
+      server: auth-provider-migrate
+  template:
+    metadata:
+      labels:
+        app: price-monitoring
+        server: auth-provider-migrate
+    spec:
+      containers:
+        - name: auth-provider-migrate
+          image: registry.local:5000/price-monitoring-auth-provider:5b92d527dd7351068a7b4023352cbda5e347f41f
+          command:
+            [
+              "/bin/sh", "-c",
+              # TODO: CrashLoopBackOffの暫定対応としてRailsサーバを起動する
+              "RAILS_ENV=production rails db:create && \
+               RAILS_ENV=production rails db:migrate && \
+               ./bin/rails server -b 0.0.0.0 -p 3000 -e production"
+            ]
+          env:
+            - name: DB_HOST_NAME
+              value: 192.168.0.222
+            - name: DB_DATABASE_NAME
+              value: rails
+            - name: DB_USER_NAME
+              value: root
+            - name: DB_PASSWORD
+              value: ""
+            - name: ALLOWED_ORIGINS
+              value: "192.168.0.221,kuroweb.net"
+            - name: DD_AGENT_HOST
+              value: "datadog-agent.datadog.svc.cluster.local"
+            - name: DD_TRACE_AGENT_PORT
+              value: "8126"
+            - name: RAILS_MASTER_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: auth-provider-secret
+                  key: RAILS_MASTER_KEY
+            - name: BUGSNAG_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: auth-provider-secret
+                  key: BUGSNAG_API_KEY
+          volumeMounts:
+            - name: op-private-key
+              mountPath: /app/certs/private.pem
+              subPath: OP_PRIVATE_KEY
+              readOnly: true
+      volumes:
+        - name: op-private-key
+          secret:
+            secretName: auth-provider-secret
