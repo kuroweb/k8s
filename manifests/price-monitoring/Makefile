@@ -17,11 +17,20 @@ all: apply-all commit push
 apply-all: apply-backend apply-backend-playwright apply-frontend apply-auth-provider
 
 commit:
-	git add .
-	git commit -m 'deploy'
+	@if ! git diff --cached --quiet || ! git diff --quiet; then \
+		echo "Committing changes..."; \
+		git add . && git commit -m 'deploy' || echo "No changes to commit"; \
+	else \
+		echo "No changes to commit"; \
+	fi
 
 push:
-	git push
+	@if git rev-parse --verify --quiet HEAD >/dev/null; then \
+		echo "Pushing changes..."; \
+		git push || echo "Nothing to push"; \
+	else \
+		echo "Nothing to push"; \
+	fi
 
 #
 # backend
