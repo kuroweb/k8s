@@ -69,3 +69,13 @@ frontend_tag := $(registry)/$(project)-frontend
 apply-frontend:
 	awk '{gsub("image: $(frontend_tag):[^ ]*", "image: $(frontend_tag):$(tag_suffix)")}1' \
 	frontend.yaml > tmpfile && mv tmpfile frontend.yaml
+
+#
+# auth-provider.yaml
+#
+
+auth_provider_tag := $(registry)/$(project)-auth-provider
+
+apply-auth-provider:
+	awk '{gsub("image: $(auth_provider_tag):[^ ]*", "image: $(auth_provider_tag):$(tag_suffix)")}1' \
+	auth-provider.yaml > tmpfile && mv tmpfile auth-provider.yaml

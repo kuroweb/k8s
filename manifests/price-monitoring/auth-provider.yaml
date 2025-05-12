@@ -1,0 +1,81 @@
+#
+# Service
+#
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-provider-service
+  namespace: price-monitoring
+spec:
+  selector:
+    app: price-monitoring
+    server: auth-provider
+  type: LoadBalancer
+  ports:
+    - name: http
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
+  loadBalancerIP: 192.168.0.221
+
+---
+#
+# Deployment
+#
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-provider-deployment
+  namespace: price-monitoring
+  labels:
+    app: price-monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: price-monitoring
+      server: auth-provider
+  template:
+    metadata:
+      labels:
+        app: price-monitoring
+        server: auth-provider
+    spec:
+      containers:
+        - name: auth-provider
+          image: registry.local:5000/price-monitoring-auth-provider:b21b7fdbd5d900cd922d49d20f8e79a6e53e2779
+          command: ["./bin/rails", "server", "-b", "0.0.0.0", "-p", "3000", "-e", "production"]
+          ports:
+            - name: http
+              containerPort: 3000
+          env:
+            - name: DB_HOST_NAME
+              value: 192.168.0.222
+            - name: DB_DATABASE_NAME
+              value: rails
+            - name: DB_USER_NAME
+              value: root
+            - name: DB_PASSWORD
+              value: ""
+            - name: REDIS_URL
+              value: "redis://192.168.0.213:6379"
+            - name: PLAYWRIGHT_URL
+              value: "ws://192.168.0.215:8888/ws"
+            - name: ALLOWED_ORIGINS
+              value: "192.168.0.210,kuroweb.net"
+            - name: DD_AGENT_HOST
+              value: "datadog-agent.datadog.svc.cluster.local"
+            - name: DD_TRACE_AGENT_PORT
+              value: "8126"
+            - name: RAILS_MASTER_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: auth-provider-secret
+                  key: RAILS_MASTER_KEY
+            - name: BUGSNAG_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: auth-provider-secret
+                  key: BUGSNAG_API_KEY
