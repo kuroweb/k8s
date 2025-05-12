@@ -77,5 +77,10 @@ apply-frontend:
 auth_provider_tag := $(registry)/$(project)-auth-provider
 
 apply-auth-provider:
+	# auth-provider.yaml
 	awk '{gsub("image: $(auth_provider_tag):[^ ]*", "image: $(auth_provider_tag):$(tag_suffix)")}1' \
 	auth-provider.yaml > tmpfile && mv tmpfile auth-provider.yaml
+
+	# auth-provider-migrate.yaml
+	awk '{gsub("image: $(auth_provider_tag):[^ ]*", "image: $(auth_provider_tag):$(tag_suffix)")}1' \
+	auth-provider-migrate.yaml > tmpfile && mv tmpfile auth-provider-migrate.yaml
