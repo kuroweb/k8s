@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
         - name: auth-provider-migrate
-          image: registry.local:5000/price-monitoring-auth-provider:f7cf4ec998cc220c69e3189ed45cca44e750c1a1
+          image: registry.local:5000/price-monitoring-auth-provider:245076c1cea3f9dcb92aa20a828238a3425fb67c
           command:
             [
               "/bin/sh", "-c",
