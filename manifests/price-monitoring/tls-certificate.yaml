@@ -8,9 +8,9 @@ spec:
   issuerRef:
     name: tls-issuer
     kind: Issuer
-  commonName: kuroweb.net
+  commonName: price-monitoring.kuroweb.net
   dnsNames:
-    - kuroweb.net
-    - www.kuroweb.net
+    - price-monitoring.kuroweb.net
+    - www.price-monitoring.kuroweb.net
   renewBefore: 720h
   duration: 2160h
