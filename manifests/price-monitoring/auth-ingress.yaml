@@ -24,9 +24,9 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: frontend-service
+                name: auth-provider-service
                 port:
-                  number: 80
+                  number: 3000
     - host: www.auth.price-monitoring.kuroweb.net
       http:
         paths:
@@ -34,6 +34,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: frontend-service
+                name: auth-provider-service
                 port:
-                  number: 80
+                  number: 3000
