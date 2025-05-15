@@ -32,7 +32,7 @@ spec:
                   apk add --no-cache git bash curl yq openssh
 
                   REPO_URL=https://$GIT_TOKEN@github.com/kuroweb/k8s.git
-                  INGRESS_PATH="manifests/price-monitoring/web-ingress.yaml"
+                  INGRESS_PATHS=("manifests/price-monitoring/web-ingress.yaml" "manifests/price-monitoring/auth-ingress.yaml")
                   WHITELIST_KEY="nginx.ingress.kubernetes.io/whitelist-source-range"
                   DYNAMIC_KEY="price-monitoring/managed-dynamic-ip"
 
@@ -42,21 +42,31 @@ spec:
                   cd /repo
 
                   NEW_IP=$(curl -s https://api.ipify.org)/32
-                  OLD_IP=$(yq e ".metadata.annotations.\"$DYNAMIC_KEY\"" "$INGRESS_PATH")
+                  UPDATED=0
 
-                  echo "NEW_IP = $NEW_IP"
-                  echo "OLD_IP = $OLD_IP"
+                  for INGRESS_PATH in "${INGRESS_PATHS[@]}"; do
+                    OLD_IP=$(yq e ".metadata.annotations.\"$DYNAMIC_KEY\"" "$INGRESS_PATH")
 
-                  if [ "$NEW_IP" = "$OLD_IP" ]; then
-                    echo "No IP change detected. Skipping update."
-                    exit 0
+                    echo "Processing $INGRESS_PATH"
+                    echo "NEW_IP = $NEW_IP"
+                    echo "OLD_IP = $OLD_IP"
+
+                    if [ "$NEW_IP" = "$OLD_IP" ]; then
+                      echo "No change in $INGRESS_PATH"
+                      continue
+                    fi
+
+                    echo "Updating $INGRESS_PATH"
+                    yq e ".metadata.annotations.\"$WHITELIST_KEY\" |= sub(\"$OLD_IP\", \"$NEW_IP\")" -i "$INGRESS_PATH"
+                    yq e ".metadata.annotations.\"$DYNAMIC_KEY\" = \"$NEW_IP\"" -i "$INGRESS_PATH"
+                    git add "$INGRESS_PATH"
+                    UPDATED=1
+                  done
+
+                  if [ "$UPDATED" -eq 1 ]; then
+                    git commit -m "auto: update dynamic IP to $NEW_IP"
+                    git push origin master
+                  else
+                    echo "No files updated."
                   fi
-
-                  echo "Updating IP in whitelist-source-range..."
-                  yq e ".metadata.annotations.\"$WHITELIST_KEY\" |= sub(\"$OLD_IP\", \"$NEW_IP\")" -i "$INGRESS_PATH"
-                  yq e ".metadata.annotations.\"$DYNAMIC_KEY\" = \"$NEW_IP\"" -i "$INGRESS_PATH"
-
-                  git add "$INGRESS_PATH"
-                  git commit -m "auto: update dynamic IP to $NEW_IP"
-                  git push origin master
           restartPolicy: OnFailure
