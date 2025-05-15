@@ -12,7 +12,5 @@ spec:
   dnsNames:
     - price-monitoring.kuroweb.net
     - www.price-monitoring.kuroweb.net
-    - auth.price-monitoring.kuroweb.net
-    - www.auth.price-monitoring.kuroweb.net
   renewBefore: 720h
   duration: 2160h
