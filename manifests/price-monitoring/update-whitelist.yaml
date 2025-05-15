@@ -32,7 +32,7 @@ spec:
                   apk add --no-cache git bash curl yq openssh
 
                   REPO_URL=https://$GIT_TOKEN@github.com/kuroweb/k8s.git
-                  INGRESS_PATH="manifests/price-monitoring/ingress.yaml"
+                  INGRESS_PATH="manifests/price-monitoring/web-ingress.yaml"
                   WHITELIST_KEY="nginx.ingress.kubernetes.io/whitelist-source-range"
                   DYNAMIC_KEY="price-monitoring/managed-dynamic-ip"
 
