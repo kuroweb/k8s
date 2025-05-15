@@ -15,7 +15,7 @@ spec:
     - hosts:
         - price-monitoring.kuroweb.net
         - www.price-monitoring.kuroweb.net
-      secretName: tls-cert
+      secretName: web-ingress-cert
   rules:
     - host: price-monitoring.kuroweb.net
       http:
