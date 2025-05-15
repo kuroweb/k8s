@@ -1,0 +1,16 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: auth-ingress-cert
+  namespace: price-monitoring
+spec:
+  secretName: auth-ingress-cert
+  issuerRef:
+    name: tls-issuer
+    kind: Issuer
+  commonName: price-monitoring.kuroweb.net
+  dnsNames:
+    - auth.price-monitoring.kuroweb.net
+    - www.auth.price-monitoring.kuroweb.net
+  renewBefore: 720h
+  duration: 2160h
