@@ -66,23 +66,6 @@ spec:
               value: "yes"
       volumes:
         - name: backend-redis-storage
-          persistentVolumeClaim:
-            claimName: backend-redis-pvc-1
-
----
-#
-# pvc
-#
-
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: backend-redis-pvc-1
-  namespace: price-monitoring
-spec:
-  accessModes:
-    - ReadWriteOnce
-  storageClassName: longhorn
-  resources:
-    requests:
-      storage: 5Gi
+          hostPath:
+            path: /var/lib/price-monitoring/backend-redis-storage
+            type: DirectoryOrCreate

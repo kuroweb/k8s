@@ -59,23 +59,6 @@ spec:
               value: "yes"
       volumes:
         - name: auth-provider-db-storage
-          persistentVolumeClaim:
-            claimName: auth-provider-db-pvc
-
----
-#
-# PersistentVolumeClaim
-#
-
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: auth-provider-db-pvc
-  namespace: price-monitoring
-spec:
-  accessModes:
-    - ReadWriteOnce
-  storageClassName: longhorn
-  resources:
-    requests:
-      storage: 5Gi
+          hostPath:
+            path: /var/lib/price-monitoring/auth-provider-db-storage
+            type: DirectoryOrCreate

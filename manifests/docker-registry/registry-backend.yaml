@@ -52,32 +52,15 @@ spec:
             - name: REGISTRY_HTTP_TLS_KEY
               value: "/certs/tls.key"
           volumeMounts:
-            - name: lv-storage
+            - name: registry-backend-storage
               mountPath: /var/lib/registry
-              subPath: registry
             - name: certs
               mountPath: /certs
       volumes:
-        - name: lv-storage
-          persistentVolumeClaim:
-            claimName: longhorn-docker-registry-pvc-1
+        - name: registry-backend-storage
+          hostPath:
+            path: /var/lib/docker-registry/registry-backend-storage
+            type: DirectoryOrCreate
         - name: certs
           secret:
             secretName: docker-registry-tls-cert
----
-#
-# PVC
-#
-
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: longhorn-docker-registry-pvc-1
-  namespace: docker-registry
-spec:
-  accessModes:
-    - ReadWriteOnce
-  storageClassName: longhorn
-  resources:
-    requests:
-      storage: 100Gi
