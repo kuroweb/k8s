@@ -40,7 +40,7 @@ spec:
         name: registry-backend
     spec:
       nodeSelector:
-        node-type: worker
+        kubernetes.io/hostname: worker-1
       containers:
         - name: registry-backend
           image: registry:2
