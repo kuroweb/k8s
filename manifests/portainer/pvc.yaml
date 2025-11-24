@@ -1,7 +1,6 @@
 #
 # PersistentVolume
 #
-
 apiVersion: v1
 kind: PersistentVolume
 metadata:
@@ -13,6 +12,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
+  storageClassName: ""
   hostPath:
     path: /var/lib/portainer/portainer-pv
     type: DirectoryOrCreate
@@ -20,7 +20,6 @@ spec:
 #
 # PersistentVolumeClaim
 #
-
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -32,3 +31,4 @@ spec:
   resources:
     requests:
       storage: 10Gi
+  storageClassName: ""
