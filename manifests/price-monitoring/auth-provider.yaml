@@ -45,7 +45,7 @@ spec:
     spec:
       containers:
         - name: auth-provider
-          image: registry.local:5000/price-monitoring-auth-provider:d7b907f8
+          image: registry.local:5000/price-monitoring-auth-provider:1b8f8b98
           command: ["./bin/rails", "server", "-b", "0.0.0.0", "-p", "3000", "-e", "production"]
           ports:
             - name: http
