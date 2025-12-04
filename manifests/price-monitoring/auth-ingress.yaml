@@ -5,10 +5,10 @@ metadata:
   namespace: price-monitoring
   annotations:
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
-    nginx.ingress.kubernetes.io/whitelist-source-range: "60.239.224.191/32,192.168.0.0/16"
+    nginx.ingress.kubernetes.io/whitelist-source-range: "110.233.66.131/32,192.168.0.0/16"
     # 自宅サーバのグローバルIPを捕捉するためのアノテーション
     # CronJobでホワイトリスト内の自宅サーバのグローバルIPを書き換える仕組みにしている
-    price-monitoring/managed-dynamic-ip: "60.239.224.191/32"
+    price-monitoring/managed-dynamic-ip: "110.233.66.131/32"
 spec:
   ingressClassName: nginx
   tls:
