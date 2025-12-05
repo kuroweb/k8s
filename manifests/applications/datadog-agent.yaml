@@ -35,6 +35,12 @@ spec:
         clusterAgent:
           enabled: true
           apiKeyExistingSecret: datadog-secret
+          env:
+            - name: DD_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: datadog-secret
+                  key: api-key
   destination:
     server: https://kubernetes.default.svc
     namespace: datadog
