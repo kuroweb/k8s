@@ -58,9 +58,26 @@ spec:
               mountPath: /certs
       volumes:
         - name: registry-backend-storage
-          hostPath:
-            path: /var/lib/docker-registry/registry-backend-storage
-            type: DirectoryOrCreate
+          persistentVolumeClaim:
+            claimName: registry-backend-storage
         - name: certs
           secret:
             secretName: docker-registry-tls-cert
+
+---
+#
+# PVC
+#
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: registry-backend-storage
+  namespace: docker-registry
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: longhorn
+  resources:
+    requests:
+      storage: 100Gi
