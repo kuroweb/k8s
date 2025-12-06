@@ -43,15 +43,6 @@ spec:
         app: price-monitoring
         server: backend-redis
     spec:
-      initContainers:
-        - name: fix-permissions
-          image: busybox
-          command: ['sh', '-c', 'chown -R 999:999 /data && chmod -R 755 /data']
-          securityContext:
-            runAsUser: 0
-          volumeMounts:
-            - name: backend-redis-storage
-              mountPath: /data
       # NOTE: AOF fileに問題が生じてPodが起動しない場合に利用する
       # initContainers:
       #   - name: repair-redis
