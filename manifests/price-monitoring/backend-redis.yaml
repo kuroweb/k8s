@@ -43,8 +43,6 @@ spec:
         app: price-monitoring
         server: backend-redis
     spec:
-      securityContext:
-        fsGroup: 999
       # NOTE: AOF fileに問題が生じてPodが起動しない場合に利用する
       # initContainers:
       #   - name: repair-redis
@@ -70,6 +68,8 @@ spec:
         - name: backend-redis-storage
           persistentVolumeClaim:
             claimName: backend-redis-storage
+      securityContext:
+        fsGroup: 999
 
 ---
 #
