@@ -25,3 +25,11 @@ spec:
     automated:
       prune: false
       selfHeal: true
+  ignoreDifferences:
+    # NOTE: nodePortのdiffが生じるため
+    - group: ""
+      kind: Service
+      name: longhorn-frontend
+      namespace: longhorn-system
+      jsonPointers:
+        - /spec/ports/0/nodePort
