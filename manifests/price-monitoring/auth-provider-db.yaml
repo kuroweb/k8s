@@ -59,6 +59,23 @@ spec:
               value: "yes"
       volumes:
         - name: auth-provider-db-storage
-          hostPath:
-            path: /var/lib/price-monitoring/auth-provider-db-storage
-            type: DirectoryOrCreate
+          persistentVolumeClaim:
+            claimName: auth-provider-db-storage
+
+---
+#
+# PVC
+#
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: auth-provider-db-storage
+  namespace: price-monitoring
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: longhorn
+  resources:
+    requests:
+      storage: 10Gi

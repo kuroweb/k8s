@@ -59,6 +59,23 @@ spec:
               value: "yes"
       volumes:
         - name: backend-db-storage
-          hostPath:
-            path: /var/lib/price-monitoring/backend-db-storage
-            type: DirectoryOrCreate
+          persistentVolumeClaim:
+            claimName: backend-db-storage
+
+---
+#
+# PVC
+#
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: backend-db-storage
+  namespace: price-monitoring
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: longhorn
+  resources:
+    requests:
+      storage: 20Gi
