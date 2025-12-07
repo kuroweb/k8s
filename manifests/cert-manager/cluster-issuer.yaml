@@ -7,7 +7,7 @@ spec:
     email: kuromitsu0104@gmail.com
     server: https://acme-v02.api.letsencrypt.org/directory
     privateKeySecretRef:
-      name: tls-issuer-account-key
+      name: tls-cluster-issuer-account-key
     solvers:
       - dns01:
           cloudflare:
