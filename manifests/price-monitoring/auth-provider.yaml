@@ -44,7 +44,7 @@ spec:
               containerPort: 3000
           env:
             - name: DB_HOST_NAME
-              value: 192.168.0.222
+              value: auth-provider-db-service
             - name: DB_DATABASE_NAME
               value: rails
             - name: DB_USER_NAME

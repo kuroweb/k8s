@@ -44,7 +44,7 @@ spec:
               containerPort: 3000
           env:
             - name: DB_HOST_NAME
-              value: 192.168.0.212
+              value: backend-db-service
             - name: DB_DATABASE_NAME
               value: rails
             - name: DB_USER_NAME
@@ -52,9 +52,9 @@ spec:
             - name: DB_PASSWORD
               value: ""
             - name: REDIS_URL
-              value: "redis://192.168.0.213:6379"
+              value: "redis://backend-redis-service:6379"
             - name: PLAYWRIGHT_URL
-              value: "ws://192.168.0.215:8888/ws"
+              value: "ws://backend-playwright-service:8888/ws"
             - name: ALLOWED_ORIGINS
               value: "192.168.0.210,price-monitoring.kuroweb.net,backend-service"
             - name: DD_AGENT_HOST
