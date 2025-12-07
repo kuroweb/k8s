@@ -6,8 +6,8 @@ metadata:
 spec:
   secretName: web-ingress-cert
   issuerRef:
-    name: tls-issuer
-    kind: Issuer
+    name: tls-cluster-issuer
+    kind: ClusterIssuer
   commonName: price-monitoring.kuroweb.net
   dnsNames:
     - price-monitoring.kuroweb.net

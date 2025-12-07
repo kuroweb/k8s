@@ -1,8 +1,7 @@
 apiVersion: cert-manager.io/v1
-kind: Issuer
+kind: ClusterIssuer
 metadata:
-  name: tls-issuer
-  namespace: price-monitoring
+  name: tls-cluster-issuer
 spec:
   acme:
     email: kuromitsu0104@gmail.com
