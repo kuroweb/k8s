@@ -51,7 +51,8 @@ spec:
               containerPort: 3000
           env:
             - name: NEXT_PRIVATE_API_URL
-              value: "http://192.168.0.210:3000"
+              value: "https://price-monitoring.kuroweb.net"
+              # value: "http://192.168.0.210:3000"
             - name: NEXT_PUBLIC_API_URL
               value: "https://price-monitoring.kuroweb.net"
               # value: "http://192.168.0.210:3000"
