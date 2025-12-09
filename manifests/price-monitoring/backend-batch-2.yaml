@@ -13,7 +13,7 @@ spec:
       protocol: TCP
       port: 3000
       targetPort: 3000
-  loadBalancerIP: 192.168.0.218
+  loadBalancerIP: 10.15.100.218
 
 ---
 apiVersion: apps/v1
@@ -59,7 +59,7 @@ spec:
             - name: PLAYWRIGHT_URL
               value: "ws://backend-playwright-service:8888/ws"
             - name: ALLOWED_ORIGINS
-              value: "192.168.0.211"
+              value: "10.15.100.211"
             - name: DD_AGENT_HOST
               value: "datadog-agent.datadog.svc.cluster.local"
             - name: DD_TRACE_AGENT_PORT

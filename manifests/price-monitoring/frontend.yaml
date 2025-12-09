@@ -13,7 +13,7 @@ spec:
       protocol: TCP
       port: 80
       targetPort: 3000
-  loadBalancerIP: 192.168.0.217
+  loadBalancerIP: 10.15.100.217
 
 ---
 apiVersion: apps/v1
@@ -44,7 +44,7 @@ spec:
           env:
             - name: NEXT_PRIVATE_API_URL
               value: "http://backend-service:3000"
-              # value: "http://192.168.0.210:3000"
+              # value: "http://10.15.100.210:3000"
             - name: NEXT_PUBLIC_API_URL
               value: "https://price-monitoring.kuroweb.net"
-              # value: "http://192.168.0.210:3000"
+              # value: "http://10.15.100.210:3000"

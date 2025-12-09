@@ -40,7 +40,7 @@ spec:
             - name: REDIS_URL
               value: "redis://backend-redis-service:6379"
             - name: TOR_URL
-              value: "socks5://192.168.0.214:9050"
+              value: "socks5://10.15.100.214:9050"
             - name: PLAYWRIGHT_URL
               value: "ws://backend-playwright-service:8888/ws"
             - name: ALLOWED_ORIGINS
