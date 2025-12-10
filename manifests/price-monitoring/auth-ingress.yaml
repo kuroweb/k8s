@@ -5,6 +5,7 @@ metadata:
   namespace: price-monitoring
   annotations:
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/from-to-www-redirect: "true"
 spec:
   ingressClassName: nginx
   tls:
@@ -14,16 +15,6 @@ spec:
       secretName: auth-ingress-cert
   rules:
     - host: auth.price-monitoring.kuroweb.net
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: auth-provider-service
-                port:
-                  number: 3000
-    - host: www.auth.price-monitoring.kuroweb.net
       http:
         paths:
           - path: /
