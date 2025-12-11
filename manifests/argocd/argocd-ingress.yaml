@@ -1,0 +1,44 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: argocd-ingress
+  namespace: argocd
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/from-to-www-redirect: "true"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - argocd.kuroweb.net
+        - www.argocd.kuroweb.net
+      secretName: argocd-ingress-cert
+  rules:
+    - host: argocd.kuroweb.net
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: argocd-server
+                port:
+                  number: 80
+
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: argocd-ingress-cert
+  namespace: argocd
+spec:
+  secretName: argocd-ingress-cert
+  issuerRef:
+    name: tls-cluster-issuer
+    kind: ClusterIssuer
+  commonName: argocd.kuroweb.net
+  dnsNames:
+    - argocd.kuroweb.net
+    - www.argocd.kuroweb.net
+  renewBefore: 720h
+  duration: 2160h
