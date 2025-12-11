@@ -31,16 +31,16 @@ graph
 
 ## Applications
 
-| Application | LoadbalancerIP |
+| Application | URL |
 | -- | -- |
-| Longhorn | http://192.168.0.201 |
-| docker-registry | https://192.168.0.202:5000 |
-| OpenFaaS | http://192.168.0.203:8080 |
-| Portainer | http://192.168.0.207:9000 |
-| Argo CD | https://192.168.0.208 |
-| price-monitoring - Frontend | http://192.168.0.217 |
-| price-monitoring - Backend | http://192.168.0.210:3000 |
-| price-monitoring - Backend - Sidekiq管理画面 | http://192.168.0.210:3000/sidekiq |
+| Longhorn | http://10.15.100.201 |
+| docker-registry | https://docker-registry.kuroweb.net |
+| Portainer | http://10.15.100.207:9000 |
+| Argo CD | https://10.15.100.208 |
+| price-monitoring - Frontend | https://price-monitoring.kuroweb.net |
+| price-monitoring - Backend API | https://price-monitoring.kuroweb.net/api |
+| price-monitoring - Sidekiq管理画面 | https://price-monitoring.kuroweb.net/sidekiq |
+| price-monitoring - Auth Provider | https://auth.price-monitoring.kuroweb.net |
 
 ## Secrets
 
