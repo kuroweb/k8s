@@ -37,7 +37,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: docker-registry.kuroweb.net/price-monitoring-frontend:263c2526
+          image: docker-registry.kuroweb.net/price-monitoring-frontend:9684cd5cfa8486a9a891a0416de1d4ac57dc8ebe
           ports:
             - name: http
               containerPort: 3000
