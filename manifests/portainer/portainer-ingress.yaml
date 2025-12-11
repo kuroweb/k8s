@@ -1,0 +1,45 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: portainer-ingress
+  namespace: portainer
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/from-to-www-redirect: "true"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - portainer.kuroweb.net
+        - www.portainer.kuroweb.net
+      secretName: portainer-ingress-cert
+  rules:
+    - host: portainer.kuroweb.net
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: portainer
+                port:
+                  number: 9443
+
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: portainer-ingress-cert
+  namespace: portainer
+spec:
+  secretName: portainer-ingress-cert
+  issuerRef:
+    name: tls-cluster-issuer
+    kind: ClusterIssuer
+  commonName: portainer.kuroweb.net
+  dnsNames:
+    - portainer.kuroweb.net
+    - www.portainer.kuroweb.net
+  renewBefore: 720h
+  duration: 2160h
