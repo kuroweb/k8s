@@ -7,5 +7,4 @@ metadata:
     app.kubernetes.io/name: argocd-cmd-params-cm
     app.kubernetes.io/part-of: argocd
 data:
-  # Ingress背後でHTTPで動作させる
   server.insecure: "true"
