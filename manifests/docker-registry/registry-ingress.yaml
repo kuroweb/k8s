@@ -1,0 +1,47 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: registry-ingress
+  namespace: docker-registry
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/from-to-www-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - docker-registry.kuroweb.net
+        - www.docker-registry.kuroweb.net
+      secretName: registry-ingress-cert
+  rules:
+    - host: docker-registry.kuroweb.net
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: registry-backend-service
+                port:
+                  number: 5000
+
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: registry-ingress-cert
+  namespace: docker-registry
+spec:
+  secretName: registry-ingress-cert
+  issuerRef:
+    name: tls-cluster-issuer
+    kind: ClusterIssuer
+  commonName: docker-registry.kuroweb.net
+  dnsNames:
+    - docker-registry.kuroweb.net
+    - www.docker-registry.kuroweb.net
+  renewBefore: 720h
+  duration: 2160h
