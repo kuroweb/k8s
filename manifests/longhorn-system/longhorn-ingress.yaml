@@ -1,0 +1,45 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: longhorn-ingress
+  namespace: longhorn-system
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/from-to-www-redirect: "true"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - longhorn.kuroweb.net
+        - www.longhorn.kuroweb.net
+      secretName: longhorn-ingress-cert
+  rules:
+    - host: longhorn.kuroweb.net
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: longhorn-frontend
+                port:
+                  number: 80
+
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: longhorn-ingress-cert
+  namespace: longhorn-system
+spec:
+  secretName: longhorn-ingress-cert
+  issuerRef:
+    name: tls-cluster-issuer
+    kind: ClusterIssuer
+  commonName: longhorn.kuroweb.net
+  dnsNames:
+    - longhorn.kuroweb.net
+    - www.longhorn.kuroweb.net
+  renewBefore: 720h
+  duration: 2160h
+
