@@ -17,3 +17,4 @@ data:
         - CiliumIdentity
       clusters:
         - "*"
+  url: https://argocd.kuroweb.net
