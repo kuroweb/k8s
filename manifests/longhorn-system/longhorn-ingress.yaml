@@ -42,4 +42,3 @@ spec:
     - www.longhorn.kuroweb.net
   renewBefore: 720h
   duration: 2160h
-
