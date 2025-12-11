@@ -4,7 +4,7 @@
 # config
 #
 
-registry := registry.local:5000
+registry := docker-registry.kuroweb.net
 project := price-monitoring
 tag_suffix := $(shell git rev-parse --short HEAD)
 
