@@ -17,7 +17,6 @@ spec:
           ui:
             type: LoadBalancer
             loadBalancerIP: 10.15.100.201
-            externalTrafficPolicy: Local
   destination:
     server: https://kubernetes.default.svc
     namespace: longhorn-system

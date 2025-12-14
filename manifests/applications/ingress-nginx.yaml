@@ -15,7 +15,6 @@ spec:
           service:
             type: LoadBalancer
             loadBalancerIP: 10.15.100.220
-            externalTrafficPolicy: Local
           ingressClassResource:
             default: true
   destination:
