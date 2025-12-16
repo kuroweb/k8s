@@ -37,7 +37,7 @@ spec:
     spec:
       containers:
         - name: auth-provider
-          image: docker-registry.kuroweb.net/price-monitoring-auth-provider:9684cd5cfa8486a9a891a0416de1d4ac57dc8ebe
+          image: docker-registry.kuroweb.net/price-monitoring-auth-provider:f57547e
           command: ["./bin/rails", "server", "-b", "0.0.0.0", "-p", "3000", "-e", "production"]
           ports:
             - name: http
