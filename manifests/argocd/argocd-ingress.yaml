@@ -4,12 +4,15 @@ metadata:
   name: argocd-ingress
   namespace: argocd
   annotations:
-    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/from-to-www-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
 spec:
   ingressClassName: nginx
   tls:
     - hosts:
         - argocd.kuroweb.net
+        - www.argocd.kuroweb.net
       secretName: argocd-ingress-cert
   rules:
     - host: argocd.kuroweb.net
