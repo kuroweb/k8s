@@ -24,7 +24,7 @@ metadata:
   labels:
     app: price-monitoring
 spec:
-  replicas: 30
+  replicas: 20
   selector:
     matchLabels:
       app: price-monitoring
@@ -43,7 +43,7 @@ spec:
               containerPort: 8888
           resources:
             limits:
-              cpu: "500m"
+              cpu: "1000m"
       # nodeSelector:
       #   node-tier: playwright
       # topologySpreadConstraints:
