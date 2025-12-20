@@ -13,7 +13,7 @@ spec:
       protocol: TCP
       port: 3306
       targetPort: 3306
-  loadBalancerIP: 10.15.100.212
+  loadBalancerIP: 10.15.200.212
 
 ---
 apiVersion: apps/v1
@@ -35,6 +35,8 @@ spec:
         app: price-monitoring
         server: backend-db
     spec:
+      nodeSelector:
+        vnet: evpnNt02
       containers:
         - name: backend-db
           image: mysql/mysql-server:8.0
