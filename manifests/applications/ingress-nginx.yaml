@@ -17,6 +17,8 @@ spec:
             loadBalancerIP: 10.15.100.220
           ingressClassResource:
             default: true
+          nodeSelector:
+            kubernetes.io/hostname: worker-3
   destination:
     server: https://kubernetes.default.svc
     namespace: ingress-nginx
