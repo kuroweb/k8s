@@ -35,6 +35,8 @@ spec:
         app: price-monitoring
         server: backend-db
     spec:
+      nodeSelector:
+        vnet: evpnNt01
       containers:
         - name: backend-db
           image: mysql/mysql-server:8.0
