@@ -1,7 +1,7 @@
 apiVersion: metallb.io/v1beta1
 kind: IPAddressPool
 metadata:
-  name: pool-evpnNt01
+  name: pool-evpnnt01
   namespace: metallb-system
 spec:
   addresses:
@@ -11,7 +11,7 @@ spec:
 apiVersion: metallb.io/v1beta1
 kind: IPAddressPool
 metadata:
-  name: pool-evpnNt02
+  name: pool-evpnnt02
   namespace: metallb-system
 spec:
   addresses:
@@ -21,11 +21,11 @@ spec:
 apiVersion: metallb.io/v1beta1
 kind: L2Advertisement
 metadata:
-  name: l2-evpnNt01
+  name: l2-evpnnt01
   namespace: metallb-system
 spec:
   ipAddressPools:
-    - pool-evpnNt01
+    - pool-evpnnt01
   nodeSelectors:
     - matchLabels:
         vnet: evpnNt01
@@ -34,11 +34,11 @@ spec:
 apiVersion: metallb.io/v1beta1
 kind: L2Advertisement
 metadata:
-  name: l2-evpnNt02
+  name: l2-evpnnt02
   namespace: metallb-system
 spec:
   ipAddressPools:
-    - pool-evpnNt02
+    - pool-evpnnt02
   nodeSelectors:
     - matchLabels:
         vnet: evpnNt02
