@@ -1,19 +1,44 @@
 apiVersion: metallb.io/v1beta1
 kind: IPAddressPool
 metadata:
-  name: default-pool
+  name: pool-evpnNt01
   namespace: metallb-system
 spec:
   addresses:
     - 10.15.100.200-10.15.100.250
+
+---
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: pool-evpnNt02
+  namespace: metallb-system
+spec:
+  addresses:
     - 10.15.200.200-10.15.200.250
 
 ---
 apiVersion: metallb.io/v1beta1
 kind: L2Advertisement
 metadata:
-  name: default
+  name: l2-evpnNt01
   namespace: metallb-system
 spec:
   ipAddressPools:
-    - default-pool
+    - pool-evpnNt01
+  nodeSelectors:
+    - matchLabels:
+        vnet: evpnNt01
+
+---
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: l2-evpnNt02
+  namespace: metallb-system
+spec:
+  ipAddressPools:
+    - pool-evpnNt02
+  nodeSelectors:
+    - matchLabels:
+        vnet: evpnNt02
