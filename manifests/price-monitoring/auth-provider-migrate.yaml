@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: auth-provider-migrate
-          image: docker-registry.kuroweb.net/price-monitoring-auth-provider:66061f6d
+          image: docker-registry.kuroweb.net/price-monitoring-auth-provider:56592771fd6eb0cd2ec9a35e92e7df1d1142daf2
           command:
             [
               "/bin/sh", "-c",
