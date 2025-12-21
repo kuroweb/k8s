@@ -13,7 +13,6 @@ spec:
       protocol: TCP
       port: 3000
       targetPort: 3000
-  loadBalancerIP: 10.15.100.218
 
 ---
 apiVersion: apps/v1
@@ -24,7 +23,7 @@ metadata:
   labels:
     app: price-monitoring
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: price-monitoring
@@ -64,7 +63,6 @@ spec:
               value: "datadog-agent.datadog.svc.cluster.local"
             - name: DD_TRACE_AGENT_PORT
               value: "8126"
-
             - name: RAILS_MASTER_KEY
               valueFrom:
                 secretKeyRef:

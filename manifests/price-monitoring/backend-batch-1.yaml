@@ -13,7 +13,6 @@ spec:
       protocol: TCP
       port: 3000
       targetPort: 3000
-  loadBalancerIP: 10.15.100.211
 
 ---
 apiVersion: apps/v1
@@ -24,7 +23,7 @@ metadata:
   labels:
     app: price-monitoring
 spec:
-  replicas: 6
+  replicas: 2
   selector:
     matchLabels:
       app: price-monitoring
@@ -44,7 +43,7 @@ spec:
               containerPort: 3000
           resources:
             limits:
-              cpu: "200m"
+              cpu: "1000m"
           env:
             - name: DB_HOST_NAME
               value: backend-db-service
