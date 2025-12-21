@@ -36,7 +36,7 @@ spec:
     spec:
       containers:
         - name: backend-batch-2
-          image: docker-registry.kuroweb.net/price-monitoring-backend:6355deaff848cc0dd45e8ecc0722704d2a11e424
+          image: docker-registry.kuroweb.net/price-monitoring-backend:9255479739670e324936b9dd8b79551ae125ac81
           command: ["sidekiq", "-C", "config/sidekiq/general_process.yml", "-e", "production"]
           ports:
             - name: http
