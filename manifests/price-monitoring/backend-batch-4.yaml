@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: backend-batch-3-service
+  name: backend-batch-4-service
   namespace: price-monitoring
 spec:
   selector:
     app: price-monitoring
-    server: backend-batch-3
+    server: backend-batch-4
   type: LoadBalancer
   ports:
     - name: http
@@ -18,7 +18,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: backend-batch-3-deployment
+  name: backend-batch-4-deployment
   namespace: price-monitoring
   labels:
     app: price-monitoring
@@ -27,15 +27,15 @@ spec:
   selector:
     matchLabels:
       app: price-monitoring
-      server: backend-batch-3
+      server: backend-batch-4
   template:
     metadata:
       labels:
         app: price-monitoring
-        server: backend-batch-3
+        server: backend-batch-4
     spec:
       containers:
-        - name: backend-batch-3
+        - name: backend-batch-4
           image: docker-registry.kuroweb.net/price-monitoring-backend:542683f50f8c873e2831aeebf2d93627c05fbe97
           command: ["sidekiq", "-C", "config/sidekiq/crawl_process_3.yml", "-e", "production"]
           ports:
