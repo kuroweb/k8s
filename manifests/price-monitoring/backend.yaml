@@ -37,7 +37,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: docker-registry.kuroweb.net/price-monitoring-backend:8a6d36273de0304b79de2fba9441ae6fafc90cce
+          image: docker-registry.kuroweb.net/price-monitoring-backend:c65734c8073cfd67047052ffa00a4fcefca1cb54
           command: ["./bin/rails", "server", "-b", "0.0.0.0", "-p", "3000", "-e", "production"]
           ports:
             - name: http
