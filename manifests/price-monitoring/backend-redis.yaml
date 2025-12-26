@@ -39,7 +39,7 @@ spec:
       initContainers:
         - name: repair-redis
           image: redis
-          command: ['sh', '-c', "echo 'y' | redis-check-aof --fix /data/appendonlydir/appendonly.aof.manifest"]
+          command: ['sh', '-c', "if [ -f /data/appendonlydir/appendonly.aof.manifest ]; then echo 'y' | redis-check-aof --fix /data/appendonlydir/appendonly.aof.manifest; fi"]
           volumeMounts:
             - name: backend-redis-storage
               mountPath: /data
