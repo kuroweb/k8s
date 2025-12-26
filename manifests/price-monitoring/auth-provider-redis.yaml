@@ -7,7 +7,7 @@ spec:
   selector:
     app: price-monitoring
     server: auth-provider-redis
-  type: ClusterIP
+  type: LoadBalancer
   ports:
     - name: redis
       protocol: TCP
