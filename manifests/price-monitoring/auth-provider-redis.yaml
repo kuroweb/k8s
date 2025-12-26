@@ -1,0 +1,76 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-provider-redis-service
+  namespace: price-monitoring
+spec:
+  selector:
+    app: price-monitoring
+    server: auth-provider-redis
+  type: ClusterIP
+  ports:
+    - name: redis
+      protocol: TCP
+      port: 6379
+      targetPort: 6379
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-provider-redis-deployment
+  namespace: price-monitoring
+  labels:
+    app: price-monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: price-monitoring
+      server: auth-provider-redis
+  template:
+    metadata:
+      labels:
+        app: price-monitoring
+        server: auth-provider-redis
+    spec:
+      initContainers:
+        - name: repair-redis
+          image: redis
+          command: ['sh', '-c', "echo 'y' | redis-check-aof --fix /data/appendonlydir/appendonly.aof.manifest"]
+          volumeMounts:
+            - name: auth-provider-redis-storage
+              mountPath: /data
+      containers:
+        - name: auth-provider-redis
+          image: redis
+          args: ["--appendonly", "yes"]
+          ports:
+            - name: redis
+              containerPort: 6379
+          volumeMounts:
+            - name: auth-provider-redis-storage
+              mountPath: /data
+          env:
+            - name: ALLOW_EMPTY_PASSWORD
+              value: "yes"
+      volumes:
+        - name: auth-provider-redis-storage
+          persistentVolumeClaim:
+            claimName: auth-provider-redis-storage
+      securityContext:
+        fsGroup: 999
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: auth-provider-redis-storage
+  namespace: price-monitoring
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: longhorn
+  resources:
+    requests:
+      storage: 5Gi
