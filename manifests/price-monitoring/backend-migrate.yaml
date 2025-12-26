@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: backend-migrate
-          image: docker-registry.kuroweb.net/price-monitoring-backend:70eee1771ee004beaed5f88b436d8a0a96f69e91
+          image: docker-registry.kuroweb.net/price-monitoring-backend:5551afb3a7ee269e125f73a6bed4344b7477fd26
           command:
             [
               "/bin/sh", "-c",
