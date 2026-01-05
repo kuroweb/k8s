@@ -54,21 +54,6 @@ spec:
                 secretKeyRef:
                   name: backend-secret
                   key: RAILS_MASTER_KEY
-            - name: PROXY_HOST
-              valueFrom:
-                secretKeyRef:
-                  name: backend-secret
-                  key: PROXY_HOST
-            - name: PROXY_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: backend-secret
-                  key: PROXY_USERNAME
-            - name: PROXY_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: backend-secret
-                  key: PROXY_PASSWORD
             - name: PROXY_LIST
               valueFrom:
                 secretKeyRef:
