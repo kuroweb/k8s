@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-migrate-deployment
+  namespace: auth-provider
+  labels:
+    app: auth-provider
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth-provider
+      server: backend-migrate
+  template:
+    metadata:
+      labels:
+        app: auth-provider
+        server: backend-migrate
+    spec:
+      containers:
+        - name: backend-migrate
+          image: docker-registry.kuroweb.net/auth-provider-backend:latest
+          command: [
+              "/bin/sh",
+              "-c",
+              # TODO: CrashLoopBackOffの暫定対応としてRailsサーバを起動する
+              "RAILS_ENV=production rails db:create && \
+              RAILS_ENV=production rails db:migrate && \
+              ./bin/rails server -b 0.0.0.0 -p 3000 -e production",
+            ]
+          env:
+            - name: DB_HOST_NAME
+              value: backend-db-service
+            - name: DB_DATABASE_NAME
+              value: rails
+            - name: DB_USER_NAME
+              value: root
+            - name: DB_PASSWORD
+              value: ""
+            - name: ALLOWED_ORIGINS
+              value: "10.15.100.230,auth-provider.kuroweb.net,www.auth-provider.kuroweb.net,backend-service"
+            - name: DOMAIN_NAME
+              value: "auth-provider.kuroweb.net"
+            - name: DD_AGENT_HOST
+              value: "datadog-agent.datadog.svc.cluster.local"
+            - name: DD_TRACE_AGENT_PORT
+              value: "8126"
+            - name: RAILS_MASTER_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secret
+                  key: RAILS_MASTER_KEY
+            - name: BUGSNAG_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secret
+                  key: BUGSNAG_API_KEY
+          volumeMounts:
+            - name: op-private-key
+              mountPath: /app/certs/private.pem
+              subPath: OP_PRIVATE_KEY
+              readOnly: true
+      volumes:
+        - name: op-private-key
+          secret:
+            secretName: backend-secret
