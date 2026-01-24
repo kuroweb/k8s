@@ -14,7 +14,7 @@ tag_suffix := $(shell git rev-parse --short HEAD)
 
 all: apply-all commit push
 
-apply-all: apply-backend apply-backend-playwright apply-frontend apply-auth-provider
+apply-all: apply-backend apply-backend-playwright apply-frontend
 
 commit:
 	git add .
@@ -73,18 +73,3 @@ frontend_tag := $(registry)/$(project)-frontend
 apply-frontend:
 	awk '{gsub("image: $(frontend_tag):[^ ]*", "image: $(frontend_tag):$(tag_suffix)")}1' \
 	frontend.yaml > tmpfile && mv tmpfile frontend.yaml
-
-#
-# auth-provider.yaml
-#
-
-auth_provider_tag := $(registry)/$(project)-auth-provider
-
-apply-auth-provider:
-	# auth-provider.yaml
-	awk '{gsub("image: $(auth_provider_tag):[^ ]*", "image: $(auth_provider_tag):$(tag_suffix)")}1' \
-	auth-provider.yaml > tmpfile && mv tmpfile auth-provider.yaml
-
-	# auth-provider-migrate.yaml
-	awk '{gsub("image: $(auth_provider_tag):[^ ]*", "image: $(auth_provider_tag):$(tag_suffix)")}1' \
-	auth-provider-migrate.yaml > tmpfile && mv tmpfile auth-provider-migrate.yaml
