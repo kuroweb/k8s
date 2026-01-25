@@ -37,7 +37,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: docker-registry.kuroweb.net/auth-provider-backend:1e7e356cfd639dcd68cfb96a526c4bc824b59b06
+          image: docker-registry.kuroweb.net/auth-provider-backend:b8b921008ebf86150b1c6c4e9547b37361229216
           command:
             [
               "./bin/rails",
