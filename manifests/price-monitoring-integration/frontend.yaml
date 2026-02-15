@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service
+  namespace: price-monitoring-integration
+spec:
+  selector:
+    app: price-monitoring
+    server: frontend
+  type: LoadBalancer
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 3000
+  loadBalancerIP: 10.15.100.227
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment
+  namespace: price-monitoring-integration
+  labels:
+    app: price-monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: price-monitoring
+      server: frontend
+  template:
+    metadata:
+      labels:
+        app: price-monitoring
+        server: frontend
+    spec:
+      containers:
+        - name: frontend
+          image: docker-registry.kuroweb.net/price-monitoring-frontend:4dd4abc1b10c071426ac62f426ec0403ac7ef7ae
+          ports:
+            - name: http
+              containerPort: 3000
+          env:
+            - name: NEXT_PRIVATE_API_URL
+              value: "http://backend-service:3000"
+            - name: NEXT_PUBLIC_API_URL
+              value: "https://integration.price-monitoring.kuroweb.net"

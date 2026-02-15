@@ -1,0 +1,104 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-batch-2-service
+  namespace: price-monitoring-integration
+spec:
+  selector:
+    app: price-monitoring
+    server: backend-batch-2
+  type: LoadBalancer
+  ports:
+    - name: http
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-batch-2-deployment
+  namespace: price-monitoring-integration
+  labels:
+    app: price-monitoring
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: price-monitoring
+      server: backend-batch-2
+  template:
+    metadata:
+      labels:
+        app: price-monitoring
+        server: backend-batch-2
+    spec:
+      containers:
+        - name: backend-batch-2
+          image: docker-registry.kuroweb.net/price-monitoring-backend:1ee55cba8cbb1956ec19af40f86e5c07a2debb57
+          command: ["sidekiq", "-C", "config/sidekiq/general_process.yml", "-e", "production"]
+          ports:
+            - name: http
+              containerPort: 3000
+          resources:
+            limits:
+              cpu: "200m"
+          env:
+            - name: DB_HOST_NAME
+              value: backend-db-service
+            - name: DB_DATABASE_NAME
+              value: rails
+            - name: DB_USER_NAME
+              value: root
+            - name: DB_PASSWORD
+              value: ""
+            - name: REDIS_URL
+              value: "redis://backend-redis-service:6379"
+            - name: PLAYWRIGHT_URL
+              value: "ws://backend-playwright-service:8888/ws"
+            - name: ALLOWED_ORIGINS
+              value: "10.15.100.221"
+            - name: DD_SERVICE
+              value: "price-monitoring-integration"
+            - name: DD_ENV
+              value: "integration"
+            - name: DD_AGENT_HOST
+              value: "datadog-agent.datadog.svc.cluster.local"
+            - name: DD_TRACE_AGENT_PORT
+              value: "8126"
+            - name: RAILS_MASTER_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secret
+                  key: RAILS_MASTER_KEY
+            - name: PROXY_LIST
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secret
+                  key: PROXY_LIST
+            - name: BUGSNAG_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secret
+                  key: BUGSNAG_API_KEY
+            - name: OIDC_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secret
+                  key: OIDC_CLIENT_ID
+            - name: OIDC_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secret
+                  key: OIDC_CLIENT_SECRET
+            - name: OIDC_ISSUER
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secret
+                  key: OIDC_ISSUER
+            - name: OIDC_REDIRECT_URI
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secret
+                  key: OIDC_REDIRECT_URI

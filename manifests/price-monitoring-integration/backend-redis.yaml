@@ -1,0 +1,77 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-redis-service
+  namespace: price-monitoring-integration
+spec:
+  selector:
+    app: price-monitoring
+    server: backend-redis
+  type: LoadBalancer
+  ports:
+    - name: http
+      protocol: TCP
+      port: 6379
+      targetPort: 6379
+  loadBalancerIP: 10.15.100.223
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-redis-deployment
+  namespace: price-monitoring-integration
+  labels:
+    app: price-monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: price-monitoring
+      server: backend-redis
+  template:
+    metadata:
+      labels:
+        app: price-monitoring
+        server: backend-redis
+    spec:
+      initContainers:
+        - name: repair-redis
+          image: redis
+          command: ['sh', '-c', "if [ -f /data/appendonlydir/appendonly.aof.manifest ]; then echo 'y' | redis-check-aof --fix /data/appendonlydir/appendonly.aof.manifest; fi"]
+          volumeMounts:
+            - name: backend-redis-storage
+              mountPath: /data
+      containers:
+        - name: backend-redis
+          image: redis
+          args: ["--appendonly", "yes"]
+          ports:
+            - name: http
+              containerPort: 6379
+          volumeMounts:
+            - name: backend-redis-storage
+              mountPath: /data
+          env:
+            - name: ALLOW_EMPTY_PASSWORD
+              value: "yes"
+      volumes:
+        - name: backend-redis-storage
+          persistentVolumeClaim:
+            claimName: backend-redis-storage
+      securityContext:
+        fsGroup: 999
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: backend-redis-storage
+  namespace: price-monitoring-integration
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: longhorn
+  resources:
+    requests:
+      storage: 10Gi

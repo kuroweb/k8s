@@ -1,0 +1,44 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress
+  namespace: auth-provider-integration
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/from-to-www-redirect: "true"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - integration.auth-provider.kuroweb.net
+        - www.integration.auth-provider.kuroweb.net
+      secretName: ingress-cert
+  rules:
+    - host: integration.auth-provider.kuroweb.net
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: backend-service
+                port:
+                  number: 3000
+
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: ingress-cert
+  namespace: auth-provider-integration
+spec:
+  secretName: ingress-cert
+  issuerRef:
+    name: tls-cluster-issuer
+    kind: ClusterIssuer
+  commonName: integration.auth-provider.kuroweb.net
+  dnsNames:
+    - integration.auth-provider.kuroweb.net
+    - www.integration.auth-provider.kuroweb.net
+  renewBefore: 720h
+  duration: 2160h
