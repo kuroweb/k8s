@@ -16,8 +16,6 @@ spec:
           site: ap1.datadoghq.com
           tags:
             - "env:production"
-            - "service:price-monitoring"
-            - "version:v1.0.0"
           kubelet:
             tlsVerify: false
           env:
