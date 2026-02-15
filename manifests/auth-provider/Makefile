@@ -27,7 +27,7 @@ push:
 # backend
 #
 
-backend_tag := $(registry)/$(project)-backend
+backend_tag := $(registry)/$(project)-backend-production
 
 apply-backend:
 	# backend.yaml

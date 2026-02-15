@@ -27,7 +27,7 @@ push:
 # backend
 #
 
-backend_tag := $(registry)/$(project)-backend
+backend_tag := $(registry)/$(project)-backend-integration
 
 apply-backend:
 	awk '{gsub("image: $(backend_tag):[^ ]*", "image: $(backend_tag):$(tag_suffix)")}1' \
@@ -47,7 +47,7 @@ apply-backend:
 # backend-playwright
 #
 
-backend_playwright_tag := $(registry)/$(project)-backend-playwright
+backend_playwright_tag := $(registry)/$(project)-backend-playwright-integration
 
 apply-backend-playwright:
 	awk '{gsub("image: $(backend_playwright_tag):[^ ]*", "image: $(backend_playwright_tag):$(tag_suffix)")}1' \
@@ -57,7 +57,7 @@ apply-backend-playwright:
 # frontend
 #
 
-frontend_tag := $(registry)/$(project)-frontend
+frontend_tag := $(registry)/$(project)-frontend-integration
 
 apply-frontend:
 	awk '{gsub("image: $(frontend_tag):[^ ]*", "image: $(frontend_tag):$(tag_suffix)")}1' \

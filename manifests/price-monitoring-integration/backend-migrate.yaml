@@ -19,13 +19,13 @@ spec:
     spec:
       containers:
         - name: backend-migrate
-          image: docker-registry.kuroweb.net/price-monitoring-backend:1ee55cba8cbb1956ec19af40f86e5c07a2debb57
+          image: docker-registry.kuroweb.net/price-monitoring-backend-integration:1ee55cba8cbb1956ec19af40f86e5c07a2debb57
           command:
             [
               "/bin/sh", "-c",
-              "RAILS_ENV=production rails db:create && \
-               RAILS_ENV=production rails db:migrate && \
-               ./bin/rails server -b 0.0.0.0 -p 3000 -e production"
+              "RAILS_ENV=integration rails db:create && \
+               RAILS_ENV=integration rails db:migrate && \
+               ./bin/rails server -b 0.0.0.0 -p 3000 -e integration"
             ]
           env:
             - name: DB_HOST_NAME

@@ -27,7 +27,7 @@ push:
 # backend
 #
 
-backend_tag := $(registry)/$(project)-backend
+backend_tag := $(registry)/$(project)-backend-production
 
 apply-backend:
 	# backend.yaml
@@ -58,7 +58,7 @@ apply-backend:
 # backend-playwright.yaml
 #
 
-backend_playwright_tag := $(registry)/$(project)-backend-playwright
+backend_playwright_tag := $(registry)/$(project)-backend-playwright-production
 
 apply-backend-playwright:
 	awk '{gsub("image: $(backend_playwright_tag):[^ ]*", "image: $(backend_playwright_tag):$(tag_suffix)")}1' \
@@ -68,7 +68,7 @@ apply-backend-playwright:
 # frontend
 #
 
-frontend_tag := $(registry)/$(project)-frontend
+frontend_tag := $(registry)/$(project)-frontend-production
 
 apply-frontend:
 	awk '{gsub("image: $(frontend_tag):[^ ]*", "image: $(frontend_tag):$(tag_suffix)")}1' \

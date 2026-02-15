@@ -19,13 +19,13 @@ spec:
     spec:
       containers:
         - name: backend-migrate
-          image: docker-registry.kuroweb.net/auth-provider-backend:00d018498bf8ad28dfa7789edebedfc6f924af3a
+          image: docker-registry.kuroweb.net/auth-provider-backend-integration:00d018498bf8ad28dfa7789edebedfc6f924af3a
           command: [
               "/bin/sh",
               "-c",
-              "RAILS_ENV=production rails db:create && \
-              RAILS_ENV=production rails db:migrate && \
-              ./bin/rails server -b 0.0.0.0 -p 3000 -e production",
+              "RAILS_ENV=integration rails db:create && \
+              RAILS_ENV=integration rails db:migrate && \
+              ./bin/rails server -b 0.0.0.0 -p 3000 -e integration",
             ]
           env:
             - name: DB_HOST_NAME
