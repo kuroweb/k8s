@@ -37,7 +37,7 @@ spec:
     spec:
       containers:
         - name: backend-playwright
-          image: docker-registry.kuroweb.net/price-monitoring-backend-playwright-integration:66061f6d
+          image: docker-registry.kuroweb.net/price-monitoring-backend-playwright-integration:73898b80e8efd2e693ca69ec68f14bff7a822368
           ports:
             - name: http
               containerPort: 8888
