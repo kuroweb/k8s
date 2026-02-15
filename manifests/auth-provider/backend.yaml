@@ -67,6 +67,10 @@ spec:
               value: "10.15.100.230,auth-provider.kuroweb.net,www.auth-provider.kuroweb.net,backend-service"
             - name: DOMAIN_NAME
               value: "auth-provider.kuroweb.net"
+            - name: DD_SERVICE
+              value: "auth-provider"
+            - name: DD_ENV
+              value: "production"
             - name: DD_AGENT_HOST
               value: "datadog-agent.datadog.svc.cluster.local"
             - name: DD_TRACE_AGENT_PORT

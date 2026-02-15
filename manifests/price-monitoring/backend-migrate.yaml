@@ -45,6 +45,10 @@ spec:
               value: "ws://backend-playwright-service:8888/ws"
             - name: ALLOWED_ORIGINS
               value: ""
+            - name: DD_SERVICE
+              value: "price-monitoring"
+            - name: DD_ENV
+              value: "production"
             - name: DD_AGENT_HOST
               value: "datadog-agent.datadog.svc.cluster.local"
             - name: DD_TRACE_AGENT_PORT
