@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: backend-migrate
-          image: docker-registry.kuroweb.net/auth-provider-backend:b8b921008ebf86150b1c6c4e9547b37361229216
+          image: docker-registry.kuroweb.net/auth-provider-backend:271e4e6ce16a374fef2b6b6e0ff295e73bd04c0d
           command: [
               "/bin/sh",
               "-c",
