@@ -1,0 +1,72 @@
+# backend-batch-1..4: command -e integration and ALLOWED_ORIGINS 10.15.100.221
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-batch-1-deployment
+spec:
+  template:
+    spec:
+      containers:
+        - name: backend-batch-1
+          command: ["sidekiq", "-C", "config/sidekiq/crawl_process.yml", "-e", "integration"]
+          env:
+            - name: ALLOWED_ORIGINS
+              value: "10.15.100.221"
+            - name: DD_SERVICE
+              value: "price-monitoring-integration"
+            - name: DD_ENV
+              value: "integration"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-batch-2-deployment
+spec:
+  template:
+    spec:
+      containers:
+        - name: backend-batch-2
+          command: ["sidekiq", "-C", "config/sidekiq/general_process.yml", "-e", "integration"]
+          env:
+            - name: ALLOWED_ORIGINS
+              value: "10.15.100.221"
+            - name: DD_SERVICE
+              value: "price-monitoring-integration"
+            - name: DD_ENV
+              value: "integration"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-batch-3-deployment
+spec:
+  template:
+    spec:
+      containers:
+        - name: backend-batch-3
+          command: ["sidekiq", "-C", "config/sidekiq/crawl_process_2.yml", "-e", "integration"]
+          env:
+            - name: ALLOWED_ORIGINS
+              value: "10.15.100.221"
+            - name: DD_SERVICE
+              value: "price-monitoring-integration"
+            - name: DD_ENV
+              value: "integration"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-batch-4-deployment
+spec:
+  template:
+    spec:
+      containers:
+        - name: backend-batch-4
+          command: ["sidekiq", "-C", "config/sidekiq/crawl_process_3.yml", "-e", "integration"]
+          env:
+            - name: ALLOWED_ORIGINS
+              value: "10.15.100.221"
+            - name: DD_SERVICE
+              value: "price-monitoring-integration"
+            - name: DD_ENV
+              value: "integration"

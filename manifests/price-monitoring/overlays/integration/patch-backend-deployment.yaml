@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+spec:
+  template:
+    spec:
+      containers:
+        - name: backend
+          command: ["./bin/rails", "server", "-b", "0.0.0.0", "-p", "3000", "-e", "integration"]
+          env:
+            - name: ALLOWED_ORIGINS
+              value: "10.15.100.228,integration.price-monitoring.kuroweb.net,backend-service"
+            - name: DD_SERVICE
+              value: "price-monitoring-integration"
+            - name: DD_ENV
+              value: "integration"

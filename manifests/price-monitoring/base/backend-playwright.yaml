@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-playwright-service
+spec:
+  selector:
+    app: price-monitoring
+    server: backend-playwright
+  type: LoadBalancer
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8888
+      targetPort: 8888
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-playwright-deployment
+  labels:
+    app: price-monitoring
+spec:
+  replicas: 20
+  selector:
+    matchLabels:
+      app: price-monitoring
+      server: backend-playwright
+  template:
+    metadata:
+      labels:
+        app: price-monitoring
+        server: backend-playwright
+    spec:
+      containers:
+        - name: backend-playwright
+          image: docker-registry.kuroweb.net/price-monitoring-backend-playwright:placeholder
+          ports:
+            - name: http
+              containerPort: 8888
+          resources:
+            limits:
+              cpu: "500m"

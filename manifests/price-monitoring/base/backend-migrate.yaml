@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: backend-migrate-deployment
-  namespace: price-monitoring-integration
   labels:
     app: price-monitoring
 spec:
@@ -19,14 +18,11 @@ spec:
     spec:
       containers:
         - name: backend-migrate
-          image: docker-registry.kuroweb.net/price-monitoring-backend-integration:fd353775b2140ae7be467ee8bea353d407a2f076
+          image: docker-registry.kuroweb.net/price-monitoring-backend:placeholder
           command:
-            [
-              "/bin/sh", "-c",
-              "RAILS_ENV=integration rails db:create && \
-               RAILS_ENV=integration rails db:migrate && \
-               ./bin/rails server -b 0.0.0.0 -p 3000 -e integration"
-            ]
+            - "/bin/sh"
+            - "-c"
+            - "RAILS_ENV=PLACEHOLDER_RAILS_ENV rails db:create && RAILS_ENV=PLACEHOLDER_RAILS_ENV rails db:migrate && ./bin/rails server -b 0.0.0.0 -p 3000 -e PLACEHOLDER_RAILS_ENV"
           env:
             - name: DB_HOST_NAME
               value: backend-db-service
@@ -43,9 +39,9 @@ spec:
             - name: ALLOWED_ORIGINS
               value: ""
             - name: DD_SERVICE
-              value: "price-monitoring-integration"
+              value: "PLACEHOLDER_DD_SERVICE"
             - name: DD_ENV
-              value: "integration"
+              value: "PLACEHOLDER_DD_ENV"
             - name: DD_AGENT_HOST
               value: "datadog-agent.datadog.svc.cluster.local"
             - name: DD_TRACE_AGENT_PORT

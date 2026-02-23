@@ -1,0 +1,14 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - backend.yaml
+  - backend-db.yaml
+  - backend-redis.yaml
+  - backend-playwright.yaml
+  - backend-migrate.yaml
+  - backend-batch-1.yaml
+  - backend-batch-2.yaml
+  - backend-batch-3.yaml
+  - backend-batch-4.yaml
+  - frontend.yaml
+  - web-ingress.yaml

@@ -1,0 +1,67 @@
+# Set integration host for Ingress and Certificate
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: web-ingress
+spec:
+  tls:
+    - hosts:
+        - integration.price-monitoring.kuroweb.net
+        - www.integration.price-monitoring.kuroweb.net
+      secretName: web-ingress-cert
+  rules:
+    - host: integration.price-monitoring.kuroweb.net
+      http:
+        paths:
+          - path: /sidekiq
+            pathType: Prefix
+            backend:
+              service:
+                name: backend-service
+                port:
+                  number: 3000
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: backend-service
+                port:
+                  number: 3000
+          - path: /auth
+            pathType: Prefix
+            backend:
+              service:
+                name: backend-service
+                port:
+                  number: 3000
+          - path: /logout
+            pathType: Prefix
+            backend:
+              service:
+                name: backend-service
+                port:
+                  number: 3000
+          - path: /assets
+            pathType: Prefix
+            backend:
+              service:
+                name: backend-service
+                port:
+                  number: 3000
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend-service
+                port:
+                  number: 80
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: web-ingress-cert
+spec:
+  commonName: integration.price-monitoring.kuroweb.net
+  dnsNames:
+    - integration.price-monitoring.kuroweb.net
+    - www.integration.price-monitoring.kuroweb.net

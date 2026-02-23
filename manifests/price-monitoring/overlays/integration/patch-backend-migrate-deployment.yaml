@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-migrate-deployment
+spec:
+  template:
+    spec:
+      containers:
+        - name: backend-migrate
+          command:
+            - "/bin/sh"
+            - "-c"
+            - "RAILS_ENV=integration rails db:create && RAILS_ENV=integration rails db:migrate && ./bin/rails server -b 0.0.0.0 -p 3000 -e integration"
+          env:
+            - name: DD_SERVICE
+              value: "price-monitoring-integration"
+            - name: DD_ENV
+              value: "integration"

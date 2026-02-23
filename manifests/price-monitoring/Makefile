@@ -14,6 +14,9 @@ tag_suffix := $(shell git rev-parse --short HEAD)
 
 all: apply-all commit push
 
+# integration: Kustomize overlay のイメージタグを更新し commit/push まで行う
+all-integration: update-images-integration commit push
+
 apply-all: apply-backend apply-backend-playwright apply-frontend
 
 commit:
@@ -22,6 +25,33 @@ commit:
 
 push:
 	git push || echo "Nothing to push"
+
+#
+# integration overlay: kustomization.yaml の newTag を置換（kustomize CLI 不要）
+#
+
+update-images-integration: apply-backend-integration apply-backend-playwright-integration apply-frontend-integration
+
+apply-backend-integration:
+	cd overlays/integration && \
+	awk -v tag="$(tag_suffix)" \
+		'/price-monitoring-backend:placeholder/{f=1} f && /newTag:/{sub(/newTag: .*/, "newTag: " tag); f=0} {print}' \
+		kustomization.yaml > kustomization.yaml.tmp && \
+	mv kustomization.yaml.tmp kustomization.yaml
+
+apply-backend-playwright-integration:
+	cd overlays/integration && \
+	awk -v tag="$(tag_suffix)" \
+		'/price-monitoring-backend-playwright:placeholder/{f=1} f && /newTag:/{sub(/newTag: .*/, "newTag: " tag); f=0} {print}' \
+		kustomization.yaml > kustomization.yaml.tmp && \
+	mv kustomization.yaml.tmp kustomization.yaml
+
+apply-frontend-integration:
+	cd overlays/integration && \
+	awk -v tag="$(tag_suffix)" \
+		'/price-monitoring-frontend:placeholder/{f=1} f && /newTag:/{sub(/newTag: .*/, "newTag: " tag); f=0} {print}' \
+		kustomization.yaml > kustomization.yaml.tmp && \
+	mv kustomization.yaml.tmp kustomization.yaml
 
 #
 # backend

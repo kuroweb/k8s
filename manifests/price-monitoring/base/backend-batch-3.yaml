@@ -1,32 +1,47 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-batch-3-service
+spec:
+  selector:
+    app: price-monitoring
+    server: backend-batch-3
+  type: LoadBalancer
+  ports:
+    - name: http
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
+
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: backend-migrate-deployment
-  namespace: price-monitoring-integration
+  name: backend-batch-3-deployment
   labels:
     app: price-monitoring
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: price-monitoring
-      server: backend-migrate
+      server: backend-batch-3
   template:
     metadata:
       labels:
         app: price-monitoring
-        server: backend-migrate
+        server: backend-batch-3
     spec:
       containers:
-        - name: backend-migrate
-          image: docker-registry.kuroweb.net/price-monitoring-backend-integration:fd353775b2140ae7be467ee8bea353d407a2f076
-          command:
-            [
-              "/bin/sh", "-c",
-              "RAILS_ENV=integration rails db:create && \
-               RAILS_ENV=integration rails db:migrate && \
-               ./bin/rails server -b 0.0.0.0 -p 3000 -e integration"
-            ]
+        - name: backend-batch-3
+          image: docker-registry.kuroweb.net/price-monitoring-backend:placeholder
+          command: ["sidekiq", "-C", "config/sidekiq/crawl_process_2.yml", "-e", "PLACEHOLDER_RAILS_ENV"]
+          ports:
+            - name: http
+              containerPort: 3000
+          resources:
+            limits:
+              cpu: "1000m"
           env:
             - name: DB_HOST_NAME
               value: backend-db-service
@@ -41,11 +56,11 @@ spec:
             - name: PLAYWRIGHT_URL
               value: "ws://backend-playwright-service:8888/ws"
             - name: ALLOWED_ORIGINS
-              value: ""
+              value: "PLACEHOLDER_ALLOWED_ORIGINS"
             - name: DD_SERVICE
-              value: "price-monitoring-integration"
+              value: "PLACEHOLDER_DD_SERVICE"
             - name: DD_ENV
-              value: "integration"
+              value: "PLACEHOLDER_DD_ENV"
             - name: DD_AGENT_HOST
               value: "datadog-agent.datadog.svc.cluster.local"
             - name: DD_TRACE_AGENT_PORT
