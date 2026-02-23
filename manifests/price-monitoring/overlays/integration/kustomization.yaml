@@ -25,3 +25,5 @@ patches:
   - path: patch-backend-migrate-deployment.yaml
   - path: patch-batch-env.yaml
   - path: patch-frontend-deployment.yaml
+  - path: patch-playwright-replicas.yaml
+  - path: patch-batch-replicas.yaml

@@ -1,0 +1,28 @@
+# integration: batch 系はレプリカ1に統一
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-batch-1-deployment
+spec:
+  replicas: 1
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-batch-2-deployment
+spec:
+  replicas: 1
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-batch-3-deployment
+spec:
+  replicas: 1
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-batch-4-deployment
+spec:
+  replicas: 1
