@@ -11,9 +11,7 @@ spec:
             [
               "/bin/sh",
               "-c",
-              "RAILS_ENV=integration rails db:create && \\
-              RAILS_ENV=integration rails db:migrate && \\
-              ./bin/rails server -b 0.0.0.0 -p 3000 -e integration",
+              "RAILS_ENV=integration rails db:create && RAILS_ENV=integration rails db:migrate && ./bin/rails server -b 0.0.0.0 -p 3000 -e integration",
             ]
           env:
             - name: ALLOWED_ORIGINS
