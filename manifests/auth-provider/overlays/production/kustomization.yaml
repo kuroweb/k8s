@@ -5,7 +5,7 @@ resources:
   - ../../base
   - namespace.yaml
 
-namespace: auth-provider
+namespace: auth-provider-production
 
 images:
   - name: docker-registry.kuroweb.net/auth-provider-backend:placeholder
