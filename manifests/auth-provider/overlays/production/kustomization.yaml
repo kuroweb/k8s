@@ -11,3 +11,9 @@ images:
   - name: docker-registry.kuroweb.net/auth-provider-backend:placeholder
     newName: docker-registry.kuroweb.net/auth-provider-backend-production
     newTag: placeholder
+
+patches:
+  - path: patch-loadbalancer-ips.yaml
+  - path: patch-ingress-cert-host.yaml
+  - path: patch-backend-deployment.yaml
+  - path: patch-backend-migrate-deployment.yaml
