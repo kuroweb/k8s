@@ -10,13 +10,13 @@ namespace: price-monitoring-integration
 images:
   - name: docker-registry.kuroweb.net/price-monitoring-backend:placeholder
     newName: docker-registry.kuroweb.net/price-monitoring-backend-integration
-    newTag: 7c6da16f7f63400cd7f7a92c2190056c89acea0d
+    newTag: 64872b8e88af535551a4bbdf0c01029059001306
   - name: docker-registry.kuroweb.net/price-monitoring-backend-playwright:placeholder
     newName: docker-registry.kuroweb.net/price-monitoring-backend-playwright-integration
-    newTag: 7c6da16f7f63400cd7f7a92c2190056c89acea0d
+    newTag: 64872b8e88af535551a4bbdf0c01029059001306
   - name: docker-registry.kuroweb.net/price-monitoring-frontend:placeholder
     newName: docker-registry.kuroweb.net/price-monitoring-frontend-integration
-    newTag: 7c6da16f7f63400cd7f7a92c2190056c89acea0d
+    newTag: 64872b8e88af535551a4bbdf0c01029059001306
 
 patches:
   - path: patch-loadbalancer-ips.yaml
