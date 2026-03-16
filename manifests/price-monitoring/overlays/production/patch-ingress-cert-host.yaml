@@ -2,19 +2,14 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: web-ingress
-  namespace: price-monitoring-integration
-  annotations:
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
-    nginx.ingress.kubernetes.io/from-to-www-redirect: "true"
 spec:
-  ingressClassName: nginx
   tls:
     - hosts:
-        - integration.price-monitoring.kuroweb.net
-        - www.integration.price-monitoring.kuroweb.net
+        - price-monitoring.kuroweb.net
+        - www.price-monitoring.kuroweb.net
       secretName: web-ingress-cert
   rules:
-    - host: integration.price-monitoring.kuroweb.net
+    - host: price-monitoring.kuroweb.net
       http:
         paths:
           - path: /sidekiq
@@ -59,21 +54,13 @@ spec:
                 name: frontend-service
                 port:
                   number: 80
-
 ---
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: web-ingress-cert
-  namespace: price-monitoring-integration
 spec:
-  secretName: web-ingress-cert
-  issuerRef:
-    name: tls-cluster-issuer
-    kind: ClusterIssuer
-  commonName: integration.price-monitoring.kuroweb.net
+  commonName: price-monitoring.kuroweb.net
   dnsNames:
-    - integration.price-monitoring.kuroweb.net
-    - www.integration.price-monitoring.kuroweb.net
-  renewBefore: 720h
-  duration: 2160h
+    - price-monitoring.kuroweb.net
+    - www.price-monitoring.kuroweb.net

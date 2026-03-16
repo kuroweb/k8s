@@ -1,17 +1,17 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: price-monitoring
+  name: price-monitoring-production
   namespace: argocd
 spec:
   project: default
   source:
     repoURL: https://github.com/kuroweb/k8s.git
     targetRevision: HEAD
-    path: manifests/price-monitoring
+    path: manifests/price-monitoring/overlays/production
   destination:
     server: https://kubernetes.default.svc
-    namespace: price-monitoring
+    namespace: price-monitoring-production
   syncPolicy:
     automated:
       prune: false
