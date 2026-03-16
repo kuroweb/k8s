@@ -1,10 +1,11 @@
 # ArgoCDによるGitOps用のMakefile
 
-registry := docker-registry.kuroweb.net
 tag_suffix := $(shell git rev-parse --short HEAD)
+ENV ?= production
+OVERLAY_DIR := overlays/$(ENV)
+IMAGE ?=
 
-all: update-images-production commit push
-all-integration: update-images-integration commit push
+all: update-images commit push
 
 commit:
 	git add .
@@ -13,48 +14,15 @@ commit:
 push:
 	git push || echo "Nothing to push"
 
-update-images-production: apply-backend-production apply-backend-playwright-production apply-frontend-production
+update-images:
+	$(MAKE) update-image ENV=$(ENV) IMAGE=price-monitoring-backend
+	$(MAKE) update-image ENV=$(ENV) IMAGE=price-monitoring-backend-playwright
+	$(MAKE) update-image ENV=$(ENV) IMAGE=price-monitoring-frontend
 
-apply-backend-production:
-	cd overlays/production && \
-	awk -v tag="$(tag_suffix)" \
-		'/price-monitoring-backend:placeholder/{f=1} f && /newTag:/{sub(/newTag: .*/, "newTag: " tag); f=0} {print}' \
-		kustomization.yaml > kustomization.yaml.tmp && \
-	mv kustomization.yaml.tmp kustomization.yaml
-
-apply-backend-playwright-production:
-	cd overlays/production && \
-	awk -v tag="$(tag_suffix)" \
-		'/price-monitoring-backend-playwright:placeholder/{f=1} f && /newTag:/{sub(/newTag: .*/, "newTag: " tag); f=0} {print}' \
-		kustomization.yaml > kustomization.yaml.tmp && \
-	mv kustomization.yaml.tmp kustomization.yaml
-
-apply-frontend-production:
-	cd overlays/production && \
-	awk -v tag="$(tag_suffix)" \
-		'/price-monitoring-frontend:placeholder/{f=1} f && /newTag:/{sub(/newTag: .*/, "newTag: " tag); f=0} {print}' \
-		kustomization.yaml > kustomization.yaml.tmp && \
-	mv kustomization.yaml.tmp kustomization.yaml
-
-update-images-integration: apply-backend-integration apply-backend-playwright-integration apply-frontend-integration
-
-apply-backend-integration:
-	cd overlays/integration && \
-	awk -v tag="$(tag_suffix)" \
-		'/price-monitoring-backend:placeholder/{f=1} f && /newTag:/{sub(/newTag: .*/, "newTag: " tag); f=0} {print}' \
-		kustomization.yaml > kustomization.yaml.tmp && \
-	mv kustomization.yaml.tmp kustomization.yaml
-
-apply-backend-playwright-integration:
-	cd overlays/integration && \
-	awk -v tag="$(tag_suffix)" \
-		'/price-monitoring-backend-playwright:placeholder/{f=1} f && /newTag:/{sub(/newTag: .*/, "newTag: " tag); f=0} {print}' \
-		kustomization.yaml > kustomization.yaml.tmp && \
-	mv kustomization.yaml.tmp kustomization.yaml
-
-apply-frontend-integration:
-	cd overlays/integration && \
-	awk -v tag="$(tag_suffix)" \
-		'/price-monitoring-frontend:placeholder/{f=1} f && /newTag:/{sub(/newTag: .*/, "newTag: " tag); f=0} {print}' \
+update-image:
+	test -n "$(IMAGE)"
+	cd $(OVERLAY_DIR) && \
+	awk -v image="$(IMAGE)" -v tag="$(tag_suffix)" \
+		'$$0 ~ image ":placeholder" {f=1} f && /newTag:/ {sub(/newTag: .*/, "newTag: " tag); f=0} {print}' \
 		kustomization.yaml > kustomization.yaml.tmp && \
 	mv kustomization.yaml.tmp kustomization.yaml
