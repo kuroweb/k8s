@@ -1,0 +1,20 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../base
+  - namespace.yaml
+
+namespace: auth-provider-integration
+
+images:
+  - name: docker-registry.kuroweb.net/auth-provider-backend:placeholder
+    newName: docker-registry.kuroweb.net/auth-provider-backend-integration
+    newTag: placeholder
+
+patchesStrategicMerge:
+  - patch-backend.yaml
+  - patch-backend-db.yaml
+  - patch-backend-migrate.yaml
+  - patch-backend-redis.yaml
+  - patch-ingress.yaml

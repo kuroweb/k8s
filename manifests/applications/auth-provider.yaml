@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://github.com/kuroweb/k8s.git
     targetRevision: HEAD
-    path: manifests/auth-provider
+    path: manifests/auth-provider/overlays/production
   destination:
     server: https://kubernetes.default.svc
     namespace: auth-provider

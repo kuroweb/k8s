@@ -1,8 +1,26 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+  namespace: auth-provider-integration
+spec:
+  selector:
+    app: auth-provider
+    server: backend
+  type: LoadBalancer
+  ports:
+    - name: http
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
+  loadBalancerIP: 10.15.100.234
+
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: backend-migrate-deployment
-  namespace: auth-provider
+  name: backend-deployment
+  namespace: auth-provider-integration
   labels:
     app: auth-provider
 spec:
@@ -10,24 +28,30 @@ spec:
   selector:
     matchLabels:
       app: auth-provider
-      server: backend-migrate
+      server: backend
   template:
     metadata:
       labels:
         app: auth-provider
-        server: backend-migrate
+        server: backend
     spec:
       containers:
-        - name: backend-migrate
-          image: docker-registry.kuroweb.net/auth-provider-backend-production:3845a7795e41ced2b85e1830735c70e81fb4cd8c
-          command: [
-              "/bin/sh",
-              "-c",
-              # TODO: CrashLoopBackOffの暫定対応としてRailsサーバを起動する
-              "RAILS_ENV=production rails db:create && \
-              RAILS_ENV=production rails db:migrate && \
-              ./bin/rails server -b 0.0.0.0 -p 3000 -e production",
+        - name: backend
+          image: docker-registry.kuroweb.net/auth-provider-backend:placeholder
+          command:
+            [
+              "./bin/rails",
+              "server",
+              "-b",
+              "0.0.0.0",
+              "-p",
+              "3000",
+              "-e",
+              "integration",
             ]
+          ports:
+            - name: http
+              containerPort: 3000
           env:
             - name: DB_HOST_NAME
               value: backend-db-service
@@ -37,14 +61,16 @@ spec:
               value: root
             - name: DB_PASSWORD
               value: ""
+            - name: REDIS_URL
+              value: "redis://backend-redis-service:6379"
             - name: ALLOWED_ORIGINS
-              value: "10.15.100.230,auth-provider.kuroweb.net,www.auth-provider.kuroweb.net,backend-service"
+              value: "10.15.100.234,integration.auth-provider.kuroweb.net,www.integration.auth-provider.kuroweb.net,backend-service"
             - name: DOMAIN_NAME
-              value: "auth-provider.kuroweb.net"
+              value: "integration.auth-provider.kuroweb.net"
             - name: DD_SERVICE
-              value: "auth-provider"
+              value: "auth-provider-integration"
             - name: DD_ENV
-              value: "production"
+              value: "integration"
             - name: DD_AGENT_HOST
               value: "datadog-agent.datadog.svc.cluster.local"
             - name: DD_TRACE_AGENT_PORT
