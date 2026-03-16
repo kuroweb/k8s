@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: backend-migrate-deployment
-  namespace: auth-provider
   labels:
     app: auth-provider
 spec:
