@@ -1,20 +1,10 @@
 # ArgoCDによるGitOps用のMakefile
 
-#
-# config
-#
-
-registry := docker-registry.kuroweb.net
-project := auth-provider
 tag_suffix := $(shell git rev-parse --short HEAD)
+ENV ?= production
+OVERLAY_DIR := overlays/$(ENV)
 
-#
-# util
-#
-
-all: apply-all commit push
-
-apply-all: apply-backend
+all: update-images commit push
 
 commit:
 	git add .
@@ -23,17 +13,13 @@ commit:
 push:
 	git push || echo "Nothing to push"
 
-#
-# backend
-#
+update-images:
+	$(MAKE) update-image ENV=$(ENV) IMAGE=auth-provider-backend
 
-backend_tag := $(registry)/$(project)-backend-production
-
-apply-backend:
-	# backend.yaml
-	awk '{gsub("image: $(backend_tag):[^ ]*", "image: $(backend_tag):$(tag_suffix)")}1' \
-	backend.yaml > tmpfile && mv tmpfile backend.yaml
-
-	# backend-migrate.yaml
-	awk '{gsub("image: $(backend_tag):[^ ]*", "image: $(backend_tag):$(tag_suffix)")}1' \
-	backend-migrate.yaml > tmpfile && mv tmpfile backend-migrate.yaml
+update-image:
+	test -n "$(IMAGE)"
+	cd $(OVERLAY_DIR) && \
+	awk -v image="$(IMAGE)" -v tag="$(tag_suffix)" \
+		'$$0 ~ image ":placeholder" {f=1} f && /newTag:/ {sub(/newTag: .*/, "newTag: " tag); f=0} {print}' \
+		kustomization.yaml > kustomization.yaml.tmp && \
+	mv kustomization.yaml.tmp kustomization.yaml

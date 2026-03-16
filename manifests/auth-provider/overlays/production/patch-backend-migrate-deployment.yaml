@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-migrate-deployment
+spec:
+  template:
+    spec:
+      containers:
+        - name: backend-migrate
+          command:
+            [
+              "/bin/sh",
+              "-c",
+              "RAILS_ENV=production rails db:create && \\
+              RAILS_ENV=production rails db:migrate && \\
+              ./bin/rails server -b 0.0.0.0 -p 3000 -e production",
+            ]
+          env:
+            - name: ALLOWED_ORIGINS
+              value: "10.15.100.230,auth-provider.kuroweb.net,www.auth-provider.kuroweb.net,backend-service"
+            - name: DOMAIN_NAME
+              value: "auth-provider.kuroweb.net"
+            - name: DD_SERVICE
+              value: "auth-provider-production"
+            - name: DD_ENV
+              value: "production"
