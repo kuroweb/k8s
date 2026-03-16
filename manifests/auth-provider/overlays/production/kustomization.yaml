@@ -10,7 +10,7 @@ namespace: auth-provider-production
 images:
   - name: docker-registry.kuroweb.net/auth-provider-backend:placeholder
     newName: docker-registry.kuroweb.net/auth-provider-backend-production
-    newTag: placeholder
+    newTag: 9a66874b1412e278a889b642d604d48a48edb22a
 
 patches:
   - path: patch-loadbalancer-ips.yaml
