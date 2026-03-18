@@ -16,7 +16,7 @@ images:
     newTag: fd353775b2140ae7be467ee8bea353d407a2f076
   - name: docker-registry.kuroweb.net/price-monitoring-frontend:placeholder
     newName: docker-registry.kuroweb.net/price-monitoring-frontend-production
-    newTag: fd353775b2140ae7be467ee8bea353d407a2f076
+    newTag: 4cafbbd06277c67e70c023938d7445c8dbea7f98
 
 patches:
   - path: patch-loadbalancer-ips.yaml
