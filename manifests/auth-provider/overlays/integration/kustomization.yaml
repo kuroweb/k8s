@@ -13,7 +13,8 @@ images:
     newTag: b1224608826bae96a36fb9c00ae37678c709fe8c
 
 patches:
-  - path: patch-loadbalancer-ips.yaml
-  - path: patch-ingress-cert-host.yaml
-  - path: patch-backend-deployment.yaml
-  - path: patch-backend-migrate-deployment.yaml
+  - path: patches/backend.yaml
+  - path: patches/backend-db.yaml
+  - path: patches/backend-redis.yaml
+  - path: patches/backend-migrate.yaml
+  - path: patches/ingress.yaml
