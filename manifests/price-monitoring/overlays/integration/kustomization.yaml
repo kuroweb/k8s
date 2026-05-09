@@ -19,11 +19,14 @@ images:
     newTag: da281a1aebb6bc19f0c8b5b9844f9b43daea9761
 
 patches:
-  - path: patch-loadbalancer-ips.yaml
-  - path: patch-ingress-cert-host.yaml
-  - path: patch-backend-deployment.yaml
-  - path: patch-backend-migrate-deployment.yaml
-  - path: patch-batch-env.yaml
-  - path: patch-frontend-deployment.yaml
-  - path: patch-playwright-replicas.yaml
-  - path: patch-batch-replicas.yaml
+  - path: patches/backend.yaml
+  - path: patches/backend-db.yaml
+  - path: patches/backend-redis.yaml
+  - path: patches/backend-playwright.yaml
+  - path: patches/backend-migrate.yaml
+  - path: patches/backend-batch-1.yaml
+  - path: patches/backend-batch-2.yaml
+  - path: patches/backend-batch-3.yaml
+  - path: patches/backend-batch-4.yaml
+  - path: patches/frontend.yaml
+  - path: patches/web-ingress.yaml

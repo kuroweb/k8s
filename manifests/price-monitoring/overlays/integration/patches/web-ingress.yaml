@@ -1,4 +1,3 @@
-# Set integration host for Ingress and Certificate
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
