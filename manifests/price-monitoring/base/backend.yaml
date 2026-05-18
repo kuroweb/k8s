@@ -97,3 +97,13 @@ spec:
                 secretKeyRef:
                   name: backend-secret
                   key: OIDC_REDIRECT_URI
+            - name: BACKMARKET_DISCORD_WEBHOOK_URL
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secret
+                  key: BACKMARKET_DISCORD_WEBHOOK_URL
+            - name: DYNAMIC_PROXY_LIST_URL
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secret
+                  key: DYNAMIC_PROXY_LIST_URL
