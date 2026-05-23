@@ -13,7 +13,7 @@ images:
     newTag: 3f4aec6ddb9283b3e95162b30bca30e8750814c0
   - name: docker-registry.kuroweb.net/price-monitoring-backend-playwright:placeholder
     newName: docker-registry.kuroweb.net/price-monitoring-backend-playwright-integration
-    newTag: 33681798e34c282b6b01998dbd3dabb4415cf41e
+    newTag: 3f4aec6ddb9283b3e95162b30bca30e8750814c0
   - name: docker-registry.kuroweb.net/price-monitoring-frontend:placeholder
     newName: docker-registry.kuroweb.net/price-monitoring-frontend-integration
     newTag: 3f4aec6ddb9283b3e95162b30bca30e8750814c0
