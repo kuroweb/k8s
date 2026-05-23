@@ -16,7 +16,7 @@ images:
     newTag: 71287f9a52a8bb821e98c6ac8882fe060f836a3b
   - name: docker-registry.kuroweb.net/price-monitoring-frontend:placeholder
     newName: docker-registry.kuroweb.net/price-monitoring-frontend-production
-    newTag: 71287f9a52a8bb821e98c6ac8882fe060f836a3b
+    newTag: 08de4d78c36dc7f153524b7c1cbde1074c7e569a
 
 patches:
   - path: patches/backend.yaml
