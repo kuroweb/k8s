@@ -35,7 +35,7 @@ spec:
       containers:
         - name: backend-batch-4
           image: docker-registry.kuroweb.net/price-monitoring-backend:placeholder
-          command: ["sidekiq", "-C", "config/sidekiq/crawl_process_3.yml", "-e", "PLACEHOLDER_RAILS_ENV"]
+          command: ["bundle", "exec", "sidekiq", "-C", "config/sidekiq/crawl_process_3.yml", "-e", "PLACEHOLDER_RAILS_ENV"]
           ports:
             - name: http
               containerPort: 3000

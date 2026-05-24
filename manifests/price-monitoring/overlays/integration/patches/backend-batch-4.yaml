@@ -8,7 +8,7 @@ spec:
     spec:
       containers:
         - name: backend-batch-4
-          command: ["sidekiq", "-C", "config/sidekiq/crawl_process_3.yml", "-e", "integration"]
+          command: ["bundle", "exec", "sidekiq", "-C", "config/sidekiq/crawl_process_3.yml", "-e", "integration"]
           env:
             - name: ALLOWED_ORIGINS
               value: "10.15.100.221"
