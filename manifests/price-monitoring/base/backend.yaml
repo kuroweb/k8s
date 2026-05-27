@@ -62,48 +62,6 @@ spec:
               value: "datadog-agent.datadog.svc.cluster.local"
             - name: DD_TRACE_AGENT_PORT
               value: "8126"
-            - name: RAILS_MASTER_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: backend-secret
-                  key: RAILS_MASTER_KEY
-            - name: PROXY_LIST
-              valueFrom:
-                secretKeyRef:
-                  name: backend-secret
-                  key: PROXY_LIST
-            - name: BUGSNAG_API_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: backend-secret
-                  key: BUGSNAG_API_KEY
-            - name: OIDC_CLIENT_ID
-              valueFrom:
-                secretKeyRef:
-                  name: backend-secret
-                  key: OIDC_CLIENT_ID
-            - name: OIDC_CLIENT_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: backend-secret
-                  key: OIDC_CLIENT_SECRET
-            - name: OIDC_ISSUER
-              valueFrom:
-                secretKeyRef:
-                  name: backend-secret
-                  key: OIDC_ISSUER
-            - name: OIDC_REDIRECT_URI
-              valueFrom:
-                secretKeyRef:
-                  name: backend-secret
-                  key: OIDC_REDIRECT_URI
-            - name: BACKMARKET_DISCORD_WEBHOOK_URL
-              valueFrom:
-                secretKeyRef:
-                  name: backend-secret
-                  key: BACKMARKET_DISCORD_WEBHOOK_URL
-            - name: DYNAMIC_PROXY_LIST_URL
-              valueFrom:
-                secretKeyRef:
-                  name: backend-secret
-                  key: DYNAMIC_PROXY_LIST_URL
+          envFrom:
+            - secretRef:
+                name: backend-secret
