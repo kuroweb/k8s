@@ -5,6 +5,7 @@ resources:
   - backend-db.yaml
   - backend-redis.yaml
   - backend-playwright.yaml
+  - backend-camoufox.yaml
   - backend-migrate.yaml
   - backend-batch-1.yaml
   - backend-batch-2.yaml

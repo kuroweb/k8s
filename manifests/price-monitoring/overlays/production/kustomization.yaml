@@ -14,6 +14,9 @@ images:
   - name: docker-registry.kuroweb.net/price-monitoring-backend-playwright:placeholder
     newName: docker-registry.kuroweb.net/price-monitoring-backend-playwright-production
     newTag: f75964372d261cabba6ed72960161bcf6ec1a306
+  - name: docker-registry.kuroweb.net/price-monitoring-backend-camoufox:placeholder
+    newName: docker-registry.kuroweb.net/price-monitoring-backend-camoufox-production
+    newTag: 71287f9a52a8bb821e98c6ac8882fe060f836a3b
   - name: docker-registry.kuroweb.net/price-monitoring-frontend:placeholder
     newName: docker-registry.kuroweb.net/price-monitoring-frontend-production
     newTag: a6d90d35e6ee1bdf7c1bfe833ce761331874c159
@@ -23,6 +26,7 @@ patches:
   - path: patches/backend-db.yaml
   - path: patches/backend-redis.yaml
   - path: patches/backend-playwright.yaml
+  - path: patches/backend-camoufox.yaml
   - path: patches/backend-migrate.yaml
   - path: patches/backend-batch-1.yaml
   - path: patches/backend-batch-2.yaml

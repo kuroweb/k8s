@@ -39,19 +39,21 @@ graph
 | -- | -- | -- |
 | 10.15.100.201 | longhorn-system | Longhorn UI |
 | 10.15.100.202 | docker-registry | Registry |
-| 10.15.100.210 | price-monitoring | backend-service |
-| 10.15.100.212 | price-monitoring | backend-db-service |
-| 10.15.100.213 | price-monitoring | backend-redis-service |
-| 10.15.100.215 | price-monitoring | backend-playwright-service |
-| 10.15.100.217 | price-monitoring | frontend-service |
+| 10.15.100.210 | price-monitoring-production | backend-service |
+| 10.15.100.212 | price-monitoring-production | backend-db-service |
+| 10.15.100.213 | price-monitoring-production | backend-redis-service |
+| 10.15.100.215 | price-monitoring-production | backend-playwright-service |
+| 10.15.100.216 | price-monitoring-production | backend-camoufox-service |
+| 10.15.100.217 | price-monitoring-production | frontend-service |
 | 10.15.100.220 | ingress-nginx | Ingress Controller（本番・integration 共通） |
 | 10.15.100.222 | price-monitoring-integration | backend-db-service |
 | 10.15.100.223 | price-monitoring-integration | backend-redis-service |
 | 10.15.100.225 | price-monitoring-integration | backend-playwright-service |
+| 10.15.100.226 | price-monitoring-integration | backend-camoufox-service |
 | 10.15.100.227 | price-monitoring-integration | frontend-service |
 | 10.15.100.228 | price-monitoring-integration | backend-service |
-| 10.15.100.230 | auth-provider | backend-service |
-| 10.15.100.231 | auth-provider | backend-db-service |
+| 10.15.100.230 | auth-provider-production | backend-service |
+| 10.15.100.231 | auth-provider-production | backend-db-service |
 | 10.15.100.234 | auth-provider-integration | backend-service |
 | 10.15.100.235 | auth-provider-integration | backend-db-service |
 | 10.15.100.236 | auth-provider-integration | backend-redis-service |

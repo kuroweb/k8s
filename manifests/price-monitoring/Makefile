@@ -17,6 +17,7 @@ push:
 update-images:
 	$(MAKE) update-image ENV=$(ENV) IMAGE=price-monitoring-backend
 	$(MAKE) update-image ENV=$(ENV) IMAGE=price-monitoring-backend-playwright
+	$(MAKE) update-image ENV=$(ENV) IMAGE=price-monitoring-backend-camoufox
 	$(MAKE) update-image ENV=$(ENV) IMAGE=price-monitoring-frontend
 
 update-image:
