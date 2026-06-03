@@ -10,7 +10,7 @@ namespace: price-monitoring-integration
 images:
   - name: docker-registry.kuroweb.net/price-monitoring-backend:placeholder
     newName: docker-registry.kuroweb.net/price-monitoring-backend-integration
-    newTag: 3fc0b72c38a959c64b185cd8a8536a28b1e2ca5d
+    newTag: 2de9f7e6286a22b8f0a476c3696c57783f6ea6c0
   - name: docker-registry.kuroweb.net/price-monitoring-backend-playwright:placeholder
     newName: docker-registry.kuroweb.net/price-monitoring-backend-playwright-integration
     newTag: 71287f9a52a8bb821e98c6ac8882fe060f836a3b
