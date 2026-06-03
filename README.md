@@ -42,14 +42,10 @@ graph
 | 10.15.100.210 | price-monitoring-production | backend-service |
 | 10.15.100.212 | price-monitoring-production | backend-db-service |
 | 10.15.100.213 | price-monitoring-production | backend-redis-service |
-| 10.15.100.215 | price-monitoring-production | backend-playwright-service |
-| 10.15.100.216 | price-monitoring-production | backend-camoufox-service |
 | 10.15.100.217 | price-monitoring-production | frontend-service |
 | 10.15.100.220 | ingress-nginx | Ingress Controller（本番・integration 共通） |
 | 10.15.100.222 | price-monitoring-integration | backend-db-service |
 | 10.15.100.223 | price-monitoring-integration | backend-redis-service |
-| 10.15.100.225 | price-monitoring-integration | backend-playwright-service |
-| 10.15.100.226 | price-monitoring-integration | backend-camoufox-service |
 | 10.15.100.227 | price-monitoring-integration | frontend-service |
 | 10.15.100.228 | price-monitoring-integration | backend-service |
 | 10.15.100.230 | auth-provider-production | backend-service |

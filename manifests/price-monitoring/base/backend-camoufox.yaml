@@ -21,7 +21,6 @@ metadata:
   labels:
     app: price-monitoring
 spec:
-  replicas: 5
   selector:
     matchLabels:
       app: price-monitoring
