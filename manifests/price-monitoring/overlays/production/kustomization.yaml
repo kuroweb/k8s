@@ -10,7 +10,7 @@ namespace: price-monitoring-production
 images:
   - name: docker-registry.kuroweb.net/price-monitoring-backend:placeholder
     newName: docker-registry.kuroweb.net/price-monitoring-backend-production
-    newTag: cc632c7909250ea540a0a47f073f1232657a21a0
+    newTag: 8b4167c24138aecce8a971ee7f70466eee785171
   - name: docker-registry.kuroweb.net/price-monitoring-backend-playwright:placeholder
     newName: docker-registry.kuroweb.net/price-monitoring-backend-playwright-production
     newTag: f75964372d261cabba6ed72960161bcf6ec1a306
