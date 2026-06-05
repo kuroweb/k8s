@@ -39,4 +39,4 @@ spec:
               containerPort: 8890
           resources:
             limits:
-              cpu: "400m"
+              cpu: "500m"
