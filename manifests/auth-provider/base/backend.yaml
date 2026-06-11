@@ -50,6 +50,9 @@ spec:
           ports:
             - name: http
               containerPort: 3000
+          resources:
+            limits:
+              cpu: "800m"
           env:
             - name: DB_HOST_NAME
               value: backend-db-service

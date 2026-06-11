@@ -25,6 +25,9 @@ spec:
               # TODO: CrashLoopBackOffの暫定対応としてRailsサーバを起動する
               "RAILS_ENV=production rails db:create && RAILS_ENV=production rails db:migrate && ./bin/rails server -b 0.0.0.0 -p 3000 -e production",
             ]
+          resources:
+            limits:
+              cpu: "500m"
           env:
             - name: DB_HOST_NAME
               value: backend-db-service

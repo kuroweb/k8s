@@ -25,6 +25,9 @@ spec:
               "-e",
               "production",
             ]
+          resources:
+            limits:
+              cpu: "800m"
           env:
             - name: ALLOWED_ORIGINS
               value: "10.15.100.230,auth-provider.kuroweb.net,www.auth-provider.kuroweb.net,backend-service"
