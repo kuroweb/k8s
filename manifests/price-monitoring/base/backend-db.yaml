@@ -38,6 +38,10 @@ spec:
           ports:
             - name: http
               containerPort: 3306
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "1Gi"
           volumeMounts:
             - name: backend-db-storage
               mountPath: /var/lib/mysql

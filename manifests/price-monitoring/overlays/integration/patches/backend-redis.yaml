@@ -4,3 +4,17 @@ metadata:
   name: backend-redis-service
 spec:
   loadBalancerIP: 10.15.100.223
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-redis-deployment
+spec:
+  template:
+    spec:
+      containers:
+        - name: backend-redis
+          resources:
+            limits:
+              cpu: "200m"
+              memory: "200Mi"

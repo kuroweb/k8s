@@ -46,6 +46,10 @@ spec:
           ports:
             - name: http
               containerPort: 6379
+          resources:
+            limits:
+              cpu: "300m"
+              memory: "500Mi"
           volumeMounts:
             - name: backend-redis-storage
               mountPath: /data

@@ -4,3 +4,17 @@ metadata:
   name: backend-db-service
 spec:
   loadBalancerIP: 10.15.100.222
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-db-deployment
+spec:
+  template:
+    spec:
+      containers:
+        - name: backend-db
+          resources:
+            limits:
+              cpu: "300m"
+              memory: "500Mi"

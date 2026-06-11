@@ -15,5 +15,6 @@ images:
 patches:
   - path: patches/backend.yaml
   - path: patches/backend-db.yaml
+  - path: patches/backend-redis.yaml
   - path: patches/backend-migrate.yaml
   - path: patches/ingress.yaml
