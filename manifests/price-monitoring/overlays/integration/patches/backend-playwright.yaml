@@ -10,5 +10,5 @@ spec:
         - name: backend-playwright
           resources:
             limits:
-              cpu: "300m"
-              memory: "700Mi"
+              cpu: "700m"
+              memory: "500Mi"

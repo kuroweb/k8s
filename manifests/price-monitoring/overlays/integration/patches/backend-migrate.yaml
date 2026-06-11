@@ -14,7 +14,7 @@ spec:
           resources:
             limits:
               cpu: "300m"
-              memory: "500Mi"
+              memory: "300Mi"
           env:
             - name: DD_SERVICE
               value: "price-monitoring-integration"

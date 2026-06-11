@@ -10,5 +10,5 @@ spec:
         - name: backend-camoufox
           resources:
             limits:
-              cpu: "500m"
+              cpu: "700m"
               memory: "1000Mi"
