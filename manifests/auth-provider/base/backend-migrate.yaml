@@ -28,6 +28,7 @@ spec:
           resources:
             limits:
               cpu: "300m"
+              memory: "500Mi"
           env:
             - name: DB_HOST_NAME
               value: backend-db-service

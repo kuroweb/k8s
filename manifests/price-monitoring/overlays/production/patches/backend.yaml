@@ -18,6 +18,7 @@ spec:
           resources:
             limits:
               cpu: "500m"
+              memory: "500Mi"
           env:
             - name: ALLOWED_ORIGINS
               value: "10.15.100.210,price-monitoring.kuroweb.net,backend-service"

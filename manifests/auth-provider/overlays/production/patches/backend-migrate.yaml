@@ -16,6 +16,7 @@ spec:
           resources:
             limits:
               cpu: "300m"
+              memory: "500Mi"
           env:
             - name: ALLOWED_ORIGINS
               value: "10.15.100.230,auth-provider.kuroweb.net,www.auth-provider.kuroweb.net,backend-service"

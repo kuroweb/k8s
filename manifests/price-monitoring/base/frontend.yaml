@@ -41,6 +41,7 @@ spec:
           resources:
             limits:
               cpu: "300m"
+              memory: "300Mi"
           env:
             - name: NEXT_PRIVATE_API_URL
               value: "http://backend-service:3000"

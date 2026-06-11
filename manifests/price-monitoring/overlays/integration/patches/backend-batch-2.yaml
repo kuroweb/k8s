@@ -12,6 +12,7 @@ spec:
           resources:
             limits:
               cpu: "300m"
+              memory: "400Mi"
           env:
             - name: ALLOWED_ORIGINS
               value: "10.15.100.221"

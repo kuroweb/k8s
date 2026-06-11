@@ -17,6 +17,7 @@ spec:
           resources:
             limits:
               cpu: "200m"
+              memory: "300Mi"
           env:
             - name: NEXT_PUBLIC_API_URL
               value: "https://integration.price-monitoring.kuroweb.net"
