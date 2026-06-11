@@ -9,6 +9,9 @@ spec:
       containers:
         - name: backend-batch-1
           command: ["bundle", "exec", "sidekiq", "-C", "config/sidekiq/crawl_process.yml", "-e", "integration"]
+          resources:
+            limits:
+              cpu: "400m"
           env:
             - name: ALLOWED_ORIGINS
               value: "10.15.100.221"

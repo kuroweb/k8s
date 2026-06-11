@@ -4,3 +4,10 @@ metadata:
   name: backend-playwright-deployment
 spec:
   replicas: 10
+  template:
+    spec:
+      containers:
+        - name: backend-playwright
+          resources:
+            limits:
+              cpu: "500m"

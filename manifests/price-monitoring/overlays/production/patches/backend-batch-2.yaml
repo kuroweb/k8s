@@ -8,6 +8,9 @@ spec:
       containers:
         - name: backend-batch-2
           command: ["bundle", "exec", "sidekiq", "-C", "config/sidekiq/general_process.yml", "-e", "production"]
+          resources:
+            limits:
+              cpu: "800m"
           env:
             - name: ALLOWED_ORIGINS
               value: "10.15.100.211"

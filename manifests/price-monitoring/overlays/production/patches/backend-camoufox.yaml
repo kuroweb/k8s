@@ -4,3 +4,10 @@ metadata:
   name: backend-camoufox-deployment
 spec:
   replicas: 5
+  template:
+    spec:
+      containers:
+        - name: backend-camoufox
+          resources:
+            limits:
+              cpu: "500m"
