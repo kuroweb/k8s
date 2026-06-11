@@ -41,7 +41,7 @@ spec:
           resources:
             limits:
               cpu: "500m"
-              memory: "1Gi"
+              memory: "1000Mi"
           volumeMounts:
             - name: backend-db-storage
               mountPath: /var/lib/mysql
