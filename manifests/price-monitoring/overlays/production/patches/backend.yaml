@@ -17,8 +17,8 @@ spec:
           command: ["./bin/rails", "server", "-b", "0.0.0.0", "-p", "3000", "-e", "production"]
           resources:
             limits:
-              cpu: "800m"
-              memory: "500Mi"
+              cpu: "500m"
+              memory: "700Mi"
           env:
             - name: ALLOWED_ORIGINS
               value: "10.15.100.210,price-monitoring.kuroweb.net,backend-service"
