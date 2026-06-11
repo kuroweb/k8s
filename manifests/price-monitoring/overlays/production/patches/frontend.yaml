@@ -16,7 +16,7 @@ spec:
         - name: frontend
           resources:
             limits:
-              cpu: "800m"
+              cpu: "300m"
           env:
             - name: NEXT_PUBLIC_API_URL
               value: "https://price-monitoring.kuroweb.net"

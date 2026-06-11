@@ -40,7 +40,7 @@ spec:
               containerPort: 3000
           resources:
             limits:
-              cpu: "800m"
+              cpu: "300m"
           env:
             - name: NEXT_PRIVATE_API_URL
               value: "http://backend-service:3000"

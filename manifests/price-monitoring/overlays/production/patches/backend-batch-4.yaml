@@ -10,7 +10,7 @@ spec:
           command: ["bundle", "exec", "sidekiq", "-C", "config/sidekiq/crawl_process_3.yml", "-e", "production"]
           resources:
             limits:
-              cpu: "800m"
+              cpu: "500m"
           env:
             - name: ALLOWED_ORIGINS
               value: "10.15.100.211"
