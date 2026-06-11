@@ -41,7 +41,7 @@ spec:
               containerPort: 3000
           resources:
             limits:
-              cpu: "500m"
+              cpu: "800m"
               memory: "500Mi"
           env:
             - name: DB_HOST_NAME
