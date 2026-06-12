@@ -9,31 +9,6 @@ spec:
     repoURL: https://helm.cilium.io/
     chart: cilium
     targetRevision: 1.18.4
-    helm:
-      values: |
-        resources:
-          limits:
-            cpu: 500m
-            memory: 500Mi
-          requests:
-            cpu: 100m
-            memory: 250Mi
-        envoy:
-          resources:
-            limits:
-              cpu: 200m
-              memory: 300Mi
-            requests:
-              cpu: 50m
-              memory: 150Mi
-        operator:
-          resources:
-            limits:
-              cpu: 200m
-              memory: 300Mi
-            requests:
-              cpu: 50m
-              memory: 150Mi
   destination:
     server: https://kubernetes.default.svc
     namespace: kube-system
