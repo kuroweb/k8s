@@ -17,7 +17,7 @@ spec:
           command: ["./bin/rails", "server", "-b", "0.0.0.0", "-p", "3000", "-e", "production"]
           resources:
             limits:
-              cpu: "500m"
+              cpu: "700m"
               memory: "1000Mi"
           env:
             - name: ALLOWED_ORIGINS
