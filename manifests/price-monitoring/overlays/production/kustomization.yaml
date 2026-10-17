@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
   - ../../base
   - namespace.yaml
+  - backend-browser-restart.yaml
 
 namespace: price-monitoring-production
 

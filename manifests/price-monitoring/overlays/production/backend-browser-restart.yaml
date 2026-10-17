@@ -1,0 +1,60 @@
+# backend-playwright / backend-camoufox を定期的に再起動する（旧: master-1 の crontab）
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: backend-browser-restarter
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: backend-browser-restarter
+rules:
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    resourceNames: ["backend-playwright-deployment", "backend-camoufox-deployment"]
+    verbs: ["get", "patch"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: backend-browser-restarter
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: backend-browser-restarter
+subjects:
+  - kind: ServiceAccount
+    name: backend-browser-restarter
+
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: backend-browser-restart
+spec:
+  schedule: "0 0,12 * * *"
+  timeZone: Asia/Tokyo
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      template:
+        spec:
+          serviceAccountName: backend-browser-restarter
+          restartPolicy: Never
+          containers:
+            - name: kubectl
+              image: registry.k8s.io/kubectl:v1.31.14
+              args:
+                - rollout
+                - restart
+                - deployment/backend-playwright-deployment
+                - deployment/backend-camoufox-deployment
+              resources:
+                limits:
+                  cpu: "100m"
+                  memory: "128Mi"
