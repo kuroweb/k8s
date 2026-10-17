@@ -6,13 +6,12 @@ metadata:
 spec:
   selector:
     app: registry-backend
-  type: LoadBalancer
+  type: ClusterIP
   ports:
     - name: docker-port
       protocol: TCP
       port: 5000
       targetPort: 5000
-  loadBalancerIP: 10.15.100.202
 
 ---
 apiVersion: apps/v1

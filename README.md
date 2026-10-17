@@ -45,7 +45,6 @@ graph
 | -- | -- | -- |
 | 10.15.100.200 | price-monitoring-production | backend-camoufox-service |
 | 10.15.100.201 | longhorn-system | Longhorn UI（longhorn-frontend） |
-| 10.15.100.202 | docker-registry | Registry（registry-backend-service） |
 | 10.15.100.203 | price-monitoring-integration | backend-batch-4-service |
 | 10.15.100.205 | price-monitoring-integration | backend-batch-1-service |
 | 10.15.100.206 | price-monitoring-integration | backend-batch-2-service |
