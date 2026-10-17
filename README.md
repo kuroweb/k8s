@@ -38,19 +38,33 @@ graph
 ## IP allocation (MetalLB)
 
 - プール: `10.15.100.200-10.15.100.250` (evpnNt01), `10.15.200.200-10.15.200.250` (evpnNt02)
-- 本表は 10.15.100.x (evpnNt01) の割当のみ。新規 Service で LoadBalancer を張る場合は未使用 IP を選ぶこと。
+- 本表は実機の LoadBalancer Service の割当（2026-10-18 時点）。新規 Service で LoadBalancer を張る場合は未使用 IP を選ぶこと。
+- 確認コマンド: `kubectl get svc -A | grep LoadBalancer`
 
 | IP | Namespace | Service / 用途 |
 | -- | -- | -- |
-| 10.15.100.201 | longhorn-system | Longhorn UI |
-| 10.15.100.202 | docker-registry | Registry |
+| 10.15.100.200 | price-monitoring-production | backend-camoufox-service |
+| 10.15.100.201 | longhorn-system | Longhorn UI（longhorn-frontend） |
+| 10.15.100.202 | docker-registry | Registry（registry-backend-service） |
+| 10.15.100.203 | price-monitoring-integration | backend-batch-4-service |
+| 10.15.100.205 | price-monitoring-integration | backend-batch-1-service |
+| 10.15.100.206 | price-monitoring-integration | backend-batch-2-service |
+| 10.15.100.207 | portainer | Portainer |
+| 10.15.100.208 | argocd | Argo CD（argocd-server） |
+| 10.15.100.209 | price-monitoring-production | backend-batch-1-service |
 | 10.15.100.210 | price-monitoring-production | backend-service |
 | 10.15.100.212 | price-monitoring-production | backend-db-service |
 | 10.15.100.213 | price-monitoring-production | backend-redis-service |
+| 10.15.100.214 | price-monitoring-production | backend-batch-2-service |
+| 10.15.100.215 | price-monitoring-production | backend-playwright-service |
+| 10.15.100.216 | price-monitoring-production | backend-batch-3-service |
 | 10.15.100.217 | price-monitoring-production | frontend-service |
 | 10.15.100.220 | ingress-nginx | Ingress Controller（本番・integration 共通） |
+| 10.15.100.221 | price-monitoring-production | backend-batch-4-service |
 | 10.15.100.222 | price-monitoring-integration | backend-db-service |
 | 10.15.100.223 | price-monitoring-integration | backend-redis-service |
+| 10.15.100.225 | price-monitoring-integration | backend-playwright-service |
+| 10.15.100.226 | price-monitoring-integration | backend-camoufox-service |
 | 10.15.100.227 | price-monitoring-integration | frontend-service |
 | 10.15.100.228 | price-monitoring-integration | backend-service |
 | 10.15.100.230 | auth-provider-production | backend-service |
@@ -58,6 +72,8 @@ graph
 | 10.15.100.234 | auth-provider-integration | backend-service |
 | 10.15.100.235 | auth-provider-integration | backend-db-service |
 | 10.15.100.236 | auth-provider-integration | backend-redis-service |
+| 10.15.200.200 | price-monitoring-integration | backend-batch-3-service |
+| 10.15.200.201 | auth-provider-production | backend-redis-service |
 
 ## Applications
 
