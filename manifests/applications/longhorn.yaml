@@ -11,8 +11,11 @@ spec:
     targetRevision: 1.10.1
     helm:
       values: |
+        preUpgradeChecker:
+          jobEnabled: false
         defaultSettings:
           defaultDataPath: "/storage-1"
+          defaultReplicaCount: '{"v1":"3","v2":"3"}'
         service:
           ui:
             type: LoadBalancer
