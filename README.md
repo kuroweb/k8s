@@ -4,10 +4,15 @@
 
 ## Categories<!-- omit in toc -->
 
+- [Setup](#setup)
 - [Nodes](#nodes)
 - [IP allocation (MetalLB)](#ip-allocation-metallb)
 - [Applications](#applications)
 - [Secrets](#secrets)
+
+## Setup
+
+- クラスタの構築とアプリケーションの導入手順は [infra リポジトリ](https://github.com/kuroweb/infra/blob/master/docs/setup/index.md) を参照
 
 ## Nodes
 
