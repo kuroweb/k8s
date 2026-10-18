@@ -11,7 +11,7 @@ commit:
 	git commit -m 'auto: update docker image tag.' || echo "No changes to commit"
 
 push:
-	git push || echo "Nothing to push"
+	git push
 
 update-images:
 	$(MAKE) update-image ENV=$(ENV) IMAGE=auth-provider-backend
