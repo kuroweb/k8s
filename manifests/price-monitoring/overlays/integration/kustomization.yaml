@@ -21,6 +21,10 @@ images:
     newName: docker-registry.kuroweb.net/price-monitoring-frontend-integration
     newTag: 7ff705badd740fbb50c76333f61a1a96d0352c22
 
+  - name: docker-registry.kuroweb.net/auth-provider-backend:placeholder
+    newName: docker-registry.kuroweb.net/auth-provider-backend-integration
+    newTag: 870262c767aef54bab2ca00a03163f5152c312ff
+
 patches:
   - path: patches/backend.yaml
   - path: patches/backend-db.yaml
@@ -34,3 +38,7 @@ patches:
   - path: patches/backend-batch-4.yaml
   - path: patches/frontend.yaml
   - path: patches/web-ingress.yaml
+  - path: patches/auth-provider.yaml
+  - path: patches/auth-provider-db.yaml
+  - path: patches/auth-provider-redis.yaml
+  - path: patches/auth-provider-migrate.yaml

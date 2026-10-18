@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-provider-redis-service
+spec:
+  loadBalancerIP: 10.15.200.201
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-provider-redis-deployment
+spec:
+  template:
+    spec:
+      containers:
+        - name: auth-provider-redis
+          resources:
+            limits:
+              cpu: "300m"
+              memory: "500Mi"
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: auth-provider-redis-storage
+spec:
+  volumeName: pvc-6fd641e6-0786-40a4-b022-a33b6587a22c

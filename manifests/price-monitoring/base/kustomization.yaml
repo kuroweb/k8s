@@ -13,3 +13,7 @@ resources:
   - backend-batch-4.yaml
   - frontend.yaml
   - web-ingress.yaml
+  - auth-provider.yaml
+  - auth-provider-db.yaml
+  - auth-provider-redis.yaml
+  - auth-provider-migrate.yaml

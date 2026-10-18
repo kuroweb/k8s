@@ -1,12 +1,12 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: backend-migrate-deployment
+  name: auth-provider-migrate-deployment
 spec:
   template:
     spec:
       containers:
-        - name: backend-migrate
+        - name: auth-provider-migrate
           command:
             [
               "/bin/sh",
@@ -19,7 +19,7 @@ spec:
               memory: "500Mi"
           env:
             - name: ALLOWED_ORIGINS
-              value: "10.15.100.230,auth-provider.kuroweb.net,www.auth-provider.kuroweb.net,backend-service"
+              value: "10.15.100.230,auth-provider.kuroweb.net,www.auth-provider.kuroweb.net,auth-provider-service"
             - name: DOMAIN_NAME
               value: "auth-provider.kuroweb.net"
             - name: DD_SERVICE
