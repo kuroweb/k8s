@@ -14,7 +14,7 @@ images:
     newTag: 7ff705badd740fbb50c76333f61a1a96d0352c22
   - name: docker-registry.kuroweb.net/price-monitoring-backend-playwright:placeholder
     newName: docker-registry.kuroweb.net/price-monitoring-backend-playwright-production
-    newTag: 7ff705badd740fbb50c76333f61a1a96d0352c22
+    newTag: 61842d3e8714a0edad00e0e629a3c6be8babc369
   - name: docker-registry.kuroweb.net/price-monitoring-backend-camoufox:placeholder
     newName: docker-registry.kuroweb.net/price-monitoring-backend-camoufox-production
     newTag: 7ff705badd740fbb50c76333f61a1a96d0352c22
