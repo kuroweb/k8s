@@ -24,7 +24,7 @@ images:
 
   - name: docker-registry.kuroweb.net/auth-provider-backend:placeholder
     newName: docker-registry.kuroweb.net/auth-provider-backend-production
-    newTag: 29d45011d5f204397057cbae98aeabe1eea0f4d1
+    newTag: 61842d3e8714a0edad00e0e629a3c6be8babc369
 
 patches:
   - path: patches/backend.yaml
