@@ -17,7 +17,7 @@ images:
     newTag: 8badd2ae5c83fb6d434331774b601faf35984343
   - name: docker-registry.kuroweb.net/price-monitoring-backend-camoufox:placeholder
     newName: docker-registry.kuroweb.net/price-monitoring-backend-camoufox-production
-    newTag: 7d6ff1228de3e3e6f24220843d624b8f1c8dc2db
+    newTag: 8badd2ae5c83fb6d434331774b601faf35984343
   - name: docker-registry.kuroweb.net/price-monitoring-frontend:placeholder
     newName: docker-registry.kuroweb.net/price-monitoring-frontend-production
     newTag: 8badd2ae5c83fb6d434331774b601faf35984343
