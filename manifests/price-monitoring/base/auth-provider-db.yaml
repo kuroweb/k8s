@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: backend-db-service
+  name: auth-provider-db-service
 spec:
   selector:
     app: auth-provider
-    server: backend-db
+    server: auth-provider-db
   type: LoadBalancer
   ports:
     - name: http
@@ -18,7 +18,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: backend-db-deployment
+  name: auth-provider-db-deployment
   labels:
     app: auth-provider
 spec:
@@ -26,15 +26,15 @@ spec:
   selector:
     matchLabels:
       app: auth-provider
-      server: backend-db
+      server: auth-provider-db
   template:
     metadata:
       labels:
         app: auth-provider
-        server: backend-db
+        server: auth-provider-db
     spec:
       containers:
-        - name: backend-db
+        - name: auth-provider-db
           image: mysql/mysql-server:8.0
           ports:
             - name: http
@@ -44,7 +44,7 @@ spec:
               cpu: "500m"
               memory: "1000Mi"
           volumeMounts:
-            - name: backend-db-storage
+            - name: auth-provider-db-storage
               mountPath: /var/lib/mysql
           env:
             - name: MYSQL_ROOT_HOST
@@ -52,15 +52,17 @@ spec:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: "yes"
       volumes:
-        - name: backend-db-storage
+        - name: auth-provider-db-storage
           persistentVolumeClaim:
-            claimName: backend-db-storage
+            claimName: auth-provider-db-storage
 
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: backend-db-storage
+  name: auth-provider-db-storage
+  annotations:
+    argocd.argoproj.io/sync-options: Prune=false,Delete=false
 spec:
   accessModes:
     - ReadWriteOnce

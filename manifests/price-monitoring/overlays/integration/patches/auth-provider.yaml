@@ -1,14 +1,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: backend-service
+  name: auth-provider-service
 spec:
-  loadBalancerIP: 10.15.100.230
+  loadBalancerIP: 10.15.100.234
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: backend-deployment
+  name: auth-provider-deployment
 spec:
   template:
     spec:
@@ -23,18 +23,18 @@ spec:
               "-p",
               "3000",
               "-e",
-              "production",
+              "integration",
             ]
           resources:
             limits:
-              cpu: "400m"
-              memory: "500Mi"
+              cpu: "300m"
+              memory: "300Mi"
           env:
             - name: ALLOWED_ORIGINS
-              value: "10.15.100.230,auth-provider.kuroweb.net,www.auth-provider.kuroweb.net,backend-service"
+              value: "10.15.100.234,integration.auth-provider.kuroweb.net,www.integration.auth-provider.kuroweb.net,auth-provider-service"
             - name: DOMAIN_NAME
-              value: "auth-provider.kuroweb.net"
+              value: "integration.auth-provider.kuroweb.net"
             - name: DD_SERVICE
-              value: "auth-provider-production"
+              value: "auth-provider-integration"
             - name: DD_ENV
-              value: "production"
+              value: "integration"

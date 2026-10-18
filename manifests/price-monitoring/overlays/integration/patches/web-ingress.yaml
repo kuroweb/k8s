@@ -7,6 +7,8 @@ spec:
     - hosts:
         - integration.price-monitoring.kuroweb.net
         - www.integration.price-monitoring.kuroweb.net
+        - integration.auth-provider.kuroweb.net
+        - www.integration.auth-provider.kuroweb.net
       secretName: web-ingress-cert
   rules:
     - host: integration.price-monitoring.kuroweb.net
@@ -54,6 +56,17 @@ spec:
                 name: frontend-service
                 port:
                   number: 80
+    - host: integration.auth-provider.kuroweb.net
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: auth-provider-service
+                port:
+                  number: 3000
+
 ---
 apiVersion: cert-manager.io/v1
 kind: Certificate
@@ -64,3 +77,5 @@ spec:
   dnsNames:
     - integration.price-monitoring.kuroweb.net
     - www.integration.price-monitoring.kuroweb.net
+    - integration.auth-provider.kuroweb.net
+    - www.integration.auth-provider.kuroweb.net
