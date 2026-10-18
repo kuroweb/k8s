@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: backend-playwright-deployment
 spec:
-  replicas: 10
+  replicas: 5
   template:
     spec:
       containers:
