@@ -20,7 +20,7 @@ images:
     newTag: 52306aa9ed4ba3e4347acc9cb02e75f1287d1f97
   - name: docker-registry.kuroweb.net/price-monitoring-frontend:placeholder
     newName: docker-registry.kuroweb.net/price-monitoring-frontend-production
-    newTag: 183f5222bde9e91173329fed7be289f983aa1c4c
+    newTag: 50f73d0f1846021ecb8681ec8040a9fa03d32881
 
   - name: docker-registry.kuroweb.net/auth-provider-backend:placeholder
     newName: docker-registry.kuroweb.net/auth-provider-backend-production
