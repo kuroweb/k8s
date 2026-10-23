@@ -67,6 +67,8 @@ data:
         regctl manifest get "$ref:$tag" --format '{{ if .IsList }}{{ range .GetManifestList }}{{ .Digest }}{{ "\n" }}{{ end }}{{ end }}'
       done)
 
+      # 同じ中身のビルドは子 manifest を共有するため、消した digest を覚えて二重に消さない
+      deleted_digests=""
       for tag in $(echo "$sorted" | tail -n "+$((KEEP + 1))"); do
         # 同じ manifest を指す別のタグを先に消していれば、このタグも一緒に消えている
         if ! index=$(regctl image digest "$ref:$tag" 2>/dev/null); then
@@ -75,10 +77,11 @@ data:
         fi
         children=$(regctl manifest get "$ref:$tag" --format '{{ if .IsList }}{{ range .GetManifestList }}{{ .Digest }} {{ end }}{{ end }}')
         for digest in $children $index; do
-          if echo "$keep_digests" | grep -qx "$digest"; then
+          if echo "$keep_digests $deleted_digests" | tr ' ' '\n' | grep -qx "$digest"; then
             continue
           fi
           regctl manifest rm "$ref@$digest"
+          deleted_digests="$deleted_digests $digest"
         done
         echo "deleted: $repo:$tag"
       done
