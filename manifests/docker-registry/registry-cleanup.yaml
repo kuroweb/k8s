@@ -1,0 +1,128 @@
+# 古いイメージを定期的に削除し、registry の PVC を空ける
+# リポジトリごとに作成日時の新しいタグを KEEP 個残し、それより古いタグを消してから GC する
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: registry-cleaner
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: registry-cleaner
+rules:
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    resourceNames: ["registry-backend"]
+    verbs: ["get", "patch"]
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list"]
+  - apiGroups: [""]
+    resources: ["pods/exec"]
+    verbs: ["create"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: registry-cleaner
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: registry-cleaner
+subjects:
+  - kind: ServiceAccount
+    name: registry-cleaner
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: registry-cleanup-script
+data:
+  prune-tags.sh: |
+    set -eu
+
+    REGISTRY=registry-backend-service.docker-registry.svc.cluster.local:5000
+    KEEP=5
+
+    regctl registry set "$REGISTRY" --tls disabled
+
+    for repo in $(regctl repo ls "$REGISTRY"); do
+      ref="$REGISTRY/$repo"
+
+      sorted=$(for tag in $(regctl tag ls "$ref"); do
+        echo "$(regctl image config "$ref:$tag" --format '{{ .Created.UTC.Format "2006-01-02T15:04:05Z" }}') $tag"
+      done | sort -r | awk '{print $2}')
+
+      # buildx の push は index と子 manifest になるため、残すタグの子も消さないように集める
+      keep_digests=$(for tag in $(echo "$sorted" | head -n "$KEEP"); do
+        regctl image digest "$ref:$tag"
+        regctl manifest get "$ref:$tag" --format '{{ if .IsList }}{{ range .GetManifestList }}{{ .Digest }}{{ "\n" }}{{ end }}{{ end }}'
+      done)
+
+      for tag in $(echo "$sorted" | tail -n "+$((KEEP + 1))"); do
+        index=$(regctl image digest "$ref:$tag")
+        children=$(regctl manifest get "$ref:$tag" --format '{{ if .IsList }}{{ range .GetManifestList }}{{ .Digest }} {{ end }}{{ end }}')
+        for digest in $children $index; do
+          if echo "$keep_digests" | grep -qx "$digest"; then
+            continue
+          fi
+          regctl manifest rm "$ref@$digest"
+        done
+        echo "deleted: $repo:$tag"
+      done
+    done
+
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: registry-cleanup
+spec:
+  schedule: "0 4 * * 0"
+  timeZone: Asia/Tokyo
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      template:
+        spec:
+          serviceAccountName: registry-cleaner
+          restartPolicy: Never
+          initContainers:
+            - name: prune-tags
+              image: ghcr.io/regclient/regctl:v0.8.3-alpine
+              command: ["sh", "/scripts/prune-tags.sh"]
+              volumeMounts:
+                - name: scripts
+                  mountPath: /scripts
+            # --delete-untagged は index の子 manifest まで消してイメージを壊すため使わない
+            - name: garbage-collect
+              image: registry.k8s.io/kubectl:v1.31.14
+              args:
+                - exec
+                - deployment/registry-backend
+                - --
+                - sh
+                - -c
+                - |
+                  set -o pipefail
+                  echo "before: $(du -sh /var/lib/registry | cut -f1)"
+                  registry garbage-collect /etc/docker/registry/config.yml | grep -v ': marking '
+                  echo "after: $(du -sh /var/lib/registry | cut -f1)"
+          containers:
+            # GC 後もメモリ上の blob キャッシュが残り、次の push でレイヤーが欠けるため再起動する
+            - name: restart-registry
+              image: registry.k8s.io/kubectl:v1.31.14
+              args:
+                - rollout
+                - restart
+                - deployment/registry-backend
+          volumes:
+            - name: scripts
+              configMap:
+                name: registry-cleanup-script

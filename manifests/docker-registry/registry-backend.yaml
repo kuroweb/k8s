@@ -35,6 +35,10 @@ spec:
       containers:
         - name: registry-backend
           image: registry:2
+          env:
+            # registry-cleanup が古いタグを API で削除できるようにする
+            - name: REGISTRY_STORAGE_DELETE_ENABLED
+              value: "true"
           ports:
             - containerPort: 5000
           volumeMounts:
