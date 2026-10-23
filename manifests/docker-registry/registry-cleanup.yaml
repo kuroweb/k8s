@@ -49,12 +49,17 @@ data:
 
     regctl registry set "$REGISTRY" --tls disabled
 
+    # 同じ中身のビルドはイメージの作成日時が並ぶため、push 日時（タグの link の更新日時）で新しい順に並べる
+    pushed=$(kubectl exec deployment/registry-backend -- sh -c '
+      cd /var/lib/registry/docker/registry/v2/repositories
+      for repo in *; do
+        (cd "$repo/_manifests/tags" && ls -t */current/link | cut -d/ -f1 | sed "s#^#$repo #")
+      done')
+
     for repo in $(regctl repo ls "$REGISTRY"); do
       ref="$REGISTRY/$repo"
 
-      sorted=$(for tag in $(regctl tag ls "$ref"); do
-        echo "$(regctl image config "$ref:$tag" --format '{{ .Created.UTC.Format "2006-01-02T15:04:05Z" }}') $tag"
-      done | sort -r | awk '{print $2}')
+      sorted=$(echo "$pushed" | awk -v repo="$repo" '$1 == repo {print $2}')
 
       # buildx の push は index と子 manifest になるため、残すタグの子も消さないように集める
       keep_digests=$(for tag in $(echo "$sorted" | head -n "$KEEP"); do
@@ -63,7 +68,11 @@ data:
       done)
 
       for tag in $(echo "$sorted" | tail -n "+$((KEEP + 1))"); do
-        index=$(regctl image digest "$ref:$tag")
+        # 同じ manifest を指す別のタグを先に消していれば、このタグも一緒に消えている
+        if ! index=$(regctl image digest "$ref:$tag" 2>/dev/null); then
+          echo "already deleted: $repo:$tag"
+          continue
+        fi
         children=$(regctl manifest get "$ref:$tag" --format '{{ if .IsList }}{{ range .GetManifestList }}{{ .Digest }} {{ end }}{{ end }}')
         for digest in $children $index; do
           if echo "$keep_digests" | grep -qx "$digest"; then
@@ -94,12 +103,24 @@ spec:
           serviceAccountName: registry-cleaner
           restartPolicy: Never
           initContainers:
-            - name: prune-tags
+            # prune-tags は kubectl と regctl の両方を使うため、regctl のバイナリを渡す
+            - name: install-regctl
               image: ghcr.io/regclient/regctl:v0.8.3-alpine
+              command: ["cp", "/usr/local/bin/regctl", "/tools/regctl"]
+              volumeMounts:
+                - name: tools
+                  mountPath: /tools
+            - name: prune-tags
+              image: alpine/k8s:1.35.9
               command: ["sh", "/scripts/prune-tags.sh"]
+              env:
+                - name: PATH
+                  value: /tools:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
               volumeMounts:
                 - name: scripts
                   mountPath: /scripts
+                - name: tools
+                  mountPath: /tools
             # --delete-untagged は index の子 manifest まで消してイメージを壊すため使わない
             - name: garbage-collect
               image: registry.k8s.io/kubectl:v1.31.14
@@ -126,3 +147,5 @@ spec:
             - name: scripts
               configMap:
                 name: registry-cleanup-script
+            - name: tools
+              emptyDir: {}
