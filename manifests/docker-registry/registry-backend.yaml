@@ -55,6 +55,10 @@ kind: PersistentVolumeClaim
 metadata:
   name: registry-backend-storage
   namespace: docker-registry
+  labels:
+    # Longhorn の RecurringJob を default ではなく registry グループで動かす（longhorn-system/recurring-jobs.yaml）
+    recurring-job.longhorn.io/source: enabled
+    recurring-job-group.longhorn.io/registry: enabled
 spec:
   accessModes:
     - ReadWriteOnce

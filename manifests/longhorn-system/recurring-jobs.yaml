@@ -1,0 +1,49 @@
+# volume のスナップショットのローテーションと、消したデータの領域の解放
+# default グループ: スナップショットを日次で 3 つにローテーションする
+# registry グループ: イメージは CI から作り直せるため、スナップショットを取らずに領域の解放を優先する
+#   （スナップショットに入ったデータは trim で解放できないため）
+# cron は UTC（JST の 4:30 / 4:45 / 5:00）。registry-cleanup（日曜 4:00 JST）の後に動く
+apiVersion: longhorn.io/v1beta2
+kind: RecurringJob
+metadata:
+  name: snapshot-cleanup
+  namespace: longhorn-system
+spec:
+  # レプリカの再構築や容量拡張で作られるシステムスナップショットを消す
+  task: snapshot-cleanup
+  cron: "30 19 * * *"
+  groups:
+    - default
+    - registry
+  retain: 0
+  concurrency: 1
+
+---
+apiVersion: longhorn.io/v1beta2
+kind: RecurringJob
+metadata:
+  name: filesystem-trim
+  namespace: longhorn-system
+spec:
+  # スナップショットを取る前に trim し、消したファイルのブロックを新しいスナップショットに残さない
+  task: filesystem-trim
+  cron: "45 19 * * *"
+  groups:
+    - default
+    - registry
+  retain: 0
+  concurrency: 1
+
+---
+apiVersion: longhorn.io/v1beta2
+kind: RecurringJob
+metadata:
+  name: snapshot
+  namespace: longhorn-system
+spec:
+  task: snapshot
+  cron: "0 20 * * *"
+  groups:
+    - default
+  retain: 3
+  concurrency: 1
