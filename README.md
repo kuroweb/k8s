@@ -13,6 +13,7 @@
 ## Setup
 
 - クラスタの構築とアプリケーションの導入手順は [infra リポジトリ](https://github.com/kuroweb/infra/blob/master/docs/setup/index.md) を参照
+- productionのログ収集・検索とAI接続は [ログ基盤の運用手順](docs/logging.md) を参照
 
 ## Nodes
 
@@ -82,6 +83,7 @@ graph
 | docker-registry | https://docker-registry.kuroweb.net |
 | Portainer | https://portainer.kuroweb.net |
 | Argo CD | https://argocd.kuroweb.net |
+| VictoriaLogs | https://victoria-logs.kuroweb.net/select/vmui/ |
 | price-monitoring → Frontend | https://price-monitoring.kuroweb.net |
 | price-monitoring → Backend API | https://price-monitoring.kuroweb.net/api |
 | price-monitoring → Sidekiq管理画面 | https://price-monitoring.kuroweb.net/sidekiq |
