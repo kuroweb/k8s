@@ -12,9 +12,12 @@ spec:
             - "-c"
             - "RAILS_ENV=production rails db:create && RAILS_ENV=production rails db:migrate && ./bin/rails server -b 0.0.0.0 -p 3000 -e production"
           resources:
+            requests:
+              cpu: "300m"
+              memory: "1Gi"
             limits:
               cpu: "300m"
-              memory: "500Mi"
+              memory: "1Gi"
           env:
             - name: DD_SERVICE
               value: "price-monitoring"
