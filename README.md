@@ -1,8 +1,6 @@
-# k8s<!-- omit in toc -->
+# k8s
 
-- 自宅k8sサーバのマニフェスト管理用リポジトリ
-
-## Categories<!-- omit in toc -->
+自宅k8sサーバのマニフェスト管理用リポジトリ
 
 - [Setup](#setup)
 - [Nodes](#nodes)
