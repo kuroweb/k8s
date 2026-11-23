@@ -1,4 +1,4 @@
-# ログ収集とAIによる調査<!-- omit in toc -->
+# ログ収集とAIによる調査
 
 productionのアプリログをFluent Bitで収集し、VictoriaLogsに保存する。ブラウザとAI（MCP）から検索できる。既存アプリのPod定義や出力先の変更は不要。
 
