@@ -104,37 +104,34 @@ _time:30m | stats by (k8s_container_name) count()
 
 request_idで調べるときは、そのIDを本文から全文検索し、同じPod・近い時刻のログに絞り込む。ログ本文は加工せずに保存しており、アプリが出力したJSONもフィールドに分解しない。本文に秘密情報がある場合は、アプリ側で出力しないようにするか、収集前にマスクする処理を追加する。
 
-### port-forward
-
-Ingressを通さずに確認したいとき（問題の切り分けなど）に使う。kubectlがクラスタへ接続できる端末で実行する。
-
-```sh
-kubectl -n logging port-forward svc/victoria-logs 9428:9428
-```
-
-内蔵UIは `http://127.0.0.1:9428/select/vmui/`。master-1上でport-forwardする場合は、手元からSSHトンネルも張る。
-
-```sh
-ssh -N -L 9428:127.0.0.1:9428 -p 22222 user@10.15.100.10
-```
-
 ## MCP接続
 
-手元の端末から、Ingress経由で公式の [mcp-victorialogs](https://github.com/VictoriaMetrics/mcp-victorialogs) を使う。port-forwardは不要。
+手元の端末から、Ingress経由で公式の [mcp-victorialogs](https://github.com/VictoriaMetrics/mcp-victorialogs) を使う。
 
 | 環境変数 | 値 |
 | --- | --- |
 | `VL_INSTANCE_ENTRYPOINT` | `https://victoria-logs.kuroweb.net` |
 | `MCP_DISABLED_TOOLS` | `flags`（`/flags` はIngressで公開していないため） |
 
-1. mcp-victorialogsをバージョンを固定して導入する（Releasesのバイナリまたは `go install`）
+1. 公式のリリースから、バージョンを固定してバイナリを `~/.local/bin` に置く（Apple Silicon Macの例）
+
+   ```sh
+   v=v1.10.0
+   cd "$(mktemp -d)"
+   curl -fsSLO https://github.com/VictoriaMetrics/mcp-victorialogs/releases/download/$v/mcp-victorialogs_Darwin_arm64.tar.gz
+   curl -fsSLO https://github.com/VictoriaMetrics/mcp-victorialogs/releases/download/$v/checksums.txt
+   grep Darwin_arm64 checksums.txt | shasum -a 256 -c
+   tar xzf mcp-victorialogs_Darwin_arm64.tar.gz
+   mkdir -p ~/.local/bin && install -m 755 mcp-victorialogs ~/.local/bin/
+   ```
+
 2. AIクライアントに登録する（Claude Codeの例）
 
    ```sh
    claude mcp add --scope user victorialogs \
      -e VL_INSTANCE_ENTRYPOINT=https://victoria-logs.kuroweb.net \
      -e MCP_DISABLED_TOOLS=flags \
-     -- /path/to/mcp-victorialogs
+     -- ~/.local/bin/mcp-victorialogs
    ```
 
 3. 起動後、読み取り用のツールだけが提供されることを確認する
