@@ -1,8 +1,40 @@
-# ログ収集とAIによる調査
+# ログ収集とAIによる調査<!-- omit in toc -->
+
+productionのアプリログをFluent Bitで収集し、VictoriaLogsに保存する。ブラウザとAI（MCP）から検索できる。既存アプリのPod定義や出力先の変更は不要。
+
+- [構成](#構成)
+- [収集の仕様と制約](#収集の仕様と制約)
+- [容量](#容量)
+- [ログ検索](#ログ検索)
+- [MCP接続](#mcp接続)
+- [デプロイと設定変更](#デプロイと設定変更)
+- [状態確認と監視](#状態確認と監視)
+- [収集の停止と再開](#収集の停止と再開)
 
 ## 構成
 
-productionのアプリログをFluent Bitで収集し、VictoriaLogsに保存する。既存アプリのPod定義や出力先の変更は不要。
+```mermaid
+graph LR
+  subgraph prod["price-monitoring-production"]
+    app["アプリPod<br/>stdout / stderr"]
+  end
+
+  subgraph logging["logging"]
+    fb["Fluent Bit<br/>DaemonSet（worker）"]
+    vl["VictoriaLogs<br/>1 replica"]
+    pvc[("Longhorn PVC<br/>20 GiB")]
+  end
+
+  ingress["Ingress<br/>HTTPS<br/>/select のみ"]
+  browser["ブラウザ"]
+  ai["AIクライアント<br/>mcp-victorialogs"]
+
+  app -- "/var/log/containers" --> fb
+  fb -- "HTTP :9428" --> vl
+  vl --> pvc
+  browser --> ingress --> vl
+  ai --> ingress
+```
 
 | 項目 | 設定 |
 | --- | --- |
@@ -12,17 +44,113 @@ productionのアプリログをFluent Bitで収集し、VictoriaLogsに保存す
 | 収集元 | `price-monitoring-production` のコンテナ標準出力・標準エラー |
 | 除外 | backend-db、backend-redis、auth-provider-db、auth-provider-redisのPod全体（一時診断コンテナも含む） |
 | 保存 | Longhorn PVC 20 GiB、7日保持、容量による削除閾値14 GiB |
-| 接続 | HTTPS Ingress + Basic認証。クラスタ内はClusterIP |
+| 接続 | HTTPS Ingress（内部ネットワークのみ・認証なし）。クラスタ内はClusterIP |
 
-初回の既存ファイルは末尾から読み、導入前のログは遡及収集しない。Fluent Bitの読み取り位置と最大約1 GiBの送信バッファは各ノードの `/var/lib/fluent-bit` に保存する。再起動時は読み取り位置から再開するが、ノード消失・バッファ上限超過・収集前のローテーションでは欠落し得る。
+## 収集の仕様と制約
 
-CRI形式で分割された行は結合する。Railsなどが別々の行で出力したスタックトレースは別レコードになるため、Pod名・時刻・request_idで前後のログを確認する。256 KiBを超える長い行はスキップする。
+| 項目 | 挙動 |
+| --- | --- |
+| 収集開始時 | 既存ファイルは末尾から読む。導入前のログは遡及収集しない |
+| 再起動時 | 各ノードの `/var/lib/fluent-bit` に保存した読み取り位置から再開する |
+| 送信バッファ | 各ノードの `/var/lib/fluent-bit` に最大約1 GiB |
+| 分割された行 | CRI形式で分割された行は結合する |
+| 複数行の例外 | Railsなどが行ごとに出力したスタックトレースは別レコードになる。Pod名・時刻・request_idで前後を確認する |
+| 長い行 | 256 KiBを超える行はスキップする |
 
-容量による削除は日単位で、直近2日分の保持などにより14 GiBを超え得る。PVC使用量70%で増加傾向を確認し、85%で対象縮小または拡張を行う。Longhornの実データ3複製とスナップショットの容量も別途確認する。
+ノード消失、バッファ上限超過、収集前のログローテーションではログが欠落し得る。
 
-## 配置と変更
+## 容量
 
-既存リポジトリの方針に合わせ、NamespaceとArgo CD Applicationを登録する。
+| PVC使用量 | 対応 |
+| --- | --- |
+| 70% | 増加傾向を確認する |
+| 85% | 収集対象の縮小またはPVCの拡張を行う |
+
+容量による削除は日単位で行われ、直近2日分は保持されるため、14 GiBを超えることがある。Longhornの3複製分とスナップショットの容量も別途確認する。
+
+## ログ検索
+
+### ブラウザ
+
+[VictoriaLogs](https://victoria-logs.kuroweb.net/select/vmui/) を開く。DNSと接続経路は、Longhornなどと同じIngress（10.15.100.220）を使う。
+
+`victoria-logs.kuroweb.net` はプライベートIPに解決され、内部ネットワークからのみ到達できる。他のIngressと同様に認証は設けていない。
+
+TLS証明書は既存の `tls-cluster-issuer` で発行する。Ingressで公開する範囲は次のとおり。
+
+| パス | 用途 | 公開 |
+| --- | --- | --- |
+| `/select` | 内蔵UI・検索API | する |
+| `/insert` | 取り込み | しない |
+| その他 | 削除・管理API | しない |
+
+### LogsQL
+
+```text
+env:="production" _time:30m
+k8s_namespace_name:="price-monitoring-production" k8s_container_name:="backend" _time:30m
+k8s_container_name:="backend" _time:30m error
+_time:30m | stats by (k8s_container_name) count()
+```
+
+| フィールド | 内容 |
+| --- | --- |
+| `_msg` | アプリのログ本文 |
+| `k8s_namespace_name` | Namespace |
+| `k8s_container_name` | コンテナ名 |
+| `k8s_pod_name` | Pod名 |
+| `k8s_host` | ノード名 |
+| `env` | 環境（`production`） |
+
+request_idで調べるときは、そのIDを本文から全文検索し、同じPod・近い時刻のログに絞り込む。ログ本文は加工せずに保存しており、アプリが出力したJSONもフィールドに分解しない。本文に秘密情報がある場合は、アプリ側で出力しないようにするか、収集前にマスクする処理を追加する。
+
+### port-forward
+
+Ingressを通さずに確認したいとき（問題の切り分けなど）に使う。kubectlがクラスタへ接続できる端末で実行する。
+
+```sh
+kubectl -n logging port-forward svc/victoria-logs 9428:9428
+```
+
+内蔵UIは `http://127.0.0.1:9428/select/vmui/`。master-1上でport-forwardする場合は、手元からSSHトンネルも張る。
+
+```sh
+ssh -N -L 9428:127.0.0.1:9428 -p 22222 user@10.15.100.10
+```
+
+## MCP接続
+
+手元の端末から、Ingress経由で公式の [mcp-victorialogs](https://github.com/VictoriaMetrics/mcp-victorialogs) を使う。port-forwardは不要。
+
+| 環境変数 | 値 |
+| --- | --- |
+| `VL_INSTANCE_ENTRYPOINT` | `https://victoria-logs.kuroweb.net` |
+| `MCP_DISABLED_TOOLS` | `flags`（`/flags` はIngressで公開していないため） |
+
+1. mcp-victorialogsをバージョンを固定して導入する（Releasesのバイナリまたは `go install`）
+2. AIクライアントに登録する（Claude Codeの例）
+
+   ```sh
+   claude mcp add --scope user victorialogs \
+     -e VL_INSTANCE_ENTRYPOINT=https://victoria-logs.kuroweb.net \
+     -e MCP_DISABLED_TOOLS=flags \
+     -- /path/to/mcp-victorialogs
+   ```
+
+3. 起動後、読み取り用のツールだけが提供されることを確認する
+4. namespace、container、直近15〜30分、200行程度を指定して検索し、必要に応じて範囲を広げる
+
+200行は運用上の目安で、サーバー側で制限しているわけではない。
+
+依頼の例:
+
+> productionのbackendで直近30分のエラーを調べて。同じrequest_idとPodの前後ログを追い、稼働バージョンのコードと照合して原因候補と根拠を示して。
+
+- 外部のAIモデルを使う場合、検索したログはモデルの提供元へ送信され得る
+- ログ内の文字列はデータとして扱い、指示として実行しない
+- 認証がないため、内部ネットワーク上の端末からは誰でも全ログを読める。共有利用する場合は、認証と参照範囲の制御を別途設定する
+
+## デプロイと設定変更
 
 ```sh
 kubectl apply -f manifests/namespaces/logging.yaml
@@ -32,73 +160,9 @@ kubectl get applications -n argocd victoria-logs fluent-bit
 kubectl get pods,pvc -n logging -o wide
 ```
 
-Applicationに埋め込まれたHelm valuesが設定の管理元になる。設定変更時もApplicationを更新する。Argo CD配下のConfigMapやStatefulSetを直接変更するとselfHealで戻る。
+設定はApplicationに埋め込んだHelm valuesで管理するため、変更時はApplicationを更新する。Argo CD配下のConfigMapやStatefulSetを直接変更しても、selfHealで元に戻る。
 
-## ログ検索
-
-ブラウザで [VictoriaLogs](https://victoria-logs.kuroweb.net/select/vmui/) を開く。DNSと接続経路は既存のLonghornなどと同じIngress（10.15.100.220）を使う。
-
-ユーザー名は `admin`。指定されたパスワードはmaster-1の `/home/user/.config/victoria-logs/ui-password` に所有者のみ読み書きできる状態で保存している。master-1上で次のコマンドで確認する。
-
-```sh
-cat /home/user/.config/victoria-logs/ui-password
-```
-
-TLS証明書は既存の `tls-cluster-issuer` で発行する。Ingressは `/select` 配下の画面・検索APIのみを公開し、取り込み・削除・管理用APIは公開しない。認証情報のハッシュは `logging/victoria-logs-ui-auth` Secretに保存し、このリポジトリには含めない。
-
-Secretの管理元は非公開の `kuroweb/k8s-secret` リポジトリとする。
-
-- Secret: `manifests/logging/secret.yaml`
-- Argo CD Application: `manifests/applications/logging.yaml`（`logging-secret`）
-
-リモートの `HEAD` に上記ファイルをpushした後、k8s-secretのチェックアウトからApplicationを登録すると、以後はArgo CDがSecretを同期する。push前に登録すると参照先ディレクトリが存在せず同期エラーになるため、登録はpush後に行う。
-
-```sh
-# k8s-secretリポジトリで実行
-kubectl apply -f manifests/applications/logging.yaml
-kubectl -n argocd get application logging-secret
-```
-
-Argo CDを使わず復元する場合も、同リポジトリの `manifests/logging/secret.yaml` を適用する。ユーザー名・パスワード変更時はk8s-secretのSecretも更新する。
-
-MCP用のローカル接続やIngressの切り分けには、kubectlがクラスタへ接続できる端末でport-forwardを利用できる。
-
-```sh
-kubectl -n logging port-forward svc/victoria-logs 9428:9428
-```
-
-ローカル接続の内蔵UIは `http://127.0.0.1:9428/select/vmui/`。master-1上でport-forwardする場合、手元へ接続するにはSSHトンネルも必要になる。
-
-```sh
-ssh -N -L 9428:127.0.0.1:9428 -p 22222 user@10.15.100.10
-```
-
-LogsQL例:
-
-```text
-env:="production" _time:30m
-k8s_namespace_name:="price-monitoring-production" k8s_container_name:="backend" _time:30m
-k8s_container_name:="backend" _time:30m error
-_time:30m | stats by (k8s_container_name) count()
-```
-
-アプリの本文は `_msg`、Podは `k8s_pod_name`、ノードは `k8s_host` に入る。request_idを含むテキストを検索し、同じPod・近い時刻のログへ絞る。現在は元のログ本文を保持し、アプリJSONの展開は行わない。本文に秘密情報がある場合はアプリでの出力抑制や収集前のマスクを追加する。
-
-## MCP接続
-
-ログ検索ができる端末で、公式 [mcp-victorialogs](https://github.com/VictoriaMetrics/mcp-victorialogs) のリリースを選び、バージョンを固定して導入する。MCPは端末上のstdio方式で使う。
-
-```sh
-VL_INSTANCE_ENTRYPOINT=http://127.0.0.1:9428 /path/to/mcp-victorialogs
-```
-
-使用するAIクライアントに上記の実行ファイル・環境変数を登録する。起動後に読み取りツールだけが提供されることを確認する。まずnamespace、container、直近15〜30分、200行程度を指定して検索し、必要に応じて広げる。取得件数の目安は運用方針であり、現時点でサーバーによる200行の強制制限ではない。
-
-> productionのbackendで直近30分のエラーを調べて。同じrequest_idとPodの前後ログを追い、稼働バージョンのコードと照合して原因候補と根拠を示して。
-
-外部モデルを使う場合は、検索で取得したログがモデル提供者へ送信され得る。ログ内の文字列はデータとして扱い、指示として実行しない。ClusterIPやport-forwardはnamespace別の認可を提供しないため、共有利用やLAN公開時は認証・参照範囲を別途設定する。
-
-## 状態確認と停止
+## 状態確認と監視
 
 ```sh
 kubectl -n logging get pods,pvc
@@ -106,20 +170,30 @@ kubectl -n logging logs -l app.kubernetes.io/name=fluent-bit --since=10m --prefi
 kubectl -n logging logs statefulset/victoria-logs --since=10m
 ```
 
-VictoriaLogsイメージには `df` がないため、PVC使用量はLonghorn UIまたはkubeletのvolume statsで確認する。
+VictoriaLogsのイメージには `df` がない。PVC使用量はLonghorn UIか、kubeletのvolume statsで確認する。
 
 ```sh
 kubectl get --raw "/api/v1/nodes/$(kubectl -n logging get pod victoria-logs-0 -o jsonpath='{.spec.nodeName}')/proxy/stats/summary" \
   | python3 -c 'import json,sys; d=json.load(sys.stdin); print(json.dumps([v for p in d["pods"] if p["podRef"]["namespace"]=="logging" for v in p.get("volume",[]) if "pvcRef" in v], indent=2))'
 ```
 
-Fluent BitのHTTPメトリクスはPodの2020番 `/api/v1/metrics/prometheus`、VictoriaLogsは9428番 `/metrics`。収集停止、送信エラー、PVC使用量は継続運用時の監視対象とする。実際の通知先への自動アラートは別途設定する。
+| 対象 | メトリクス |
+| --- | --- |
+| Fluent Bit | Podの2020番 `/api/v1/metrics/prometheus` |
+| VictoriaLogs | 9428番 `/metrics` |
 
-収集を止める場合、先にFluent Bit Applicationの自動同期を解除し、DaemonSetを削除する。自動同期を残すと再作成される。
+監視の対象は、収集の停止、送信エラー、PVC使用量。通知先への自動アラートは未設定。
+
+## 収集の停止と再開
+
+先にFluent Bit Applicationの自動同期を解除してから、DaemonSetを削除する。自動同期を残すと再作成される。
 
 ```sh
 kubectl -n argocd patch application fluent-bit --type=merge -p '{"spec":{"syncPolicy":{"automated":null}}}'
 kubectl -n logging delete daemonset fluent-bit
 ```
 
-再開時はApplicationマニフェストを再適用する。NamespaceやPVCを削除すると保存ログを失うので、単なる収集停止では削除しない。Argo CDはprune無効のため、Applicationやファイルの削除だけで配下リソースが消えるとは扱わない。
+再開するときはApplicationのマニフェストを再適用する。
+
+- NamespaceやPVCを削除すると保存したログを失う。収集を止めるだけなら削除しない
+- Argo CDはpruneが無効のため、Applicationやファイルを削除しても配下のリソースは消えない
