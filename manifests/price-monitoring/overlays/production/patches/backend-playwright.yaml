@@ -9,6 +9,9 @@ spec:
       containers:
         - name: backend-playwright
           resources:
+            requests:
+              cpu: "700m"
+              memory: "768Mi"
             limits:
               cpu: "700m"
               memory: "1200Mi"
